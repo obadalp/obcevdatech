@@ -89,6 +89,19 @@
       stroke-width: 4;
       stroke-linejoin: round;
     }
+    /* Tečky pro všech 6258 obcí */
+    #cr-map .obec-dot {
+      fill: #64748b;
+      fill-opacity: 0.55;
+      cursor: pointer;
+      transition: fill 0.12s ease, fill-opacity 0.12s ease, r 0.12s ease;
+    }
+    #cr-map .obec-dot:hover {
+      fill: #7c3aed;
+      fill-opacity: 1;
+    }
+    #cr-map.kraj-active .obec-dot { fill-opacity: 0.15; }
+    #cr-map.kraj-active .obec-dot.in-kraj { fill: #7c3aed; fill-opacity: 0.85; }
 
     /* Search results */
     .obec-row {
@@ -105,13 +118,13 @@
   <div class="bg-white border border-ink-200/60 shadow-pill rounded-3xl xl:rounded-full">
     <div class="flex items-center justify-between px-4 lg:px-6 py-2 gap-4">
       <a href="index.html" class="flex items-center shrink-0 hover:opacity-90 transition-opacity">
-        <img src="./Výsledky IKŽ za 2025 _ Obce v datech_files/logo-D9ygtVhA.svg" alt="Obce v datech" class="h-9 w-auto">
+        <img src="./Výsledky IKŽ za 2025 _ Obce v datech_files/logo-D9ygtVhA.svg" alt="Obce v datech" class="h-7 w-auto">
       </a>
       <nav class="hidden xl:flex items-center gap-1">
-        <a href="index.html" class="nav-link font-semibold">Index kvality života</a>
+        <a href="index.html" class="nav-link font-semibold">Kvalita života</a>
         <details class="relative group">
           <summary class="nav-link inline-flex items-center gap-1.5 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
-            Naše služby
+            Pro obce
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-open:rotate-180"><path d="m6 9 6 6 6-6"/></svg>
           </summary>
           <div class="absolute left-0 top-full mt-3 w-64 bg-white rounded-2xl shadow-pop border border-ink-200/60 py-2 z-50">
@@ -121,12 +134,26 @@
             <a href="#" class="block px-4 py-2.5 text-[14px] font-medium text-ink-700 hover:bg-primary-50 hover:text-primary-700 transition-colors">Datová zakázka na&nbsp;míru</a>
           </div>
         </details>
+        <a href="#" class="nav-link">Pro média</a>
         <a href="#" class="nav-link">Datové příběhy</a>
-        <a href="#" class="nav-link">O&nbsp;projektu</a>
+        <details class="relative group">
+          <summary class="nav-link inline-flex items-center gap-1.5 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+            O&nbsp;projektu
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-open:rotate-180"><path d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="absolute right-0 top-full mt-3 w-56 bg-white rounded-2xl shadow-pop border border-ink-200/60 py-2 z-50">
+            <a href="#" class="block px-4 py-2.5 text-[14px] font-medium text-ink-700 hover:bg-primary-50 hover:text-primary-700 transition-colors">Metodika</a>
+            <a href="#" class="block px-4 py-2.5 text-[14px] font-medium text-ink-700 hover:bg-primary-50 hover:text-primary-700 transition-colors">Reference</a>
+            <a href="#" class="block px-4 py-2.5 text-[14px] font-medium text-ink-700 hover:bg-primary-50 hover:text-primary-700 transition-colors">O&nbsp;týmu</a>
+            <hr class="my-2 border-ink-200">
+            <a href="#" class="block px-4 py-2 text-[12px] text-ink-500 hover:bg-ink-100 transition-colors">FAQ</a>
+            <a href="#" class="block px-4 py-2 text-[12px] text-ink-500 hover:bg-ink-100 transition-colors">Obchodní podmínky</a>
+          </div>
+        </details>
+        <a href="#" class="nav-link">Kontakt</a>
       </nav>
       <div class="hidden xl:flex items-center gap-4">
         <a href="#" class="nav-utility">Přihlásit se</a>
-        <span class="text-sm font-semibold text-primary-700 px-3">Jste tu</span>
       </div>
     </div>
   </div>
@@ -181,6 +208,9 @@
   <g data-kraj="Zlínský" transform="matrix(1.1788376,0,0,1.1788376,-404.60872,0)"><path class="kraj-poly" d="M 3164.8711 1220.3418 C 3157.393 1219.741 3148.894 1222.9969 3141.207 1223.1719 C 3138.1203 1231.0085 3139.8813 1243.8733 3131.9453 1246.6836 C 3122.0719 1250.1805 3112.2386 1234.8621 3101.9961 1237.0703 C 3096.6361 1238.2228 3104.2762 1249.4952 3100.4883 1253.4707 C 3093.5121 1260.7995 3079.1103 1258.832 3073.375 1267.1699 C 3070.2371 1271.7387 3081.8512 1276.6142 3080.8145 1282.0547 C 3079.837 1287.2093 3070.937 1287.3438 3068.6406 1292.0664 C 3066.8242 1295.8013 3069.4748 1300.3407 3069.8828 1304.4863 C 3059.5775 1306.6202 3049.0561 1313.8691 3038.9648 1310.8887 C 3030.7605 1308.4626 3029.9046 1295.8912 3023.125 1290.6836 C 3020.7606 1288.8684 3015.9608 1289.4449 3014.2539 1291.8848 C 3010.466 1297.2976 3014.9491 1308.2978 3008.9102 1310.9922 C 3001.9429 1314.1037 2989.4957 1296.7581 2987.0859 1304.0039 C 2983.783 1313.9516 3000.7816 1321.2773 3002.0488 1331.6836 C 3002.7077 1337.0749 2997.3376 1343.5532 2991.9902 1344.5156 C 2969.5476 1348.5666 2945.4849 1339.543 2923.5625 1345.8477 C 2917.9015 1347.4726 2931.9955 1356.8576 2929.9082 1362.3711 C 2926.1694 1372.2672 2918.9824 1384.7632 2908.4414 1385.8086 C 2900.3895 1386.6086 2902.2152 1368.5066 2894.5664 1365.8613 C 2881.826 1361.4449 2865.7334 1373.8157 2854.1016 1366.9844 C 2846.2688 1362.3828 2859.5408 1340.6855 2850.4824 1339.9473 C 2840.0573 1339.0919 2832.7451 1354.7394 2831.7676 1365.1582 C 2830.654 1377.0659 2847.1808 1386.7804 2844.9688 1398.5332 C 2843.505 1406.2852 2828.9953 1402.9465 2823.5547 1408.668 C 2816.1124 1416.4855 2816.4977 1430.313 2808.1699 1437.1934 C 2804.0117 1440.6249 2797.5134 1435.4525 2792.1875 1434.582 C 2780.7306 1436.7878 2760.8562 1429.9498 2757.8203 1441.2051 L 2751.3301 1465.2793 C 2750.3424 1468.9387 2744.8697 1461.2899 2741.6387 1459.3047 C 2736.6315 1468.0066 2725.8759 1475.4034 2726.6191 1485.4141 C 2727.831 1501.6866 2743.6377 1514.0099 2746.875 1530.0117 C 2747.8814 1534.9924 2733.5469 1540.4916 2738.1914 1542.5625 C 2747.2862 1546.6187 2761.9054 1531.4559 2767.9141 1539.3945 C 2774.6583 1548.3055 2767.3245 1563.2142 2760.584 1572.1289 C 2756.2481 1577.8605 2743.9796 1571.2671 2739.5254 1576.918 C 2734.6793 1583.0665 2742.8561 1594.025 2738.291 1600.3965 C 2735.0939 1604.8609 2725.2427 1597.2837 2721.834 1601.5957 C 2718.7918 1605.444 2726.3534 1610.7658 2726.2109 1615.6836 C 2726.1192 1618.8316 2718.6513 1621.8156 2721.1758 1623.7051 C 2726.2259 1627.4841 2733.8647 1627.5399 2739.9805 1625.9805 C 2752.7259 1622.7292 2762.8747 1608.2058 2775.9414 1609.6973 C 2784.0135 1610.6181 2785.9738 1623.3215 2787.1074 1631.3633 C 2788.4037 1640.559 2778.2921 1650.8627 2782.9102 1658.9121 C 2785.8111 1663.9722 2793.8659 1649.9155 2799.1504 1652.373 C 2806.7335 1655.9003 2805.5473 1670.0739 2813.3574 1673.0645 C 2823.9917 1677.1384 2836.1448 1669.648 2847.4668 1670.8926 C 2852.0192 1671.3927 2857.8575 1673.7499 2859.1602 1678.1387 C 2861.2889 1685.3113 2850.7884 1695.3062 2856.2441 1700.4355 C 2861.9229 1705.7754 2872.3782 1693.8389 2879.416 1697.1797 C 2889.5023 1701.9701 2890.8062 1720.2787 2901.8184 1722.0977 C 2914.1872 1724.1396 2923.5893 1707.6931 2936.0703 1706.5645 C 2940.5912 1706.1537 2938.8415 1716.254 2942.8398 1718.4043 C 2949.0336 1721.7361 2959.7228 1715.6926 2963.7285 1721.4707 C 2967.8086 1727.3534 2954.4187 1737.6499 2959.6211 1742.5664 C 2968.531 1750.9849 2986.1438 1743.2604 2995.3535 1751.3438 C 3004.2873 1759.1836 3009.1931 1771.629 3016.6719 1799.6367 C 3018.1475 1798.6436 3019.5055 1797.2988 3021.0117 1796.3965 C 3029.968 1791.0315 3035.7741 1806.9879 3052.9512 1790.1309 C 3069.2049 1774.1794 3073.0969 1746.4274 3092.3789 1734.3105 C 3108.5596 1724.1424 3136.5628 1743.5115 3149.5098 1729.4609 C 3166.2724 1711.2712 3159.1166 1680.9254 3163.916 1656.6602 C 3164.6833 1652.7765 3166.2864 1648.3372 3201.1973 1643.4434 C 3207.4366 1642.5678 3213.1667 1650.3691 3219.2988 1648.9219 C 3229.0148 1646.6292 3238.5804 1640.9691 3244.7793 1633.1465 C 3255.2837 1619.8908 3264.3503 1604.432 3267.6973 1587.8496 C 3269.9974 1576.4533 3256.29 1558.8714 3261.291 1551.418 C 3266.2919 1543.9657 3274.7452 1537.9055 3276.2832 1529.0801 C 3280.4023 1505.4459 3272.4611 1480.5036 3277.752 1457.1113 C 3279.7914 1448.0882 3292.6726 1445.306 3297.0879 1437.1836 C 3299.344 1433.0342 3292.1186 1425.2225 3296.2969 1423.0117 C 3328.8219 1405.8071 3367.7837 1402.2147 3399.2305 1383.123 C 3410.2226 1376.4493 3415.2994 1361.8915 3417.7695 1349.2656 C 3419.31 1341.3985 3408.1309 1330.8017 3410.3359 1326.3906 L 3410.3301 1326.3887 C 3403.2028 1324.5495 3389.2246 1328.2381 3388.9336 1320.8828 L 3387.9961 1297.168 C 3387.6408 1288.1625 3370.5658 1290.4712 3364.4551 1283.8516 C 3355.8905 1274.5702 3357.0634 1256.0252 3345.4453 1251.0684 C 3330.7863 1244.8127 3313.2954 1259.2201 3297.8164 1255.4121 C 3287.5727 1252.8928 3284.5773 1237.6205 3274.7871 1233.6777 C 3269.8706 1231.7026 3265.6153 1240.7822 3260.332 1240.3262 C 3256.9926 1240.0428 3258.1016 1231.5799 3254.7773 1231.9414 C 3230.5574 1234.5389 3207.7982 1251.2808 3183.5996 1248.5195 C 3174.1533 1247.4451 3180.0903 1227.3568 3171.9414 1222.4844 C 3169.7436 1221.1702 3167.3638 1220.5421 3164.8711 1220.3418 z"/></g>
   <g data-kraj="Moravskoslezský" transform="matrix(1.1788376,0,0,1.1788376,-404.60872,0)"><path class="kraj-poly" d="m 2986.6348,575.21289 c -7.392,0.47618 5.6084,16.01071 1.5195,22.18945 -8.2308,12.43935 -20.928,22.7022 -34.8223,28.12891 -5.3548,2.09102 -9.1799,-8.40389 -14.9316,-8.70117 -17.1166,-0.88682 -34.6647,0.66104 -51.1816,5.27148 -12.4294,3.46919 -21.093,18.59268 -34.0098,18.54102 -0,-10e-6 -0,-0.002 -0,-0.002 v 0.002 c -0.781,12.1836 6.2719,27.91676 -2.3418,36.56836 -6.3022,6.33116 -17.3534,-12.75723 -25.3399,-8.75391 -9.4425,4.73262 -6.1633,21.33954 -13.957,28.4668 -4.9254,4.50336 -14.501,-1.44545 -19.8887,2.49609 -14.1513,10.34828 -27.9118,22.82262 -36.0117,38.38477 -3.4452,6.62215 6.3784,14.68112 4.6211,21.93945 -1.387,5.72274 -12.2527,6.25589 -12.8965,12.11719 -1.2005,10.93155 10.9175,21.39511 8.0391,32.01172 -3.3861,12.48223 -18.2777,18.68241 -24.8281,29.8457 -6.762,11.52483 -16.9223,24.18605 -14.6133,37.34961 2.1932,12.50359 24.6542,15.17919 26.0449,27.79492 1.1514,10.43392 -16.4456,14.32785 -20.3203,24.08399 -1.3466,3.39487 8.2855,4.34379 7.6016,7.9414 -1.9879,10.45284 -15.8743,17.89512 -14.5352,28.47266 1.4625,11.57275 10.5118,23.98418 21.6211,27.52148 8.0254,2.55464 15.5651,-20.2672 21.1152,-13.92969 7.4574,8.51671 -9.9644,25.13259 -4.6172,35.12308 -0.3272,3.1081 15.5158,-5.6972 18.7891,-5.7227 3.335,-0.026 -6.1558,-6.93384 14.7676,6.3438 -0.4405,-7.3827 -0.8661,-10.94253 1.664,-16.10355 2.5301,-5.16102 15.5309,-10.15441 19.8438,-11.55859 4.3129,-1.40435 12.3808,-8.8567 17.666,-5.5 2.6156,1.66104 5.6533,1.93203 7.5664,4.89453 1.9133,2.96258 4.0276,6.40621 -1.834,15.74023 -1.0728,5.03648 -6.0862,11.71698 -6.1269,17.09958 -0.02,2.6915 1.2013,5.0575 4.7812,6.7325 3.5799,1.6748 7.3738,12.3723 10.5274,1.2558 1.6435,-5.7938 5.4062,-18.8093 14.0976,-10.832 5.6188,5.1568 14.6354,-3.9798 6.2774,-10.48244 -10.3336,-8.0397 7.4586,5.71774 8.4843,0.0332 1.5333,-8.49845 21.3834,17.64924 8.8555,-28.33008 14.3082,-0.83005 21.9885,-8.22564 16.7246,-1.85937 -0.3247,0.63715 2.0062,28.56495 15.4668,21.76562 -4.9426,9.31127 2.5699,5.90721 -8.0176,16.49217 7.5382,9.688 0.4493,-14.95216 13.4961,6.4453 -1.4742,1.3172 -3.4694,8.1432 -5.9492,7.5489 2.6398,-0.028 10.1659,19.8848 16.3711,20.5058 7.7022,-0.9693 12.6822,2.1831 16.668,3.502 3.9857,1.3188 6.5359,3.4553 8.4902,5.7617 1.9545,2.3064 3.3137,4.782 4.9219,6.7754 1.6083,1.9935 3.4649,3.5049 6.4121,3.8848 9.1647,1.1808 8.1436,-9.3327 17.3594,-8.7129 13.8615,0.9321 30.0905,7.2997 36.9179,19.414 5.9181,10.5008 -9.0067,24.0595 -5.8574,35.7051 2.2536,8.3315 11.3779,15.6826 19.9727,16.4824 5.8739,0.5467 6.629,-17.0263 11.3945,-13.5547 11.1758,8.1388 10.6211,26.1742 19.9453,36.3789 4.8271,5.2857 14.6326,2.9175 20.1387,7.4825 11.152,9.2474 23.4459,19.2573 28.4922,32.8379 2.0847,5.6094 -10.0121,8.3524 -10.9492,14.2753 -0.6891,4.3586 2.5029,11.7836 6.9043,11.3301 9.6365,-0.9938 15.7657,-17.1051 25.1152,-14.6172 8.1439,2.168 5.9542,15.7871 8.9316,23.6836 10.2483,-0.2361 21.943,-5.9461 30.7344,-0.6894 8.1489,4.8724 2.2119,24.9607 11.6582,26.0351 24.1986,2.7613 46.9578,-13.9806 71.1777,-16.5781 3.3243,-0.3615 2.2153,8.1014 5.5547,8.3848 5.2833,0.456 9.5386,-8.6236 14.4551,-6.6485 9.7902,3.9428 12.7856,19.2151 23.0293,21.7344 15.479,3.808 32.9699,-10.5994 47.6289,-4.3437 11.6181,4.9568 10.4452,23.5018 19.0098,32.7832 6.1107,6.6196 23.1857,4.3109 23.541,13.3164 l 0.9375,23.7148 c 0.2135,5.3969 7.9273,4.8905 21.5762,7.1973 -0.016,-0.5407 -0.3896,-1.2606 -0.1739,-1.6914 2.449,-4.8888 9.0178,5.9335 24.8418,0.6894 5.9886,-1.9852 10.1346,-7.9847 13.3985,-13.3711 3.5824,-5.9105 2.6357,-14.028 6.6289,-19.6562 7.781,-10.9707 22.4331,-16.8407 27.9707,-29.0899 2.6908,-5.9507 -6.9458,-12.018 -6.4395,-18.5293 0.4056,-5.215 4.5366,-10.0821 8.9102,-12.9277 6.7909,-4.4165 14.9667,-8.8604 23.0058,-7.8652 6.1184,0.757 7.5441,12.4106 13.709,12.4394 11.2,0.053 20.1222,-12.4764 31.3145,-12.2207 12.9583,0.2973 23.5728,15.8543 36.375,13.7871 13.6688,-2.2094 20.7638,-18.8378 33.1328,-25.0468 6.5491,-3.2878 15.3,0.709 21.834,-2.5938 2.6076,-1.3176 -7.8183,-1.8103 -7.4102,-4.7051 1.1741,-8.3541 12.1225,-14.2711 11.2774,-22.6543 -0.8138,-8.0744 -12.8098,-11.1633 -15.4512,-18.8359 -9.614,-27.9121 -4.2533,-61.6135 -20.7148,-86.1231 -6.4837,-9.6554 -23.0923,3.8775 -34.7305,3.6016 -4.511,-0.1058 -9.8552,-1.2461 -12.6895,-4.748 -3.7261,-4.6053 0.1426,-14.1442 -4.998,-17.0743 -12.3059,-7.0138 -32.4464,1.509 -41.4707,-9.4238 -20.4637,-24.7842 -33.3703,-56.51928 -39.0918,-88.13475 -1.994,-11.02349 19.1622,-17.27698 17.9668,-28.40625 -0.9737,-9.0596 -19.1743,-6.94186 -22.6485,-15.36914 -4.3408,-10.53097 6.8987,-23.7328 2.2266,-34.11133 -2.5975,-5.77187 -13.8112,-6.61472 -18.8008,-2.72851 -3.8357,2.98802 6.8296,9.67777 4.4336,13.91406 -3.1001,5.48337 -11.0077,10.22521 -17.0039,8.28906 -16.9327,-5.46827 -28.436,-22.51406 -45.2363,-28.38281 -16.8559,-5.88784 -35.4716,-7.83811 -53.2344,-6.02539 -4.7289,0.48242 10.5607,5.74881 9.752,10.43359 -0.7596,4.40629 -9.4465,1.78085 -12.4395,5.11524 -2.6818,2.98802 1.1042,12.48789 -2.418,11.47265 -9.5836,-2.76001 -18.1531,-9.96868 -23.7285,-18.22851 -3.784,-5.6068 3.4083,-16.43669 -2.2187,-20.18555 -9.2902,-6.18872 -24.0293,2.69501 -33.3321,-3.48633 -6.6489,-4.41901 -0.7936,-17.53864 -6.5742,-23.03711 -4.2779,-4.06985 -12.6767,-3.15023 -17.7304,-0.0918 -4.8511,2.93502 -1.771,14.94499 -7.4395,15.3418 -10.0473,0.69908 -21.1291,-5.00071 -27.3242,-12.94922 -7.81,-10.0208 -3.5415,-26.32663 -11.2168,-36.45703 -6.5655,-8.66408 -17.6816,-14.6946 -28.4922,-15.94922 -6.7154,-0.77843 -13.2467,5.21775 -17.3242,10.62305 -2.4175,3.20332 -3.2451,9.9782 0.1914,12.07812 6.573,4.0172 17.9329,-3.67419 23.0195,2.09766 5.4154,6.14339 7.1991,19.86705 0.5039,24.58203 -6.5868,4.63813 -14.3386,-9.55979 -22.3867,-9.16797 -9.6593,0.47123 -19.1128,5.45986 -26.627,11.53907 -7.0868,5.73276 -7.8966,17.50809 -15.5039,22.54687 -8.0481,5.33212 -18.7784,8.37011 -28.25,6.46289 -9.2083,-1.85293 -16.8103,-9.4103 -22.7031,-16.72656 -2.9288,-3.63672 1.7655,-11.08734 -1.9707,-13.875 -7.2029,-5.37504 -19.1967,-1.22578 -26.0644,-7.02539 -5.1446,-4.34326 -2.3946,-13.45063 -5.375,-19.48438 -8.2384,-16.68442 -17.0128,-33.28782 -28.0664,-48.24023 -3.6191,-4.89638 -9.1022,-10.68376 -15.1739,-10.20508 -4.7452,0.37285 -3.2159,10.67173 -7.7949,12.00195 -4.9505,1.43857 -10.7398,-1.95538 -14.4824,-5.5039 -12.2038,-11.57143 -38.5066,-23.21345 -32.2422,-38.81836 7.6551,-19.07036 39.7944,-12.16793 57.1289,-23.19141 5.3019,-3.37214 1.7494,-13.98487 6.918,-17.55859 5.9457,-4.1116 16.7407,3.18945 21.5918,-2.16797 5.5085,-6.08551 6.1159,-17.12261 2.5371,-24.49805 -4.0096,-8.26353 -20.6147,-7.19073 -22.3164,-16.22265 -2.4111,-12.78959 17.1598,-25.03202 12.2558,-37.08594 -5.1181,-12.58425 -21.9556,-20.88342 -35.5097,-20.01172 z"/></g>
   <g data-kraj="Praha"><path class="kraj-praha" d="m 1060.2343,903.3388 c -7.2957,2.0879 -18.1433,-5.9473 -22.7749,0.067 -6.3616,8.2534 5.4631,23.348 -1.3364,31.257 -5.7394,6.6734 -18.1433,4.0122 -26.4265,0.9964 -5.9325,-2.1593 -5.5434,-16.1266 -11.7252,-14.878 -18.026,3.6442 -33.9344,15.3264 -48.153,26.9863 -4.4015,3.61 12.2108,-4.4847 17.0148,-1.4494 10.0353,6.3408 23.997,15.0798 23.3183,26.9298 -0.5925,10.3666 -21.2409,8.0916 -25.8799,17.3933 -2.3226,4.6569 11.6154,0.4722 14.9967,4.4267 6.703,7.839 6.0258,20.4702 12.9071,28.1548 3.4794,3.8847 14.5987,-1.8117 15.3011,3.3545 1.0989,8.0841 -15.6767,14.1383 -11.9376,21.3909 4.501,8.7345 22.4496,1.4092 27.9054,9.5824 3.8446,5.7646 -9.8765,11.902 -8.9929,18.7832 0.4975,3.8714 11.8456,-2.2051 11.5946,1.684 -0.3817,5.8849 -17.0265,8.6974 -12.5271,12.5301 11.6896,9.9538 29.1974,18.706 43.8643,14.1427 9.1696,-2.8525 -5.1424,-23.2605 2.771,-28.6702 10.7926,-7.3757 27.1688,4.9702 39.2313,-0.06 9.3166,-3.8861 10.059,-18.4491 18.4565,-24.0401 6.5591,-4.3672 16.685,0.395 23.3526,-3.7956 2.6802,-1.6854 -5.8969,-8.0306 -2.9017,-9.076 9.633,-3.3649 20.6068,1.3319 30.6258,-0.6282 3.0591,-0.5984 3.619,-7.6103 6.5621,-6.6408 13.3231,4.3971 22.9724,17.3933 36.5568,20.8622 3.7302,0.9505 -3.056,-9.0003 -0.1842,-11.5632 2.7221,-2.4295 10.2938,5.7452 10.7586,2.1293 2.0567,-16.0316 -10.662,-33.183 -4.8082,-48.2419 4.3508,-11.1922 22.9456,-9.5988 30.8278,-18.6452 4.2827,-4.9166 6.4135,-14.3388 2.3507,-19.4203 -6.7714,-8.4627 -21.731,-6.4372 -29.2613,-14.2334 -3.6381,-3.7657 4.7757,-12.9622 0.3357,-15.7376 -10.6086,-6.6333 -27.1185,0.7024 -36.8984,-7.1115 -5.9726,-4.7727 5.4973,-18.4789 -0.7009,-22.9368 -11.3823,-8.1821 -28.8826,-1.1092 -41.4216,-7.3728 -4.6866,-2.3418 1.2799,-16.0939 -3.8803,-15.2327 -27.6515,4.6093 -51.9723,21.3433 -78.9214,29.0637 z"/></g>
+  <!-- Sem JS injektuje 6258 koleček obcí přes obce-cr.json -->
+  <g id="obce-dots"></g>
+
   <g class="kraj-labels">
     <text x="260" y="880" font-size="36" data-label="Karlovarský">Karlovarský</text>
     <text x="730" y="560" font-size="36" data-label="Ústecký">Ústecký</text>
@@ -304,106 +334,61 @@
 
 <!-- ===== JS ===== -->
 <script>
-  // ZJEDNODUŠENÁ DATABÁZE OBCÍ — kraj + počet obyv. (ukázka)
-  // Ve finální verzi bude načítáno z _obce_data.json
-  const OBCE = {
-    'Říčany':           { kraj: 'Středočeský', obyv: 17500, hasIkz: true,  rank: 1 },
-    'Praha':            { kraj: 'Praha',       obyv: 1300000, hasIkz: true, rank: 2 },
-    'Slavkov u Brna':   { kraj: 'Jihomoravský', obyv: 6900, hasIkz: true,  rank: 3 },
-    'Kuřim':            { kraj: 'Jihomoravský', obyv: 11000, hasIkz: true, rank: 4 },
-    'Hustopeče':        { kraj: 'Jihomoravský', obyv: 5900,  hasIkz: true, rank: 5 },
-    'Brno':             { kraj: 'Jihomoravský', obyv: 380000, hasIkz: true, rank: 7 },
-    'Hořovice':         { kraj: 'Středočeský', obyv: 6800,   hasIkz: true, rank: 9 },
-    'Brandýs nad Labem-Stará Boleslav': { kraj: 'Středočeský', obyv: 19000, hasIkz: true, rank: 8 },
-    'Šlapanice':        { kraj: 'Jihomoravský', obyv: 7500,  hasIkz: true, rank: 11 },
-    'Soběslav':         { kraj: 'Jihočeský',    obyv: 7000,  hasIkz: true, rank: 14 },
-    'Plzeň':            { kraj: 'Plzeňský',     obyv: 175000, hasIkz: true, rank: 26 },
-    'Liberec':          { kraj: 'Liberecký',    obyv: 104000, hasIkz: true, rank: 38 },
-    'Olomouc':          { kraj: 'Olomoucký',    obyv: 100000, hasIkz: true, rank: 42 },
-    'Hradec Králové':   { kraj: 'Královéhradecký', obyv: 92000, hasIkz: true, rank: 32 },
-    'Pardubice':        { kraj: 'Pardubický',   obyv: 91000,  hasIkz: true, rank: 47 },
-    'Jihlava':          { kraj: 'Vysočina',     obyv: 50000,  hasIkz: true, rank: 51 },
-    'Zlín':             { kraj: 'Zlínský',      obyv: 75000,  hasIkz: true, rank: 56 },
-    'Ostrava':          { kraj: 'Moravskoslezský', obyv: 285000, hasIkz: true, rank: 78 },
-    'Karlovy Vary':     { kraj: 'Karlovarský',  obyv: 49000,  hasIkz: true, rank: 89 },
-    'Ústí nad Labem':   { kraj: 'Ústecký',      obyv: 92000,  hasIkz: true, rank: 145 },
-    'Beroun':           { kraj: 'Středočeský',  obyv: 20000,  hasIkz: true, rank: 22 },
-    'Nymburk':          { kraj: 'Středočeský',  obyv: 15000,  hasIkz: true, rank: 28 },
-    'Benešov':          { kraj: 'Středočeský',  obyv: 17000,  hasIkz: true, rank: 25 },
-    'Český Krumlov':    { kraj: 'Jihočeský',    obyv: 13000,  hasIkz: true, rank: 35 },
-    'České Budějovice': { kraj: 'Jihočeský',    obyv: 95000,  hasIkz: true, rank: 41 },
-    'Tábor':            { kraj: 'Jihočeský',    obyv: 35000,  hasIkz: true, rank: 53 },
-    'Klatovy':          { kraj: 'Plzeňský',     obyv: 22000,  hasIkz: true, rank: 64 },
-    'Cheb':             { kraj: 'Karlovarský',  obyv: 32000,  hasIkz: true, rank: 102 },
-    'Sokolov':          { kraj: 'Karlovarský',  obyv: 23000,  hasIkz: true, rank: 168 },
-    'Most':             { kraj: 'Ústecký',      obyv: 64000,  hasIkz: true, rank: 195 },
-    'Litvínov':         { kraj: 'Ústecký',      obyv: 23000,  hasIkz: true, rank: 188 },
-    'Děčín':            { kraj: 'Ústecký',      obyv: 48000,  hasIkz: true, rank: 165 },
-    'Jablonec nad Nisou': { kraj: 'Liberecký',  obyv: 45000,  hasIkz: true, rank: 73 },
-    'Česká Lípa':       { kraj: 'Liberecký',    obyv: 35000,  hasIkz: true, rank: 110 },
-    'Trutnov':          { kraj: 'Královéhradecký', obyv: 30000, hasIkz: true, rank: 95 },
-    'Náchod':           { kraj: 'Královéhradecký', obyv: 19000, hasIkz: true, rank: 88 },
-    'Chrudim':          { kraj: 'Pardubický',   obyv: 23000,  hasIkz: true, rank: 67 },
-    'Svitavy':          { kraj: 'Pardubický',   obyv: 17000,  hasIkz: true, rank: 92 },
-    'Třebíč':           { kraj: 'Vysočina',     obyv: 35000,  hasIkz: true, rank: 76 },
-    'Žďár nad Sázavou': { kraj: 'Vysočina',     obyv: 21000,  hasIkz: true, rank: 60 },
-    'Vyškov':           { kraj: 'Jihomoravský', obyv: 21000,  hasIkz: true, rank: 16 },
-    'Břeclav':          { kraj: 'Jihomoravský', obyv: 24000,  hasIkz: true, rank: 21 },
-    'Znojmo':           { kraj: 'Jihomoravský', obyv: 33000,  hasIkz: true, rank: 81 },
-    'Prostějov':        { kraj: 'Olomoucký',    obyv: 43000,  hasIkz: true, rank: 70 },
-    'Přerov':           { kraj: 'Olomoucký',    obyv: 41000,  hasIkz: true, rank: 130 },
-    'Šumperk':          { kraj: 'Olomoucký',    obyv: 25000,  hasIkz: true, rank: 105 },
-    'Vsetín':           { kraj: 'Zlínský',      obyv: 26000,  hasIkz: true, rank: 84 },
-    'Uherské Hradiště': { kraj: 'Zlínský',      obyv: 25000,  hasIkz: true, rank: 50 },
-    'Kroměříž':         { kraj: 'Zlínský',      obyv: 28000,  hasIkz: true, rank: 62 },
-    'Frýdek-Místek':    { kraj: 'Moravskoslezský', obyv: 54000, hasIkz: true, rank: 46 },
-    'Karviná':          { kraj: 'Moravskoslezský', obyv: 50000, hasIkz: true, rank: 200 },
-    'Opava':            { kraj: 'Moravskoslezský', obyv: 56000, hasIkz: true, rank: 99 },
-    'Nový Jičín':       { kraj: 'Moravskoslezský', obyv: 23000, hasIkz: true, rank: 75 },
-    'Bohumín':          { kraj: 'Moravskoslezský', obyv: 20000, hasIkz: true, rank: 175 },
-    'Orlová':           { kraj: 'Moravskoslezský', obyv: 28000, hasIkz: true, rank: 206 },
+  // === Univerzální search: 6258 obcí ČR z obce-cr.json (zdroj: czech-geojson, CC-BY) ===
+  // Lat/lon → SVG x/y projekce (lineární fit přes 9 referenčních krajů, max chyba ~100 px)
+  const PROJ = { ax: 635.6402, bx: -8101.8789, ay: -934.2252, by: 47720.3501 };
+  const projX = lon => PROJ.ax * lon + PROJ.bx;
+  const projY = lat => PROJ.ay * lat + PROJ.by;
+
+  // Index pořadí v žebříčku Indexu kvality života (jen 206 ORP)
+  const RANKS = {
+    'Říčany':1,'Praha':2,'Slavkov u Brna':3,'Kuřim':4,'Hustopeče':5,
+    'Brandýs nad Labem-Stará Boleslav':8,'Brno':7,'Hořovice':9,'Šlapanice':11,'Soběslav':14
   };
 
-  // Spočítat počty obcí v krajích
-  const krajCounts = {};
-  Object.values(OBCE).forEach(o => {
-    krajCounts[o.kraj] = (krajCounts[o.kraj] || 0) + 1;
-  });
-  // Ve skutečnosti jsou počty mnohem vyšší (zahrnuje i menší obce mimo žebříček) — mockový multiplier
-  const KRAJE_TOTAL = {
-    'Praha': 1, 'Středočeský': 1144, 'Jihočeský': 624, 'Plzeňský': 501, 'Karlovarský': 132,
-    'Ústecký': 354, 'Liberecký': 215, 'Královéhradecký': 448, 'Pardubický': 451, 'Vysočina': 704,
-    'Jihomoravský': 673, 'Olomoucký': 402, 'Zlínský': 307, 'Moravskoslezský': 300
-  };
-  // (data-count tiles odstraněny — počty obcí teď v tooltipu mapy)
-
-  // Normalize pro CZ vyhledávání
+  // Normalize pro CZ vyhledávání bez diakritiky
   const norm = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
 
+  let OBCE = [];          // [name, kraj_idx, lon, lat]
+  let KRAJE = [];
   let activeKraj = null;
+  const KRAJE_TOTAL = {};
 
+  // Tooltip + map elements
+  const tooltip = document.getElementById('kraj-tooltip');
+  const mapSvg = document.getElementById('cr-map');
+  const dotsLayer = document.getElementById('obce-dots');
+  const input = document.getElementById('search-input');
+
+  // === Render results panel ===
   function renderResults(query = '', kraj = null) {
     const results = document.getElementById('results');
     const label = document.getElementById('results-label');
     const title = document.getElementById('search-title');
     const q = norm(query.trim());
 
-    let list = Object.entries(OBCE);
-    if (kraj) list = list.filter(([_, o]) => o.kraj === kraj);
-    if (q) list = list.filter(([n, _]) => norm(n).includes(q));
+    let list = OBCE;
+    if (kraj) list = list.filter(o => KRAJE[o[1]] === kraj);
+    if (q) list = list.filter(o => norm(o[0]).includes(q));
 
-    list.sort((a, b) => (a[1].rank || 999) - (b[1].rank || 999));
-    const top = list.slice(0, 30);
+    // Sort: ORP/žebříček nahoru, pak abecedně
+    list = list.slice().sort((a, b) => {
+      const ra = RANKS[a[0]] || 9999;
+      const rb = RANKS[b[0]] || 9999;
+      if (ra !== rb) return ra - rb;
+      return a[0].localeCompare(b[0], 'cs');
+    });
+    const top = list.slice(0, 50);
 
     if (q) {
-      title.textContent = `${list.length} výsledků pro „${query}"`;
-      label.textContent = list.length > 30 ? `Zobrazeno prvních 30 z ${list.length}` : `${list.length} výsledků`;
+      title.textContent = `${list.length.toLocaleString('cs-CZ')} výsledků pro „${query}"`;
+      label.textContent = list.length > 50 ? `Zobrazeno prvních 50 z ${list.length}` : `${list.length} výsledků`;
     } else if (kraj) {
       title.textContent = `Obce v kraji ${kraj}`;
-      label.textContent = `${list.length} obcí · seřazeno podle pořadí v žebříčku`;
+      label.textContent = `${list.length} obcí · prvních 50`;
     } else {
       title.textContent = 'Začněte psát název obce';
-      label.textContent = 'Top 30 měst v žebříčku 2025';
+      label.textContent = `Vyhledávejte mezi ${OBCE.length.toLocaleString('cs-CZ')} obcemi ČR`;
     }
 
     if (top.length === 0) {
@@ -411,30 +396,55 @@
       return;
     }
 
-    results.innerHTML = top.map(([name, o]) => `
-      <a href="navrh-rozcestnik.html?obec=${encodeURIComponent(name)}" class="obec-row">
-        <div class="min-w-0 flex-1">
-          <p class="font-semibold text-ink-900 truncate">${name}</p>
-          <p class="text-xs text-ink-500 truncate">${o.kraj}</p>
-        </div>
-        <div class="text-right shrink-0">
-          <p class="text-sm font-bold text-primary-700">${o.rank}.</p>
-          <p class="text-[10px] text-ink-400">v ČR</p>
-        </div>
-      </a>
-    `).join('');
+    results.innerHTML = top.map(o => {
+      const [name, ki] = o;
+      const kr = KRAJE[ki];
+      const rank = RANKS[name];
+      const rankBadge = rank
+        ? `<div class="text-right shrink-0"><p class="text-sm font-bold text-accent-700">${rank}.</p><p class="text-[10px] text-ink-400">v ČR</p></div>`
+        : `<div class="text-right shrink-0"><p class="text-[11px] text-ink-400">obec</p></div>`;
+      return `
+        <a href="navrh-rozcestnik.html?obec=${encodeURIComponent(name)}" class="obec-row">
+          <div class="min-w-0 flex-1">
+            <p class="font-semibold text-ink-900 truncate">${name}</p>
+            <p class="text-xs text-ink-500 truncate">${kr}</p>
+          </div>
+          ${rankBadge}
+        </a>
+      `;
+    }).join('');
   }
 
-  // Search handler
-  const input = document.getElementById('search-input');
-  input.addEventListener('input', e => renderResults(e.target.value, activeKraj));
+  // === Render obec dots na mapě ===
+  function renderDots() {
+    const NS = 'http://www.w3.org/2000/svg';
+    const frag = document.createDocumentFragment();
+    OBCE.forEach((o, idx) => {
+      const [name, ki, lon, lat] = o;
+      const c = document.createElementNS(NS, 'circle');
+      c.setAttribute('cx', projX(lon).toFixed(0));
+      c.setAttribute('cy', projY(lat).toFixed(0));
+      c.setAttribute('r', RANKS[name] ? '7' : '4');
+      c.setAttribute('class', 'obec-dot');
+      c.dataset.name = name;
+      c.dataset.kraj = KRAJE[ki];
+      frag.appendChild(c);
+    });
+    dotsLayer.appendChild(frag);
+  }
 
-  // SVG mapa — click + hover na kraj polygony
-  const tooltip = document.getElementById('kraj-tooltip');
-  const mapSvg = document.getElementById('cr-map');
-
+  // === Map kraj interactions ===
   function clearActive() {
     document.querySelectorAll('#cr-map g[data-kraj]').forEach(g => g.classList.remove('active'));
+    mapSvg.classList.remove('kraj-active');
+    document.querySelectorAll('#cr-map .obec-dot.in-kraj').forEach(d => d.classList.remove('in-kraj'));
+  }
+
+  function highlightDots(kraj) {
+    document.querySelectorAll('#cr-map .obec-dot').forEach(d => {
+      if (d.dataset.kraj === kraj) d.classList.add('in-kraj');
+      else d.classList.remove('in-kraj');
+    });
   }
 
   function selectKraj(kraj) {
@@ -448,6 +458,8 @@
       clearActive();
       const g = document.querySelector(`#cr-map g[data-kraj="${kraj}"]`);
       if (g) g.classList.add('active');
+      mapSvg.classList.add('kraj-active');
+      highlightDots(kraj);
       document.getElementById('kraj-filter').classList.remove('hidden');
       document.getElementById('kraj-filter-name').textContent = kraj;
       document.getElementById('reset-map').classList.remove('hidden');
@@ -455,24 +467,46 @@
     renderResults(input.value, activeKraj);
   }
 
-  // Click handlers
+  // === Tooltip helper ===
+  function showTooltip(html, e) {
+    tooltip.innerHTML = html;
+    tooltip.classList.remove('hidden');
+    const rect = mapSvg.getBoundingClientRect();
+    tooltip.style.left = (e.clientX - rect.left + 12) + 'px';
+    tooltip.style.top  = (e.clientY - rect.top - 38) + 'px';
+  }
+
+  // === Wire up kraj polygon events ===
   document.querySelectorAll('#cr-map g[data-kraj]').forEach(g => {
     g.addEventListener('click', () => selectKraj(g.dataset.kraj));
-
-    // Hover tooltip
     g.addEventListener('mousemove', e => {
       const kraj = g.dataset.kraj;
       const total = KRAJE_TOTAL[kraj] || 0;
       const detail = kraj === 'Praha' ? 'hlavní město' : `${total.toLocaleString('cs-CZ')} obcí`;
-      tooltip.innerHTML = `<strong>${kraj}</strong> · ${detail}`;
-      tooltip.classList.remove('hidden');
-      const rect = mapSvg.getBoundingClientRect();
-      tooltip.style.left = (e.clientX - rect.left + 12) + 'px';
-      tooltip.style.top  = (e.clientY - rect.top - 38) + 'px';
+      showTooltip(`<strong>${kraj}</strong> · ${detail}`, e);
     });
     g.addEventListener('mouseleave', () => tooltip.classList.add('hidden'));
   });
 
+  // === Wire up dot events (delegation) ===
+  dotsLayer.addEventListener('mousemove', e => {
+    const t = e.target;
+    if (!t.classList || !t.classList.contains('obec-dot')) return;
+    const rank = RANKS[t.dataset.name];
+    const tag = rank ? `${rank}. v ČR` : 'obec';
+    showTooltip(`<strong>${t.dataset.name}</strong> · ${t.dataset.kraj} · ${tag}`, e);
+  });
+  dotsLayer.addEventListener('mouseleave', () => tooltip.classList.add('hidden'));
+  dotsLayer.addEventListener('click', e => {
+    const t = e.target;
+    if (!t.classList || !t.classList.contains('obec-dot')) return;
+    location.href = 'navrh-rozcestnik.html?obec=' + encodeURIComponent(t.dataset.name);
+  });
+
+  // === Search input ===
+  input.addEventListener('input', e => renderResults(e.target.value, activeKraj));
+
+  // === Filter clear ===
   document.getElementById('kraj-filter-clear').addEventListener('click', () => {
     activeKraj = null;
     clearActive();
@@ -480,13 +514,29 @@
     document.getElementById('reset-map').classList.add('hidden');
     renderResults(input.value, null);
   });
-
   document.getElementById('reset-map').addEventListener('click', () => {
     document.getElementById('kraj-filter-clear').click();
   });
 
-  // Init
-  renderResults();
+  // === Load 6258 obcí ===
+  fetch('obce-cr.json')
+    .then(r => r.json())
+    .then(data => {
+      KRAJE = data.kraje;
+      OBCE = data.obce;
+      // Spočítat počty obcí v krajích
+      OBCE.forEach(o => {
+        const k = KRAJE[o[1]];
+        KRAJE_TOTAL[k] = (KRAJE_TOTAL[k] || 0) + 1;
+      });
+      renderDots();
+      renderResults();
+    })
+    .catch(err => {
+      document.getElementById('results').innerHTML =
+        '<div class="px-4 py-8 text-center text-ink-500 text-sm">Nelze načíst seznam obcí (offline?). Spusťte přes lokální server: <code>python -m http.server</code></div>';
+      console.error('obce-cr.json load failed:', err);
+    });
 </script>
 
 </body>

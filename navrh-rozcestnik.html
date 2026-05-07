@@ -235,7 +235,16 @@
   // Read URL ?obec=NAME or default to Říčany
   const params = new URLSearchParams(window.location.search);
   const obecName = decodeURIComponent(params.get('obec') || 'Říčany');
-  const obec = OBCE[obecName];
+  // Pokud obec není v embedované databázi, vytvoříme fallback —
+  // platí pro všechny obce ČR (přijde z univerzálního vyhledávače).
+  // Předpoklad: ne-ORP obce mají Ekonomiku + Studii (na vyžádání), nemají IKŽ.
+  const obec = OBCE[obecName] || {
+    type: 'obec',
+    kraj: '—',
+    orp: null,
+    obyv: null,
+    products: ['ekonomika','studie']
+  };
 
   // Render
   const nameEl = document.getElementById('r-name');
@@ -244,19 +253,9 @@
   const orpLinkBox = document.getElementById('r-orp-link');
   const orpLinkA = document.getElementById('r-orp-link-a');
 
-  if (!obec) {
-    nameEl.textContent = obecName;
-    metaEl.textContent = 'Obec nebyla nalezena v naší databázi.';
-    document.getElementById('state-none').classList.remove('hidden');
-    document.getElementById('state-none-name').textContent = obecName;
-    document.getElementById('state-none-orp').textContent = '(neznámé)';
-    return;
-  }
-
   nameEl.textContent = obecName;
-  typeEl.textContent = obec.type === 'orp' ? '— ORP' : '— Obec';
-  const obyvFmt = obec.obyv ? new Intl.NumberFormat('cs-CZ').format(obec.obyv) + ' obyvatel' : '';
-  metaEl.textContent = obec.kraj + ' kraj · ' + obyvFmt;
+  typeEl.textContent = obec.type === 'orp' ? '— Město' : '— Obec';
+  metaEl.textContent = obec.kraj !== '—' ? obec.kraj + ' kraj' : '';
 
   // ORP link box (jen pro obce, ne pro ORP samotné)
   if (obec.type === 'obec') {
