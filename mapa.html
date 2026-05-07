@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vyhledat obec — Obce v datech</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          sans:    ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
+          display: ['Plus Jakarta Sans', 'sans-serif'],
+        },
+        colors: {
+          primary: {
+            50:  '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd',
+            400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9', 800: '#5b21b6',
+          },
+          accent: {
+            50:  '#ecfdf5', 100: '#d1fae5', 500: '#10b981', 600: '#059669', 700: '#047857',
+          },
+          ink: {
+            900: '#0f172a', 700: '#334155', 500: '#64748b',
+            400: '#94a3b8', 300: '#cbd5e1', 200: '#e2e8f0', 100: '#f1f5f9', 50: '#f8fafc',
+          },
+          surface: { DEFAULT: '#ffffff', alt: '#fafbfc' },
+        },
+        boxShadow: {
+          card: '0 1px 3px rgba(15,23,42,0.04), 0 4px 12px rgba(15,23,42,0.04)',
+          pop:  '0 12px 40px rgba(15,23,42,0.10), 0 4px 12px rgba(15,23,42,0.04)',
+          pill: '0 8px 30px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)',
+        },
+        borderRadius: { '4xl': '2rem' },
+      }
+    }
+  }
+</script>
+
+<style type="text/tailwindcss">
+  @layer base {
+    html { font-family: 'Plus Jakarta Sans','Inter',system-ui,sans-serif; }
+    body { @apply bg-white text-ink-900 antialiased; }
+    h1, h2, h3 { @apply font-display tracking-tight; }
+  }
+  @layer components {
+    .container-x { @apply max-w-[1280px] mx-auto px-4 lg:px-8; }
+    .nav-link    { @apply px-4 py-2 text-[15px] font-medium text-ink-700 hover:text-primary-700 transition-colors; }
+    .nav-utility { @apply text-[12px] font-medium text-ink-500 hover:text-primary-700 transition-colors; }
+    .btn-cta     { @apply inline-flex items-center justify-center gap-2 h-12 px-6 rounded-xl bg-accent-500 text-white font-bold hover:bg-accent-600 transition-all shadow-[0_4px_14px_rgba(16,185,129,0.35)]; }
+    .btn-buy     { @apply inline-flex items-center justify-center gap-2 h-12 px-6 rounded-xl bg-accent-500 hover:bg-accent-600 text-white font-bold text-base transition-colors shadow-[0_8px_24px_-8px_rgba(16,185,129,0.5)]; }
+    .hero-grad   { background: linear-gradient(180deg, #fcfaff 0%, #ddd6fe 100%); }
+    .label-pri   { @apply text-xs font-bold uppercase tracking-[0.12em] text-primary-700; }
+
+    /* Mapa */
+    .kraj-tile {
+      @apply rounded-xl border-2 transition-all cursor-pointer flex flex-col items-center justify-center text-center px-2 py-3;
+      border-color: #e2e8f0;
+      background: #ffffff;
+    }
+    .kraj-tile:hover {
+      @apply shadow-pop;
+      border-color: #7c3aed;
+      background: #f5f3ff;
+      transform: translateY(-2px);
+    }
+    .kraj-tile.active {
+      border-color: #7c3aed;
+      background: #ede9fe;
+    }
+    .kraj-name { @apply text-[12px] lg:text-[13px] font-bold text-ink-900 leading-tight; }
+    .kraj-count { @apply text-[10px] text-ink-500 mt-1; }
+
+    /* Search results */
+    .obec-row {
+      @apply flex items-center justify-between gap-3 px-4 py-3 rounded-xl hover:bg-primary-50 cursor-pointer transition-colors border-b border-ink-100 last:border-b-0;
+    }
+  }
+</style>
+</head>
+
+<body class="font-sans">
+
+<!-- ===== NAVBAR (sjednocený) ===== -->
+<header class="sticky top-3 z-40 container-x">
+  <div class="bg-white border border-ink-200/60 shadow-pill rounded-3xl xl:rounded-full">
+    <div class="flex items-center justify-between px-4 lg:px-6 py-2 gap-4">
+      <a href="index.html" class="flex items-center shrink-0 hover:opacity-90 transition-opacity">
+        <img src="./Výsledky IKŽ za 2025 _ Obce v datech_files/logo-D9ygtVhA.svg" alt="Obce v datech" class="h-9 w-auto">
+      </a>
+      <nav class="hidden xl:flex items-center gap-1">
+        <a href="index.html" class="nav-link font-semibold">Index kvality života</a>
+        <details class="relative group">
+          <summary class="nav-link inline-flex items-center gap-1.5 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+            Naše služby
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-open:rotate-180"><path d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="absolute left-0 top-full mt-3 w-64 bg-white rounded-2xl shadow-pop border border-ink-200/60 py-2 z-50">
+            <a href="#" class="block px-4 py-2.5 text-[14px] font-medium text-ink-700 hover:bg-primary-50 hover:text-primary-700 transition-colors">Ekonomika obce</a>
+            <a href="#" class="block px-4 py-2.5 text-[14px] font-medium text-ink-700 hover:bg-primary-50 hover:text-primary-700 transition-colors">Tematická studie</a>
+            <a href="#" class="block px-4 py-2.5 text-[14px] font-medium text-ink-700 hover:bg-primary-50 hover:text-primary-700 transition-colors">Konzultace a&nbsp;workshopy</a>
+            <a href="#" class="block px-4 py-2.5 text-[14px] font-medium text-ink-700 hover:bg-primary-50 hover:text-primary-700 transition-colors">Datová zakázka na&nbsp;míru</a>
+          </div>
+        </details>
+        <a href="#" class="nav-link">Datové příběhy</a>
+        <a href="#" class="nav-link">O&nbsp;projektu</a>
+      </nav>
+      <div class="hidden xl:flex items-center gap-4">
+        <a href="#" class="nav-utility">Přihlásit se</a>
+        <span class="text-sm font-semibold text-primary-700 px-3">Jste tu</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero-grad mx-4 mt-4 lg:-mt-20 lg:pt-32 rounded-b-3xl lg:rounded-3xl">
+  <div class="container-x py-10 lg:py-14">
+    <p class="label-pri mb-3">— Vyhledat obec</p>
+    <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-[1.05] text-ink-900 max-w-3xl">
+      Najděte svou obec<br>
+      <span class="text-primary-700">na mapě nebo v&nbsp;hledání</span>
+    </h1>
+    <p class="mt-5 text-lg text-ink-700 max-w-2xl">
+      Máme data pro <strong>206&nbsp;měst</strong> a&nbsp;přes <strong>6&nbsp;000&nbsp;obcí</strong>. Klikněte na kraj na mapě, vyberte ze seznamu, nebo zkuste vyhledat přímo.
+    </p>
+  </div>
+</section>
+
+<!-- ===== HLAVNÍ BLOK: MAPA + VYHLEDÁVÁNÍ ===== -->
+<section class="container-x my-10 lg:my-14">
+  <div class="grid lg:grid-cols-[1.1fr_1fr] gap-6 lg:gap-10">
+
+    <!-- LEVÁ ČÁST: MAPA ČR (kraje jako dlaždice v geografickém uspořádání) -->
+    <div class="bg-white rounded-3xl shadow-card p-5 lg:p-7">
+      <div class="flex items-end justify-between mb-5">
+        <div>
+          <p class="label-pri mb-1.5">Mapa krajů</p>
+          <h2 class="text-2xl font-extrabold">Vyberte kraj</h2>
+        </div>
+        <button id="reset-map" class="text-sm text-primary-700 font-semibold hover:underline hidden">
+          ← Zrušit výběr kraje
+        </button>
+      </div>
+
+      <!-- Stylizovaná mapa: kraje uspořádané do gridu, který přibližně odpovídá geografii ČR.
+           14 dlaždic = 14 krajů. Klik = filtr obcí napravo. -->
+      <div class="relative mx-auto" style="max-width:580px">
+        <!-- Pozadí — siluet ČR (jen jako jemné dekorativní pozadí) -->
+        <svg viewBox="0 0 580 380" class="absolute inset-0 w-full h-full pointer-events-none opacity-[0.06]">
+          <path d="M40,180 C60,80 180,40 320,60 C440,75 510,130 540,200 C545,260 510,310 410,335 C290,355 150,345 80,290 C40,250 30,220 40,180 Z"
+                fill="#7c3aed"/>
+        </svg>
+
+        <!-- Grid 5×4 dlaždic — geografické uspořádání -->
+        <div class="relative grid grid-cols-5 gap-2 lg:gap-3" style="grid-template-rows: repeat(4, minmax(70px, 1fr))">
+          <!-- ŘÁDEK 1: západ → sever -->
+          <button class="kraj-tile col-start-1 row-start-1" data-kraj="Karlovarský">
+            <span class="kraj-name">Karlovarský</span>
+            <span class="kraj-count" data-count="Karlovarský">— obcí</span>
+          </button>
+          <button class="kraj-tile col-start-2 row-start-1" data-kraj="Ústecký">
+            <span class="kraj-name">Ústecký</span>
+            <span class="kraj-count" data-count="Ústecký">— obcí</span>
+          </button>
+          <button class="kraj-tile col-start-3 row-start-1" data-kraj="Liberecký">
+            <span class="kraj-name">Liberecký</span>
+            <span class="kraj-count" data-count="Liberecký">— obcí</span>
+          </button>
+          <button class="kraj-tile col-start-4 row-start-1" data-kraj="Královéhradecký">
+            <span class="kraj-name">Královéhradecký</span>
+            <span class="kraj-count" data-count="Královéhradecký">— obcí</span>
+          </button>
+
+          <!-- ŘÁDEK 2: středy -->
+          <button class="kraj-tile col-start-1 row-start-2" data-kraj="Plzeňský">
+            <span class="kraj-name">Plzeňský</span>
+            <span class="kraj-count" data-count="Plzeňský">— obcí</span>
+          </button>
+          <button class="kraj-tile col-start-2 row-start-2" data-kraj="Středočeský">
+            <span class="kraj-name">Středočeský</span>
+            <span class="kraj-count" data-count="Středočeský">— obcí</span>
+          </button>
+          <button class="kraj-tile col-start-3 row-start-2 bg-primary-50 border-primary-300" data-kraj="Praha">
+            <span class="kraj-name text-primary-800">Praha</span>
+            <span class="kraj-count" data-count="Praha">— obcí</span>
+          </button>
+          <button class="kraj-tile col-start-4 row-start-2" data-kraj="Pardubický">
+            <span class="kraj-name">Pardubický</span>
+            <span class="kraj-count" data-count="Pardubický">— obcí</span>
+          </button>
+          <button class="kraj-tile col-start-5 row-start-2" data-kraj="Olomoucký">
+            <span class="kraj-name">Olomoucký</span>
+            <span class="kraj-count" data-count="Olomoucký">— obcí</span>
+          </button>
+
+          <!-- ŘÁDEK 3: jih → východ -->
+          <button class="kraj-tile col-start-1 row-start-3" data-kraj="Jihočeský">
+            <span class="kraj-name">Jihočeský</span>
+            <span class="kraj-count" data-count="Jihočeský">— obcí</span>
+          </button>
+          <button class="kraj-tile col-start-2 row-start-3" data-kraj="Vysočina">
+            <span class="kraj-name">Vysočina</span>
+            <span class="kraj-count" data-count="Vysočina">— obcí</span>
+          </button>
+          <button class="kraj-tile col-start-3 row-start-3" data-kraj="Jihomoravský">
+            <span class="kraj-name">Jihomoravský</span>
+            <span class="kraj-count" data-count="Jihomoravský">— obcí</span>
+          </button>
+          <button class="kraj-tile col-start-4 row-start-3" data-kraj="Zlínský">
+            <span class="kraj-name">Zlínský</span>
+            <span class="kraj-count" data-count="Zlínský">— obcí</span>
+          </button>
+          <button class="kraj-tile col-start-5 row-start-3" data-kraj="Moravskoslezský">
+            <span class="kraj-name">Moravskoslezský</span>
+            <span class="kraj-count" data-count="Moravskoslezský">— obcí</span>
+          </button>
+        </div>
+
+        <!-- Legenda dole -->
+        <div class="mt-5 flex items-center justify-between text-xs text-ink-500">
+          <span>Schematické rozložení podle světových stran</span>
+          <span>14 krajů · 6&nbsp;258 obcí · 206 měst</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRAVÁ ČÁST: VYHLEDÁVÁNÍ + SEZNAM OBCÍ -->
+    <div class="bg-white rounded-3xl shadow-card p-5 lg:p-7 flex flex-col">
+      <p class="label-pri mb-1.5">Hledání</p>
+      <h2 class="text-2xl font-extrabold mb-4" id="search-title">Začněte psát název obce</h2>
+
+      <!-- Search input -->
+      <div class="relative">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             class="absolute left-4 top-1/2 -translate-y-1/2 text-primary-500 pointer-events-none">
+          <path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/>
+        </svg>
+        <input id="search-input" type="text" autocomplete="off"
+               placeholder="Zadejte obec — Říčany, Brno, Slavkov…"
+               class="w-full h-14 pl-12 pr-4 text-[15px] bg-surface-alt border border-ink-200 rounded-xl outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100 transition-all">
+      </div>
+
+      <!-- Filtr badge — když je vybraný kraj -->
+      <div id="kraj-filter" class="mt-3 hidden">
+        <span class="inline-flex items-center gap-2 px-3 py-1.5 bg-primary-100 text-primary-800 text-sm font-semibold rounded-full">
+          Filtr: <span id="kraj-filter-name"></span>
+          <button id="kraj-filter-clear" class="hover:bg-primary-200 rounded-full w-5 h-5 flex items-center justify-center">×</button>
+        </span>
+      </div>
+
+      <!-- Výsledky -->
+      <div class="mt-5 flex-1 min-h-[300px]">
+        <p class="text-xs font-bold uppercase tracking-wider text-ink-500 mb-2" id="results-label">
+          Náhodný výběr měst
+        </p>
+        <div id="results" class="bg-surface-alt rounded-xl divide-y divide-ink-100 overflow-y-auto max-h-[420px]"></div>
+      </div>
+
+      <!-- Spodní statistika -->
+      <div class="mt-5 pt-5 border-t border-ink-100 grid grid-cols-3 gap-3 text-center">
+        <div>
+          <p class="text-2xl font-extrabold text-primary-700">206</p>
+          <p class="text-[11px] text-ink-500">měst v žebříčku</p>
+        </div>
+        <div>
+          <p class="text-2xl font-extrabold text-accent-600">29</p>
+          <p class="text-[11px] text-ink-500">indexů</p>
+        </div>
+        <div>
+          <p class="text-2xl font-extrabold text-amber-600">88</p>
+          <p class="text-[11px] text-ink-500">ukazatelů</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TOP MĚSTA — žebříček TOP 5 jako shortcuty ===== -->
+<section class="container-x my-10 lg:my-14">
+  <div class="flex items-end justify-between mb-5">
+    <div>
+      <p class="label-pri mb-1.5">— TOP 5 měst</p>
+      <h2 class="text-2xl lg:text-3xl font-extrabold">Žebříček 2025 — bestsellery</h2>
+    </div>
+    <a href="#" class="text-sm text-primary-700 font-semibold hover:underline">Celý žebříček 206 měst →</a>
+  </div>
+  <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+    <a href="navrh-rozcestnik.html?obec=Říčany" class="bg-white rounded-2xl shadow-card p-4 hover:shadow-pop transition-all border border-ink-100">
+      <p class="text-xs text-ink-500">1. místo</p>
+      <p class="font-bold text-ink-900 mt-1">Říčany</p>
+      <p class="text-2xl font-extrabold text-accent-600 mt-1">10,0</p>
+    </a>
+    <a href="navrh-rozcestnik.html?obec=Praha" class="bg-white rounded-2xl shadow-card p-4 hover:shadow-pop transition-all border border-ink-100">
+      <p class="text-xs text-ink-500">2. místo</p>
+      <p class="font-bold text-ink-900 mt-1">Praha</p>
+      <p class="text-2xl font-extrabold text-accent-600 mt-1">8,9</p>
+    </a>
+    <a href="navrh-rozcestnik.html?obec=Slavkov u Brna" class="bg-white rounded-2xl shadow-card p-4 hover:shadow-pop transition-all border border-ink-100">
+      <p class="text-xs text-ink-500">3. místo</p>
+      <p class="font-bold text-ink-900 mt-1">Slavkov u&nbsp;Brna</p>
+      <p class="text-2xl font-extrabold text-accent-600 mt-1">8,7</p>
+    </a>
+    <a href="navrh-rozcestnik.html?obec=Kuřim" class="bg-white rounded-2xl shadow-card p-4 hover:shadow-pop transition-all border border-ink-100">
+      <p class="text-xs text-ink-500">4. místo</p>
+      <p class="font-bold text-ink-900 mt-1">Kuřim</p>
+      <p class="text-2xl font-extrabold text-accent-600 mt-1">8,5</p>
+    </a>
+    <a href="navrh-rozcestnik.html?obec=Hustopeče" class="bg-white rounded-2xl shadow-card p-4 hover:shadow-pop transition-all border border-ink-100">
+      <p class="text-xs text-ink-500">5. místo</p>
+      <p class="font-bold text-ink-900 mt-1">Hustopeče</p>
+      <p class="text-2xl font-extrabold text-accent-600 mt-1">8,3</p>
+    </a>
+  </div>
+</section>
+
+<!-- ===== JS ===== -->
+<script>
+  // ZJEDNODUŠENÁ DATABÁZE OBCÍ — kraj + počet obyv. (ukázka)
+  // Ve finální verzi bude načítáno z _obce_data.json
+  const OBCE = {
+    'Říčany':           { kraj: 'Středočeský', obyv: 17500, hasIkz: true,  rank: 1 },
+    'Praha':            { kraj: 'Praha',       obyv: 1300000, hasIkz: true, rank: 2 },
+    'Slavkov u Brna':   { kraj: 'Jihomoravský', obyv: 6900, hasIkz: true,  rank: 3 },
+    'Kuřim':            { kraj: 'Jihomoravský', obyv: 11000, hasIkz: true, rank: 4 },
+    'Hustopeče':        { kraj: 'Jihomoravský', obyv: 5900,  hasIkz: true, rank: 5 },
+    'Brno':             { kraj: 'Jihomoravský', obyv: 380000, hasIkz: true, rank: 7 },
+    'Hořovice':         { kraj: 'Středočeský', obyv: 6800,   hasIkz: true, rank: 9 },
+    'Brandýs nad Labem-Stará Boleslav': { kraj: 'Středočeský', obyv: 19000, hasIkz: true, rank: 8 },
+    'Šlapanice':        { kraj: 'Jihomoravský', obyv: 7500,  hasIkz: true, rank: 11 },
+    'Soběslav':         { kraj: 'Jihočeský',    obyv: 7000,  hasIkz: true, rank: 14 },
+    'Plzeň':            { kraj: 'Plzeňský',     obyv: 175000, hasIkz: true, rank: 26 },
+    'Liberec':          { kraj: 'Liberecký',    obyv: 104000, hasIkz: true, rank: 38 },
+    'Olomouc':          { kraj: 'Olomoucký',    obyv: 100000, hasIkz: true, rank: 42 },
+    'Hradec Králové':   { kraj: 'Královéhradecký', obyv: 92000, hasIkz: true, rank: 32 },
+    'Pardubice':        { kraj: 'Pardubický',   obyv: 91000,  hasIkz: true, rank: 47 },
+    'Jihlava':          { kraj: 'Vysočina',     obyv: 50000,  hasIkz: true, rank: 51 },
+    'Zlín':             { kraj: 'Zlínský',      obyv: 75000,  hasIkz: true, rank: 56 },
+    'Ostrava':          { kraj: 'Moravskoslezský', obyv: 285000, hasIkz: true, rank: 78 },
+    'Karlovy Vary':     { kraj: 'Karlovarský',  obyv: 49000,  hasIkz: true, rank: 89 },
+    'Ústí nad Labem':   { kraj: 'Ústecký',      obyv: 92000,  hasIkz: true, rank: 145 },
+    'Beroun':           { kraj: 'Středočeský',  obyv: 20000,  hasIkz: true, rank: 22 },
+    'Nymburk':          { kraj: 'Středočeský',  obyv: 15000,  hasIkz: true, rank: 28 },
+    'Benešov':          { kraj: 'Středočeský',  obyv: 17000,  hasIkz: true, rank: 25 },
+    'Český Krumlov':    { kraj: 'Jihočeský',    obyv: 13000,  hasIkz: true, rank: 35 },
+    'České Budějovice': { kraj: 'Jihočeský',    obyv: 95000,  hasIkz: true, rank: 41 },
+    'Tábor':            { kraj: 'Jihočeský',    obyv: 35000,  hasIkz: true, rank: 53 },
+    'Klatovy':          { kraj: 'Plzeňský',     obyv: 22000,  hasIkz: true, rank: 64 },
+    'Cheb':             { kraj: 'Karlovarský',  obyv: 32000,  hasIkz: true, rank: 102 },
+    'Sokolov':          { kraj: 'Karlovarský',  obyv: 23000,  hasIkz: true, rank: 168 },
+    'Most':             { kraj: 'Ústecký',      obyv: 64000,  hasIkz: true, rank: 195 },
+    'Litvínov':         { kraj: 'Ústecký',      obyv: 23000,  hasIkz: true, rank: 188 },
+    'Děčín':            { kraj: 'Ústecký',      obyv: 48000,  hasIkz: true, rank: 165 },
+    'Jablonec nad Nisou': { kraj: 'Liberecký',  obyv: 45000,  hasIkz: true, rank: 73 },
+    'Česká Lípa':       { kraj: 'Liberecký',    obyv: 35000,  hasIkz: true, rank: 110 },
+    'Trutnov':          { kraj: 'Královéhradecký', obyv: 30000, hasIkz: true, rank: 95 },
+    'Náchod':           { kraj: 'Královéhradecký', obyv: 19000, hasIkz: true, rank: 88 },
+    'Chrudim':          { kraj: 'Pardubický',   obyv: 23000,  hasIkz: true, rank: 67 },
+    'Svitavy':          { kraj: 'Pardubický',   obyv: 17000,  hasIkz: true, rank: 92 },
+    'Třebíč':           { kraj: 'Vysočina',     obyv: 35000,  hasIkz: true, rank: 76 },
+    'Žďár nad Sázavou': { kraj: 'Vysočina',     obyv: 21000,  hasIkz: true, rank: 60 },
+    'Vyškov':           { kraj: 'Jihomoravský', obyv: 21000,  hasIkz: true, rank: 16 },
+    'Břeclav':          { kraj: 'Jihomoravský', obyv: 24000,  hasIkz: true, rank: 21 },
+    'Znojmo':           { kraj: 'Jihomoravský', obyv: 33000,  hasIkz: true, rank: 81 },
+    'Prostějov':        { kraj: 'Olomoucký',    obyv: 43000,  hasIkz: true, rank: 70 },
+    'Přerov':           { kraj: 'Olomoucký',    obyv: 41000,  hasIkz: true, rank: 130 },
+    'Šumperk':          { kraj: 'Olomoucký',    obyv: 25000,  hasIkz: true, rank: 105 },
+    'Vsetín':           { kraj: 'Zlínský',      obyv: 26000,  hasIkz: true, rank: 84 },
+    'Uherské Hradiště': { kraj: 'Zlínský',      obyv: 25000,  hasIkz: true, rank: 50 },
+    'Kroměříž':         { kraj: 'Zlínský',      obyv: 28000,  hasIkz: true, rank: 62 },
+    'Frýdek-Místek':    { kraj: 'Moravskoslezský', obyv: 54000, hasIkz: true, rank: 46 },
+    'Karviná':          { kraj: 'Moravskoslezský', obyv: 50000, hasIkz: true, rank: 200 },
+    'Opava':            { kraj: 'Moravskoslezský', obyv: 56000, hasIkz: true, rank: 99 },
+    'Nový Jičín':       { kraj: 'Moravskoslezský', obyv: 23000, hasIkz: true, rank: 75 },
+    'Bohumín':          { kraj: 'Moravskoslezský', obyv: 20000, hasIkz: true, rank: 175 },
+    'Orlová':           { kraj: 'Moravskoslezský', obyv: 28000, hasIkz: true, rank: 206 },
+  };
+
+  // Spočítat počty obcí v krajích
+  const krajCounts = {};
+  Object.values(OBCE).forEach(o => {
+    krajCounts[o.kraj] = (krajCounts[o.kraj] || 0) + 1;
+  });
+  // Ve skutečnosti jsou počty mnohem vyšší (zahrnuje i menší obce mimo žebříček) — mockový multiplier
+  const KRAJE_TOTAL = {
+    'Praha': 1, 'Středočeský': 1144, 'Jihočeský': 624, 'Plzeňský': 501, 'Karlovarský': 132,
+    'Ústecký': 354, 'Liberecký': 215, 'Královéhradecký': 448, 'Pardubický': 451, 'Vysočina': 704,
+    'Jihomoravský': 673, 'Olomoucký': 402, 'Zlínský': 307, 'Moravskoslezský': 300
+  };
+  document.querySelectorAll('[data-count]').forEach(el => {
+    const k = el.dataset.count;
+    el.textContent = (KRAJE_TOTAL[k] || 0).toLocaleString('cs-CZ') + (k === 'Praha' ? '' : ' obcí');
+    if (k === 'Praha') el.textContent = 'hlavní město';
+  });
+
+  // Normalize pro CZ vyhledávání
+  const norm = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+
+  let activeKraj = null;
+
+  function renderResults(query = '', kraj = null) {
+    const results = document.getElementById('results');
+    const label = document.getElementById('results-label');
+    const title = document.getElementById('search-title');
+    const q = norm(query.trim());
+
+    let list = Object.entries(OBCE);
+    if (kraj) list = list.filter(([_, o]) => o.kraj === kraj);
+    if (q) list = list.filter(([n, _]) => norm(n).includes(q));
+
+    list.sort((a, b) => (a[1].rank || 999) - (b[1].rank || 999));
+    const top = list.slice(0, 30);
+
+    if (q) {
+      title.textContent = `${list.length} výsledků pro „${query}"`;
+      label.textContent = list.length > 30 ? `Zobrazeno prvních 30 z ${list.length}` : `${list.length} výsledků`;
+    } else if (kraj) {
+      title.textContent = `Obce v kraji ${kraj}`;
+      label.textContent = `${list.length} obcí · seřazeno podle pořadí v žebříčku`;
+    } else {
+      title.textContent = 'Začněte psát název obce';
+      label.textContent = 'Top 30 měst v žebříčku 2025';
+    }
+
+    if (top.length === 0) {
+      results.innerHTML = '<div class="px-4 py-8 text-center text-ink-500 text-sm">Žádné výsledky</div>';
+      return;
+    }
+
+    results.innerHTML = top.map(([name, o]) => `
+      <a href="navrh-rozcestnik.html?obec=${encodeURIComponent(name)}" class="obec-row">
+        <div class="min-w-0 flex-1">
+          <p class="font-semibold text-ink-900 truncate">${name}</p>
+          <p class="text-xs text-ink-500 truncate">${o.kraj} · ${o.obyv.toLocaleString('cs-CZ')} obyv.</p>
+        </div>
+        <div class="text-right shrink-0">
+          <p class="text-sm font-bold text-primary-700">${o.rank}.</p>
+          <p class="text-[10px] text-ink-400">v ČR</p>
+        </div>
+      </a>
+    `).join('');
+  }
+
+  // Search handler
+  const input = document.getElementById('search-input');
+  input.addEventListener('input', e => renderResults(e.target.value, activeKraj));
+
+  // Kraj tile clicks
+  document.querySelectorAll('.kraj-tile').forEach(t => {
+    t.addEventListener('click', () => {
+      const kraj = t.dataset.kraj;
+      if (activeKraj === kraj) {
+        // re-click → unselect
+        activeKraj = null;
+        document.querySelectorAll('.kraj-tile').forEach(x => x.classList.remove('active'));
+        document.getElementById('kraj-filter').classList.add('hidden');
+        document.getElementById('reset-map').classList.add('hidden');
+      } else {
+        activeKraj = kraj;
+        document.querySelectorAll('.kraj-tile').forEach(x => x.classList.remove('active'));
+        t.classList.add('active');
+        document.getElementById('kraj-filter').classList.remove('hidden');
+        document.getElementById('kraj-filter-name').textContent = kraj;
+        document.getElementById('reset-map').classList.remove('hidden');
+      }
+      renderResults(input.value, activeKraj);
+    });
+  });
+
+  document.getElementById('kraj-filter-clear').addEventListener('click', () => {
+    activeKraj = null;
+    document.querySelectorAll('.kraj-tile').forEach(x => x.classList.remove('active'));
+    document.getElementById('kraj-filter').classList.add('hidden');
+    document.getElementById('reset-map').classList.add('hidden');
+    renderResults(input.value, null);
+  });
+
+  document.getElementById('reset-map').addEventListener('click', () => {
+    document.getElementById('kraj-filter-clear').click();
+  });
+
+  // Init
+  renderResults();
+</script>
+
+</body>
+</html>

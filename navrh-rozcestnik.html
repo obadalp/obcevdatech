@@ -51,36 +51,25 @@
         <img src="./Výsledky IKŽ za 2025 _ Obce v datech_files/logo-D9ygtVhA.svg" alt="Obce v datech" class="h-9 w-auto">
       </a>
       <nav class="hidden xl:flex items-center gap-1">
+        <a href="index.html" class="nav-link font-semibold">Index kvality života</a>
         <details class="relative group">
           <summary class="nav-link inline-flex items-center gap-1.5 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
-            Produkty
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-open:rotate-180"><path d="m6 9 6 6 6-6"/></svg>
+            Naše služby
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-open:rotate-180"><path d="m6 9 6 6 6-6"/></svg>
           </summary>
-          <div class="absolute left-0 top-full mt-3 w-72 bg-white rounded-2xl shadow-pop border border-ink-200/60 py-2 z-50">
-            <a href="index.html#produkty" class="flex items-start gap-3 px-4 py-3 hover:bg-accent-50 transition-colors">
-              <span class="w-9 h-9 rounded-lg bg-accent-100 text-accent-700 flex items-center justify-center font-bold shrink-0">📊</span>
-              <span><span class="block text-[14px] font-bold text-ink-900">Index kvality života</span><span class="block text-[12px] text-ink-500 mt-0.5">29 indexů, 88 ukazatelů</span></span>
-            </a>
-            <a href="index.html#produkty" class="flex items-start gap-3 px-4 py-3 hover:bg-primary-50 transition-colors">
-              <span class="w-9 h-9 rounded-lg bg-primary-100 text-primary-700 flex items-center justify-center font-bold shrink-0">💰</span>
-              <span><span class="block text-[14px] font-bold text-ink-900">Ekonomika obce</span><span class="block text-[12px] text-ink-500 mt-0.5">Rozpočet, investice, dluh</span></span>
-            </a>
-            <a href="index.html#produkty" class="flex items-start gap-3 px-4 py-3 hover:bg-amber-50 transition-colors">
-              <span class="w-9 h-9 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center font-bold shrink-0">📋</span>
-              <span><span class="block text-[14px] font-bold text-ink-900">Tematická studie</span><span class="block text-[12px] text-ink-500 mt-0.5">Analýza na míru</span></span>
-            </a>
+          <div class="absolute left-0 top-full mt-3 w-64 bg-white rounded-2xl shadow-pop border border-ink-200/60 py-2 z-50">
+            <a href="#" class="block px-4 py-2.5 text-[14px] font-medium text-ink-700 hover:bg-primary-50 hover:text-primary-700 transition-colors">Ekonomika obce</a>
+            <a href="#" class="block px-4 py-2.5 text-[14px] font-medium text-ink-700 hover:bg-primary-50 hover:text-primary-700 transition-colors">Tematická studie</a>
+            <a href="#" class="block px-4 py-2.5 text-[14px] font-medium text-ink-700 hover:bg-primary-50 hover:text-primary-700 transition-colors">Konzultace a&nbsp;workshopy</a>
+            <a href="#" class="block px-4 py-2.5 text-[14px] font-medium text-ink-700 hover:bg-primary-50 hover:text-primary-700 transition-colors">Datová zakázka na&nbsp;míru</a>
           </div>
         </details>
-        <a href="index.html#zebricek" class="nav-link">Žebříček obcí</a>
         <a href="#" class="nav-link">Datové příběhy</a>
-        <a href="#" class="nav-link">O&nbsp;nás</a>
+        <a href="#" class="nav-link">O&nbsp;projektu</a>
       </nav>
       <div class="hidden xl:flex items-center gap-4">
-        <a href="#" class="nav-utility flex items-center gap-1.5">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          Přihlásit se
-        </a>
-        <a href="#" class="btn-buy h-10 text-sm">Koupit report</a>
+        <a href="#" class="nav-utility">Přihlásit se</a>
+        <a href="mapa.html" class="btn-cta h-10 text-sm">Vyhledat obec</a>
       </div>
     </div>
   </div>
@@ -211,7 +200,7 @@
     ikz: {
       title: 'Index kvality života',
       subtitle: 'Roční report — 29 indexů, 3 pilíře, 8letá historie',
-      icon: '📊',
+      icon: '',
       color: 'accent',
       profileUrl: 'navrh-profil-obce.html',
       buyUrl: '#kupni',
@@ -220,7 +209,7 @@
     ekonomika: {
       title: 'Ekonomika obce',
       subtitle: 'Rating obce, hospodaření, výhled rozpočtu, manažerské shrnutí',
-      icon: '💰',
+      icon: '',
       color: 'primary',
       profileUrl: '#',
       buyUrl: '#kupni',
@@ -229,7 +218,7 @@
     studie: {
       title: 'Tematická studie',
       subtitle: 'Bydlení, doprava, vzdělání, demografie — custom dle zadání',
-      icon: '📋',
+      icon: '',
       color: 'amber',
       profileUrl: '#',
       buyUrl: '#kupni',
@@ -316,8 +305,8 @@
 
     return '<article id="' + prodKey + '" class="bg-white rounded-3xl shadow-card overflow-hidden flex flex-col hover:shadow-pop transition-shadow scroll-mt-24">' +
       '<div class="bg-gradient-to-br ' + colorClasses[p.color] + ' p-6 text-white">' +
-        '<p class="text-3xl">' + p.icon + '</p>' +
-        '<h3 class="text-xl lg:text-2xl font-extrabold mt-2">' + p.title + '</h3>' +
+        '<p class="text-[10px] font-bold uppercase tracking-[0.14em] opacity-80">Produkt</p>' +
+        '<h3 class="text-xl lg:text-2xl font-extrabold mt-1.5">' + p.title + '</h3>' +
       '</div>' +
       '<div class="p-6 flex-1 flex flex-col">' +
         '<p class="text-sm text-ink-700 leading-relaxed">' + p.subtitle + '</p>' +
