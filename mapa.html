@@ -277,9 +277,8 @@
   // Sdílený canvas renderer pro všechny obce (rychlejší než SVG)
   const obceRenderer = L.canvas({ padding: 0.5 });
 
-  // Layers
+  // Layer
   const obceLayer  = L.layerGroup().addTo(map);
-  const krajeLayer = L.layerGroup().addTo(map);  // Kraje nad obcemi (jen obrysy)
 
   // === Render functions ===
   function navigateToObec(name) {
@@ -352,18 +351,14 @@
   krajSelectEl.addEventListener('change', e => {
     const kraj = e.target.value || null;
     activeKraj = kraj;
-    krajeLayer.eachLayer(l => l.setStyle({ weight: 2.5, color: '#475569' }));
-    if (kraj) {
-      const layer = findKrajLayer(kraj);
-      if (layer) {
-        layer.setStyle({ weight: 4, color: '#7c3aed' });
-        map.flyToBounds(layer.getBounds(), { padding: [40, 40], duration: 0.6 });
-      }
+    if (kraj && krajBounds[kraj]) {
+      map.flyToBounds(krajBounds[kraj], { padding: [40, 40], duration: 0.6 });
       resetBtn.classList.remove('hidden');
     } else {
       map.flyToBounds(CR_BOUNDS, { padding: [20, 20], duration: 0.6 });
       resetBtn.classList.add('hidden');
     }
+    repaintObce();
     renderResults(inputEl.value, kraj);
   });
 
@@ -372,55 +367,33 @@
     krajSelectEl.dispatchEvent(new Event('change'));
   });
 
-  // Kraj styling helpers
-  const KRAJ_DEFAULT = { weight: 3, color: '#1e293b', opacity: 0.85 };
-  const KRAJ_ACTIVE  = { weight: 4.5, color: '#7c3aed', opacity: 1 };
-
-  // === Highlight kraj ===
-  function selectKraj(kraj, layer) {
-    if (activeKraj === kraj) {
-      activeKraj = null;
-      krajeLayer.eachLayer(l => l.setStyle(KRAJ_DEFAULT));
-      document.getElementById('kraj-filter').classList.add('hidden');
-      document.getElementById('reset-view').classList.add('hidden');
-      map.flyToBounds(CR_BOUNDS, { padding: [20, 20], duration: 0.6 });
-    } else {
-      activeKraj = kraj;
-      krajeLayer.eachLayer(l => l.setStyle(KRAJ_DEFAULT));
-      layer.setStyle(KRAJ_ACTIVE);
-      document.getElementById('kraj-filter').classList.remove('hidden');
-      document.getElementById('kraj-filter-name').textContent = kraj;
-      document.getElementById('reset-view').classList.remove('hidden');
-      map.flyToBounds(layer.getBounds(), { padding: [40, 40], duration: 0.6 });
-    }
-    renderResults(inputEl.value, activeKraj);
+  // === Re-color obce by active kraj filter ===
+  function repaintObce() {
+    obceLayer.eachLayer(l => {
+      const inKraj = activeKraj === null || l._obecKraj === activeKraj;
+      const isOrp = l._isOrp;
+      if (inKraj) {
+        l.setStyle({
+          color: '#e2e8f0',
+          weight: 0.4,
+          fillColor: isOrp ? '#7c3aed' : '#c4b5fd',
+          fillOpacity: isOrp ? 0.65 : 0.35,
+        });
+      } else {
+        l.setStyle({
+          color: '#f1f5f9',
+          weight: 0.3,
+          fillColor: '#f1f5f9',
+          fillOpacity: 0.5,
+        });
+      }
+    });
   }
 
-  // === Load kraje (pouze obrysy, NEinteraktivní — kliky jdou na obce pod nimi) ===
-  fetch('kraje-simple.json')
-    .then(r => r.json())
-    .then(kraje => {
-      kraje.forEach(k => {
-        let coords;
-        if (k.rings) {
-          coords = k.rings.map(ring => ring.map(([lon, lat]) => [lat, lon]));
-        } else {
-          coords = k.polys.map(poly => poly.map(ring => ring.map(([lon, lat]) => [lat, lon])));
-        }
-        const poly = L.polygon(coords, {
-          color: '#1e293b',
-          weight: 3,
-          opacity: 0.85,
-          fillOpacity: 0,           // bez výplně — neblokuje kliky na obce
-          interactive: false,       // kraje neklikatelné — primární interakce je obec
-          smoothFactor: 0.5,
-        });
-        krajeLayer.addLayer(poly);
-        // Uložíme referenci pro pozdější selectKraj přes search filter
-        poly._krajName = k.name;
-      });
-    })
-    .catch(err => console.error('kraje-simple.json failed:', err));
+  // Kraj polygony nerenderujeme — jejich hranice nesedí s hranicemi obcí (různá zjednodušení).
+  // Místo toho: aktivní kraj zvýrazníme přes barvu obcí (repaintObce).
+  // krajeLayer ponecháváme prázdný pro flyToBounds přes uložené bounds (níže dopočítáme).
+  const krajBounds = {}; // { krajName: L.LatLngBounds }
 
   // === Load obce polygons (2.6 MB — gzip ~800 KB přes Pages) ===
   fetch('obce-polygons.json')
@@ -444,48 +417,68 @@
 
       // Vykreslit polygony obcí na canvasu
       const polys = [];
+      const krajLatLngs = {};  // pro výpočet bounds krajů
       OBCE.forEach(o => {
         const [name, ki, , , ring] = o;
         const isOrp = ORP.has(name);
         const latlngs = ring.map(([lon, lat]) => [lat, lon]);
+        const krajName = KRAJE[ki];
+        if (!krajLatLngs[krajName]) krajLatLngs[krajName] = [];
+        krajLatLngs[krajName].push(...latlngs);
+
         const poly = L.polygon(latlngs, {
           renderer: obceRenderer,
           color: '#e2e8f0',
           weight: 0.4,
-          fillColor: isOrp ? '#a78bfa' : '#f1f5f9',
-          fillOpacity: isOrp ? 0.5 : 0.4,
+          fillColor: isOrp ? '#7c3aed' : '#c4b5fd',
+          fillOpacity: isOrp ? 0.65 : 0.35,
           smoothFactor: 1.2,
         });
         poly._obecName = name;
-        poly._obecKraj = KRAJE[ki];
+        poly._obecKraj = krajName;
         poly._isOrp = isOrp;
         const tag = isOrp ? 'v žebříčku' : 'obec';
-        poly.bindTooltip(`<strong>${name}</strong> · ${KRAJE[ki]} · ${tag}`, {
+        poly.bindTooltip(`<strong>${name}</strong> · ${krajName} · ${tag}`, {
           sticky: true,
           direction: 'top',
         });
         poly.on('click', () => navigateToObec(name));
         poly.on('mouseover', e => {
           e.target.setStyle({
-            fillColor: '#7c3aed',
-            fillOpacity: 0.75,
+            fillColor: '#5b21b6',
+            fillOpacity: 0.85,
             color: '#5b21b6',
             weight: 1.5,
           });
           e.target.bringToFront();
         });
         poly.on('mouseout', e => {
-          e.target.setStyle({
-            color: '#e2e8f0',
-            weight: 0.4,
-            fillColor: e.target._isOrp ? '#a78bfa' : '#f1f5f9',
-            fillOpacity: e.target._isOrp ? 0.5 : 0.4,
-          });
+          // Reset to current state (respektuje aktivní kraj filter)
+          const inKraj = activeKraj === null || e.target._obecKraj === activeKraj;
+          if (inKraj) {
+            e.target.setStyle({
+              color: '#e2e8f0',
+              weight: 0.4,
+              fillColor: e.target._isOrp ? '#7c3aed' : '#c4b5fd',
+              fillOpacity: e.target._isOrp ? 0.65 : 0.35,
+            });
+          } else {
+            e.target.setStyle({
+              color: '#f1f5f9',
+              weight: 0.3,
+              fillColor: '#f1f5f9',
+              fillOpacity: 0.5,
+            });
+          }
         });
         polys.push(poly);
       });
-      // Hromadné přidání do layeru
       polys.forEach(p => obceLayer.addLayer(p));
+
+      // Spočítat bounds pro každý kraj (pro flyToBounds)
+      Object.keys(krajLatLngs).forEach(k => {
+        krajBounds[k] = L.latLngBounds(krajLatLngs[k]);
+      });
 
       // Schovat loading
       const loading = document.getElementById('map-loading');
@@ -501,12 +494,6 @@
       console.error('obce-cr.json failed:', err);
     });
 
-  // === Search filter — když se vybere kraj přes search/filter UI, najdi v krajeLayer a pohni mapou ===
-  function findKrajLayer(name) {
-    let found = null;
-    krajeLayer.eachLayer(l => { if (l._krajName === name) found = l; });
-    return found;
-  }
 </script>
 
 </body>
