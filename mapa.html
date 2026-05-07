@@ -367,27 +367,41 @@
     krajSelectEl.dispatchEvent(new Event('change'));
   });
 
-  // === Re-color obce by active kraj filter ===
+  // === Barva každého kraje (light fill) + tmavší varianta pro ORP ===
+  const KRAJ_COLORS = {
+    'Praha':            { fill: '#fde68a', orp: '#f59e0b' },
+    'Středočeský':      { fill: '#bae6fd', orp: '#0284c7' },
+    'Jihočeský':        { fill: '#bbf7d0', orp: '#16a34a' },
+    'Plzeňský':         { fill: '#fed7aa', orp: '#ea580c' },
+    'Karlovarský':      { fill: '#fecaca', orp: '#dc2626' },
+    'Ústecký':          { fill: '#e9d5ff', orp: '#9333ea' },
+    'Liberecký':        { fill: '#c7d2fe', orp: '#4f46e5' },
+    'Královéhradecký':  { fill: '#fbcfe8', orp: '#db2777' },
+    'Pardubický':       { fill: '#fde047', orp: '#ca8a04' },
+    'Vysočina':         { fill: '#a7f3d0', orp: '#059669' },
+    'Jihomoravský':     { fill: '#fef08a', orp: '#a16207' },
+    'Olomoucký':        { fill: '#a5f3fc', orp: '#0891b2' },
+    'Zlínský':          { fill: '#bef264', orp: '#65a30d' },
+    'Moravskoslezský':  { fill: '#fda4af', orp: '#e11d48' },
+  };
+  const FALLBACK = { fill: '#e2e8f0', orp: '#64748b' };
+
+  function styleFor(layer) {
+    const c = KRAJ_COLORS[layer._obecKraj] || FALLBACK;
+    const inKraj = activeKraj === null || layer._obecKraj === activeKraj;
+    if (!inKraj) {
+      return { color: '#ffffff', weight: 0.6, fillColor: '#f1f5f9', fillOpacity: 0.5 };
+    }
+    return {
+      color: '#ffffff',
+      weight: 0.7,
+      fillColor: layer._isOrp ? c.orp : c.fill,
+      fillOpacity: layer._isOrp ? 0.85 : 0.75,
+    };
+  }
+
   function repaintObce() {
-    obceLayer.eachLayer(l => {
-      const inKraj = activeKraj === null || l._obecKraj === activeKraj;
-      const isOrp = l._isOrp;
-      if (inKraj) {
-        l.setStyle({
-          color: '#e2e8f0',
-          weight: 0.4,
-          fillColor: isOrp ? '#7c3aed' : '#c4b5fd',
-          fillOpacity: isOrp ? 0.65 : 0.35,
-        });
-      } else {
-        l.setStyle({
-          color: '#f1f5f9',
-          weight: 0.3,
-          fillColor: '#f1f5f9',
-          fillOpacity: 0.5,
-        });
-      }
-    });
+    obceLayer.eachLayer(l => l.setStyle(styleFor(l)));
   }
 
   // Kraj polygony nerenderujeme — jejich hranice nesedí s hranicemi obcí (různá zjednodušení).
@@ -426,12 +440,13 @@
         if (!krajLatLngs[krajName]) krajLatLngs[krajName] = [];
         krajLatLngs[krajName].push(...latlngs);
 
+        const c = KRAJ_COLORS[krajName] || FALLBACK;
         const poly = L.polygon(latlngs, {
           renderer: obceRenderer,
-          color: '#e2e8f0',
-          weight: 0.4,
-          fillColor: isOrp ? '#7c3aed' : '#c4b5fd',
-          fillOpacity: isOrp ? 0.65 : 0.35,
+          color: '#ffffff',
+          weight: 0.7,
+          fillColor: isOrp ? c.orp : c.fill,
+          fillOpacity: isOrp ? 0.85 : 0.75,
           smoothFactor: 1.2,
         });
         poly._obecName = name;
@@ -445,31 +460,15 @@
         poly.on('click', () => navigateToObec(name));
         poly.on('mouseover', e => {
           e.target.setStyle({
-            fillColor: '#5b21b6',
-            fillOpacity: 0.85,
+            fillColor: '#7c3aed',
+            fillOpacity: 0.95,
             color: '#5b21b6',
-            weight: 1.5,
+            weight: 2,
           });
           e.target.bringToFront();
         });
         poly.on('mouseout', e => {
-          // Reset to current state (respektuje aktivní kraj filter)
-          const inKraj = activeKraj === null || e.target._obecKraj === activeKraj;
-          if (inKraj) {
-            e.target.setStyle({
-              color: '#e2e8f0',
-              weight: 0.4,
-              fillColor: e.target._isOrp ? '#7c3aed' : '#c4b5fd',
-              fillOpacity: e.target._isOrp ? 0.65 : 0.35,
-            });
-          } else {
-            e.target.setStyle({
-              color: '#f1f5f9',
-              weight: 0.3,
-              fillColor: '#f1f5f9',
-              fillOpacity: 0.5,
-            });
-          }
+          e.target.setStyle(styleFor(e.target));
         });
         polys.push(poly);
       });
