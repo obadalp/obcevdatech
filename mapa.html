@@ -372,18 +372,22 @@
     krajSelectEl.dispatchEvent(new Event('change'));
   });
 
+  // Kraj styling helpers
+  const KRAJ_DEFAULT = { weight: 3, color: '#1e293b', opacity: 0.85 };
+  const KRAJ_ACTIVE  = { weight: 4.5, color: '#7c3aed', opacity: 1 };
+
   // === Highlight kraj ===
   function selectKraj(kraj, layer) {
     if (activeKraj === kraj) {
       activeKraj = null;
-      krajeLayer.eachLayer(l => l.setStyle({ weight: 2.5, color: '#475569' }));
+      krajeLayer.eachLayer(l => l.setStyle(KRAJ_DEFAULT));
       document.getElementById('kraj-filter').classList.add('hidden');
       document.getElementById('reset-view').classList.add('hidden');
       map.flyToBounds(CR_BOUNDS, { padding: [20, 20], duration: 0.6 });
     } else {
       activeKraj = kraj;
-      krajeLayer.eachLayer(l => l.setStyle({ weight: 2.5, color: '#475569' }));
-      layer.setStyle({ weight: 4, color: '#7c3aed' });
+      krajeLayer.eachLayer(l => l.setStyle(KRAJ_DEFAULT));
+      layer.setStyle(KRAJ_ACTIVE);
       document.getElementById('kraj-filter').classList.remove('hidden');
       document.getElementById('kraj-filter-name').textContent = kraj;
       document.getElementById('reset-view').classList.remove('hidden');
@@ -404,10 +408,12 @@
           coords = k.polys.map(poly => poly.map(ring => ring.map(([lon, lat]) => [lat, lon])));
         }
         const poly = L.polygon(coords, {
-          color: '#475569',
-          weight: 2.5,
+          color: '#1e293b',
+          weight: 3,
+          opacity: 0.85,
           fillOpacity: 0,           // bez výplně — neblokuje kliky na obce
           interactive: false,       // kraje neklikatelné — primární interakce je obec
+          smoothFactor: 0.5,
         });
         krajeLayer.addLayer(poly);
         // Uložíme referenci pro pozdější selectKraj přes search filter
@@ -444,10 +450,10 @@
         const latlngs = ring.map(([lon, lat]) => [lat, lon]);
         const poly = L.polygon(latlngs, {
           renderer: obceRenderer,
-          color: '#cbd5e1',
-          weight: 0.6,
-          fillColor: isOrp ? '#a78bfa' : '#e2e8f0',
-          fillOpacity: isOrp ? 0.55 : 0.35,
+          color: '#e2e8f0',
+          weight: 0.4,
+          fillColor: isOrp ? '#a78bfa' : '#f1f5f9',
+          fillOpacity: isOrp ? 0.5 : 0.4,
           smoothFactor: 1.2,
         });
         poly._obecName = name;
@@ -462,17 +468,18 @@
         poly.on('mouseover', e => {
           e.target.setStyle({
             fillColor: '#7c3aed',
-            fillOpacity: 0.7,
+            fillOpacity: 0.75,
             color: '#5b21b6',
-            weight: 1.2,
+            weight: 1.5,
           });
+          e.target.bringToFront();
         });
         poly.on('mouseout', e => {
           e.target.setStyle({
-            color: '#cbd5e1',
-            weight: 0.6,
-            fillColor: e.target._isOrp ? '#a78bfa' : '#e2e8f0',
-            fillOpacity: e.target._isOrp ? 0.55 : 0.35,
+            color: '#e2e8f0',
+            weight: 0.4,
+            fillColor: e.target._isOrp ? '#a78bfa' : '#f1f5f9',
+            fillOpacity: e.target._isOrp ? 0.5 : 0.4,
           });
         });
         polys.push(poly);
