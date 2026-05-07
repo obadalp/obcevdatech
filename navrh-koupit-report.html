@@ -38,7 +38,9 @@
   @layer base { html{font-family:'Plus Jakarta Sans','Inter',system-ui,sans-serif} body{@apply bg-white text-ink-900 antialiased} h1,h2,h3,h4{@apply font-display tracking-tight} }
   @layer components {
     .container-x { @apply max-w-[1240px] mx-auto px-4 lg:px-8; }
-    .nav-link    { @apply px-4 py-2 text-[15px] font-medium text-ink-700 hover:text-primary-700 transition-colors; }
+    .nav-link    { @apply px-3 py-2 text-[14px] font-medium text-ink-700 hover:text-primary-700 transition-colors whitespace-nowrap; }
+    .nav-utility { @apply text-[12px] font-medium text-ink-500 hover:text-primary-700 transition-colors whitespace-nowrap; }
+    .btn-cta     { @apply inline-flex items-center justify-center gap-2 h-11 px-5 rounded-xl bg-accent-500 hover:bg-accent-600 text-white font-bold text-sm transition-colors shadow-[0_4px_14px_rgba(16,185,129,0.35)] whitespace-nowrap; }
     .label-acc   { @apply text-xs font-bold uppercase tracking-[0.12em] text-accent-700; }
     .label-pri   { @apply text-xs font-bold uppercase tracking-[0.12em] text-primary-700; }
     .label-up    { @apply text-xs font-bold uppercase tracking-[0.12em] text-ink-500; }
@@ -71,20 +73,44 @@
 <header class="sticky top-3 z-40 container-x">
   <div class="bg-white border border-ink-200/60 shadow-pill rounded-3xl xl:rounded-full">
     <div class="flex items-center justify-between px-4 lg:px-6 py-2 gap-4">
-      <a href="navrh-home.html" class="flex items-center shrink-0 hover:opacity-90">
-        <img src="./Výsledky IKŽ za 2025 _ Obce v datech_files/logo-D9ygtVhA.svg" alt="Obce v datech" class="h-9 w-auto">
+      <a href="index.html" class="flex items-center shrink-0 hover:opacity-90">
+        <img src="./Výsledky IKŽ za 2025 _ Obce v datech_files/logo-D9ygtVhA.svg" alt="Obce v datech" class="h-7 w-auto">
       </a>
       <nav class="hidden xl:flex items-center gap-1">
-        <a href="navrh-home.html" class="nav-link">Domů</a>
-        <a href="navrh-profil-obce.html" class="nav-link">Ukázka profilu</a>
-        <a href="#vzorovy-report" class="nav-link">Ukázka reportu</a>
-        <a href="#faq" class="nav-link">FAQ</a>
+        <a href="index.html" class="nav-link font-semibold">Kvalita života</a>
+        <details class="relative group">
+          <summary class="nav-link inline-flex items-center gap-1.5 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+            Pro obce
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-open:rotate-180"><path d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="absolute left-0 top-full mt-3 w-64 bg-white rounded-2xl shadow-pop border border-ink-200/60 py-2 z-50">
+            <a href="#" class="block px-4 py-2.5 text-[14px] font-medium text-ink-700 hover:bg-primary-50 hover:text-primary-700 transition-colors">Ekonomika obce</a>
+            <a href="#" class="block px-4 py-2.5 text-[14px] font-medium text-ink-700 hover:bg-primary-50 hover:text-primary-700 transition-colors">Tematická studie</a>
+            <a href="#" class="block px-4 py-2.5 text-[14px] font-medium text-ink-700 hover:bg-primary-50 hover:text-primary-700 transition-colors">Konzultace a&nbsp;workshopy</a>
+            <a href="#" class="block px-4 py-2.5 text-[14px] font-medium text-ink-700 hover:bg-primary-50 hover:text-primary-700 transition-colors">Datová zakázka na&nbsp;míru</a>
+          </div>
+        </details>
+        <a href="#" class="nav-link">Pro média</a>
+        <a href="#" class="nav-link">Datové příběhy</a>
+        <details class="relative group">
+          <summary class="nav-link inline-flex items-center gap-1.5 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+            O&nbsp;projektu
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-open:rotate-180"><path d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="absolute right-0 top-full mt-3 w-56 bg-white rounded-2xl shadow-pop border border-ink-200/60 py-2 z-50">
+            <a href="#" class="block px-4 py-2.5 text-[14px] font-medium text-ink-700 hover:bg-primary-50 hover:text-primary-700 transition-colors">Metodika</a>
+            <a href="#" class="block px-4 py-2.5 text-[14px] font-medium text-ink-700 hover:bg-primary-50 hover:text-primary-700 transition-colors">Reference</a>
+            <a href="#" class="block px-4 py-2.5 text-[14px] font-medium text-ink-700 hover:bg-primary-50 hover:text-primary-700 transition-colors">O&nbsp;týmu</a>
+            <hr class="my-2 border-ink-200">
+            <a href="#" class="block px-4 py-2 text-[12px] text-ink-500 hover:bg-ink-100 transition-colors">FAQ</a>
+            <a href="#" class="block px-4 py-2 text-[12px] text-ink-500 hover:bg-ink-100 transition-colors">Obchodní podmínky</a>
+          </div>
+        </details>
+        <a href="#" class="nav-link">Kontakt</a>
       </nav>
-      <div class="hidden lg:flex items-center gap-3">
-        <span class="text-sm font-bold text-ink-900">19 990 Kč</span>
-        <a href="#kupni-blok" class="inline-flex items-center justify-center gap-2 h-10 px-5 rounded-xl bg-accent-500 hover:bg-accent-600 text-white font-bold text-sm transition-colors">
-          Koupit report →
-        </a>
+      <div class="hidden xl:flex items-center gap-4">
+        <a href="#" class="nav-utility">Přihlásit se</a>
+        <a href="mapa.html" class="btn-cta">Vyhledat obec</a>
       </div>
     </div>
   </div>
