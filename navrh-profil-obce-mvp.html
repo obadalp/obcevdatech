@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Datový profil: Říčany · Obce v datech</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- ============================================================
+     Design dle §20: světlé pozadí, bílé karty, MODRÁ paleta,
+     jemné akcenty, málo barev, hodně prostoru, velká čísla.
+     ============================================================ -->
+<script>
+  tailwind.config = {
+    theme: { extend: {
+      fontFamily: {
+        sans:    ['Plus Jakarta Sans','Inter','system-ui','sans-serif'],
+        display: ['Plus Jakarta Sans','sans-serif'],
+      },
+      colors: {
+        // Primární — modrá podle §20
+        brand: {
+          50:  '#eff6ff',
+          100: '#dbeafe',
+          200: '#bfdbfe',
+          300: '#93c5fd',
+          400: '#60a5fa',
+          500: '#3b82f6',
+          600: '#2563eb',
+          700: '#1d4ed8',
+          800: '#1e40af',
+          900: '#1e3a8a',
+        },
+        ink: { 900:'#0f172a',700:'#334155',500:'#64748b',400:'#94a3b8',200:'#e2e8f0',100:'#f1f5f9',50:'#f8fafc' },
+        // Akcenty — pouze 2 barvy navíc (zelená pro silné stránky a Koupit, jantarová pro rizika)
+        good:  { 50:'#ecfdf5', 100:'#d1fae5', 500:'#10b981', 600:'#059669', 700:'#047857' },
+        warn:  { 50:'#fffbeb', 100:'#fef3c7', 500:'#f59e0b', 600:'#d97706', 700:'#b45309' },
+      },
+      boxShadow: {
+        card: '0 1px 3px rgba(15,23,42,.04), 0 4px 12px rgba(15,23,42,.04)',
+        pop:  '0 12px 40px rgba(15,23,42,.10), 0 4px 12px rgba(15,23,42,.04)',
+        pill: '0 8px 30px rgba(0,0,0,.08), inset 0 1px 0 rgba(255,255,255,.9)',
+      },
+      borderRadius: { '4xl':'2rem' },
+    }}
+  }
+</script>
+
+<style type="text/tailwindcss">
+  @layer base {
+    html { font-family: 'Plus Jakarta Sans','Inter',system-ui,sans-serif; }
+    body { @apply bg-ink-50 text-ink-900 antialiased; }
+    h1, h2, h3, h4 { @apply font-display tracking-tight; }
+  }
+  @layer components {
+    .container-x { @apply max-w-[1200px] mx-auto px-4 lg:px-8; }
+    .nav-link    { @apply px-4 py-2 text-[15px] font-medium text-ink-700 hover:text-brand-700 transition-colors; }
+    .nav-utility { @apply text-[12px] font-medium text-ink-500 hover:text-brand-700 transition-colors; }
+    .label-up    { @apply text-[11px] font-bold uppercase tracking-[0.14em] text-ink-500; }
+    .label-brand { @apply text-[11px] font-bold uppercase tracking-[0.14em] text-brand-700; }
+
+    .btn-primary { @apply inline-flex items-center justify-center gap-2 h-12 px-6 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-[15px] transition-colors shadow-[0_8px_24px_-8px_rgba(37,99,235,0.45)]; }
+    .btn-buy     { @apply inline-flex items-center justify-center gap-2 h-12 px-6 rounded-xl bg-good-500 hover:bg-good-600 text-white font-bold text-[15px] transition-colors shadow-[0_8px_24px_-8px_rgba(16,185,129,0.5)]; }
+    .btn-ghost   { @apply inline-flex items-center justify-center gap-2 h-12 px-6 rounded-xl bg-white hover:bg-ink-100 text-ink-900 font-bold text-[15px] border border-ink-200 transition-colors; }
+
+    .card        { @apply bg-white rounded-3xl shadow-card; }
+  }
+</style>
+</head>
+
+<body class="font-sans pb-24 lg:pb-0">
+
+<!-- ================================================================
+     STICKY BOTTOM CTA (mobil) — §20 doporučuje na mobilu
+     ================================================================ -->
+<div class="fixed bottom-0 inset-x-0 z-50 bg-white border-t border-ink-200 shadow-pop lg:hidden">
+  <div class="container-x py-3 flex items-center justify-between gap-3">
+    <div>
+      <p class="text-[11px] text-ink-500">Plný report obce</p>
+      <p class="text-base font-extrabold text-ink-900">Říčany 2025</p>
+    </div>
+    <a href="#kupni-blok" class="inline-flex items-center justify-center gap-2 h-11 px-5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm">
+      Získat report →
+    </a>
+  </div>
+</div>
+
+<!-- ================================================================
+     HEADER
+     ================================================================ -->
+<header class="sticky top-3 z-40 container-x">
+  <div class="bg-white border border-ink-200/60 shadow-pill rounded-3xl xl:rounded-full">
+    <div class="flex items-center justify-between px-4 lg:px-6 py-2 gap-4">
+      <a href="navrh-home.html" class="flex items-center shrink-0 hover:opacity-90">
+        <img src="./Výsledky IKŽ za 2025 _ Obce v datech_files/logo-D9ygtVhA.svg" alt="Obce v datech" class="h-9 w-auto">
+      </a>
+      <nav class="hidden xl:flex items-center gap-1">
+        <a href="#" class="nav-link">Kvalita života</a>
+        <a href="#" class="nav-link">Ekonomika obce</a>
+        <a href="#" class="nav-link">O projektu</a>
+        <a href="#" class="nav-link">Blog</a>
+      </nav>
+      <div class="hidden xl:flex items-center gap-5">
+        <div class="flex flex-col items-end gap-0.5 leading-tight">
+          <div class="flex items-center gap-2 text-[12px]">
+            <a href="#" class="nav-utility">Přihlásit se</a>
+            <span class="text-ink-200">|</span>
+            <a href="#" class="nav-utility">Registrovat se</a>
+          </div>
+        </div>
+        <a href="#kupni-blok" class="inline-flex items-center justify-center gap-2 h-10 px-5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm">
+          Získat report →
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ================================================================
+     §1) HERO — okamžitá orientace + KPI karty
+     ================================================================ -->
+<section class="container-x mt-10 lg:mt-20">
+
+  <!-- Breadcrumb -->
+  <nav class="flex items-center gap-2 text-sm text-ink-500 mb-8">
+    <a href="navrh-home.html" class="hover:text-ink-700">Domů</a>
+    <span>›</span>
+    <a href="#" class="hover:text-ink-700">Obce</a>
+    <span>›</span>
+    <span class="text-ink-700">Říčany</span>
+  </nav>
+
+  <!-- Title + auto-generovaný odstavec dle §19 -->
+  <p class="label-brand mb-4">— Datový profil obce</p>
+  <h1 class="text-5xl md:text-7xl lg:text-8xl font-extrabold text-ink-900 leading-[1.0]">
+    Říčany
+  </h1>
+  <p class="mt-4 text-lg text-ink-500">
+    Středočeský kraj · ORP · 16 213 obyvatel
+  </p>
+
+  <p class="mt-10 lg:mt-14 max-w-3xl text-xl lg:text-2xl text-ink-700 leading-relaxed">
+    Říčany patří mezi nejsilnější ORP v&nbsp;Česku. V&nbsp;roce 2025 se umístily
+    <span class="font-semibold text-ink-900">na 1. místě z 206 ORP</span>.
+    Detailnější pohled ukazuje nejen celkovou pozici, ale i&nbsp;to,
+    které oblasti město táhnou nahoru a&nbsp;kde se objevují první rizika.
+  </p>
+
+  <!-- KPI karty dle §1 -->
+  <div class="mt-12 lg:mt-16 grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
+    <div class="card p-6">
+      <p class="label-up">Pořadí v ČR</p>
+      <p class="text-5xl lg:text-6xl font-extrabold text-ink-900 mt-3">1.</p>
+      <p class="text-sm text-ink-500 mt-1">z 206 ORP</p>
+    </div>
+    <div class="card p-6">
+      <p class="label-up">Pořadí v kraji</p>
+      <p class="text-5xl lg:text-6xl font-extrabold text-ink-900 mt-3">1.</p>
+      <p class="text-sm text-ink-500 mt-1">ze 26 v kraji</p>
+    </div>
+    <div class="card p-6 bg-brand-600 text-white shadow-pop">
+      <p class="text-[11px] font-bold uppercase tracking-[0.14em] text-brand-100">IKŽ 2025</p>
+      <p class="text-5xl lg:text-6xl font-extrabold mt-3">10,0</p>
+      <p class="text-sm text-brand-100 mt-1">z 10 možných</p>
+    </div>
+    <div class="card p-6">
+      <p class="label-up">Posun od 2018</p>
+      <p class="text-3xl lg:text-4xl font-extrabold text-ink-900 mt-3">— stabilní</p>
+      <p class="text-sm text-ink-500 mt-1">8 let na 1. místě</p>
+    </div>
+  </div>
+
+  <!-- Druhá řada KPI: typ + silná/riziková oblast -->
+  <div class="mt-3 grid grid-cols-1 lg:grid-cols-3 gap-3 lg:gap-4">
+    <div class="card p-6">
+      <p class="label-brand">Typ města</p>
+      <p class="text-2xl font-extrabold text-ink-900 mt-2">Metropolitní rezidenční lídr</p>
+    </div>
+    <div class="card p-6">
+      <p class="text-[11px] font-bold uppercase tracking-[0.14em] text-good-700">Silná oblast</p>
+      <p class="text-2xl font-extrabold text-ink-900 mt-2">Zdraví a&nbsp;práce</p>
+    </div>
+    <div class="card p-6">
+      <p class="text-[11px] font-bold uppercase tracking-[0.14em] text-warn-700">Rizikový signál</p>
+      <p class="text-2xl font-extrabold text-ink-900 mt-2">Vztahy a&nbsp;služby</p>
+    </div>
+  </div>
+
+  <!-- Hero CTA -->
+  <div class="mt-10 lg:mt-12 flex flex-wrap gap-3">
+    <a href="#kupni-blok" class="btn-primary">Získat detailní report města</a>
+    <a href="#snapshot-cta" class="btn-ghost">Stáhnout snapshot zdarma</a>
+  </div>
+</section>
+
+<!-- ================================================================
+     §2) RYCHLÝ DATOVÝ VERDIKT — 3 analytické karty
+     ================================================================ -->
+<section class="container-x mt-24 lg:mt-40">
+  <p class="label-brand mb-4">— Datový verdikt</p>
+  <h2 class="text-3xl lg:text-5xl font-extrabold leading-tight max-w-3xl">
+    Co data o&nbsp;Říčanech říkají
+  </h2>
+
+  <div class="mt-12 grid lg:grid-cols-3 gap-5">
+
+    <article class="card p-8 lg:p-10">
+      <p class="label-up mb-5">1 — Celková pozice</p>
+      <h3 class="text-3xl font-extrabold text-ink-900 leading-tight">
+        Mezi <span class="text-brand-700">nejsilnějšími</span> ORP v Česku
+      </h3>
+      <p class="mt-5 text-ink-700 leading-relaxed">
+        Skóre 10,0 z&nbsp;10 řadí Říčany na 1.&nbsp;místo žebříčku.
+        Patří mezi obce, které dlouhodobě tvoří špičku českých ORP.
+      </p>
+    </article>
+
+    <article class="card p-8 lg:p-10">
+      <p class="label-up mb-5">2 — Vývoj v čase</p>
+      <h3 class="text-3xl font-extrabold text-ink-900 leading-tight">
+        Drží <span class="text-brand-700">stabilní pozici</span> od roku 2018
+      </h3>
+      <p class="mt-5 text-ink-700 leading-relaxed">
+        Osmým rokem v&nbsp;čele žebříčku. Stabilní výsledek naznačuje strukturální
+        výhodu, ne nahodilý jednorázový pík.
+      </p>
+    </article>
+
+    <article class="card p-8 lg:p-10">
+      <p class="label-up mb-5">3 — Hlavní napětí</p>
+      <h3 class="text-3xl font-extrabold text-ink-900 leading-tight">
+        Rozdíl mezi <span class="text-good-700">silnou</span> a <span class="text-warn-700">slabší</span> oblastí
+      </h3>
+      <p class="mt-5 text-ink-700 leading-relaxed">
+        Špičkový výsledek ve zdraví a&nbsp;práci kontrastuje se slabší oblastí
+        vztahů a&nbsp;služeb. Vysoká kvalita života neznamená rezervu ve všech pilířích.
+      </p>
+    </article>
+  </div>
+</section>
+
+<!-- ================================================================
+     §3) ZÁKLADNÍ PROFIL — graf tří pilířů
+     ================================================================ -->
+<section class="container-x mt-24 lg:mt-40">
+  <p class="label-brand mb-4">— Tři pilíře</p>
+  <h2 class="text-3xl lg:text-5xl font-extrabold leading-tight max-w-3xl">
+    Z&nbsp;čeho se skóre 10,0 skládá
+  </h2>
+
+  <div class="card mt-12 p-8 lg:p-12">
+    <div class="space-y-10">
+
+      <div>
+        <div class="flex items-baseline justify-between mb-3">
+          <h3 class="text-xl lg:text-2xl font-bold text-ink-900">Zdraví a&nbsp;životní prostředí</h3>
+          <p class="text-4xl lg:text-5xl font-extrabold text-brand-700">9,4</p>
+        </div>
+        <div class="h-3 bg-ink-100 rounded-full overflow-hidden">
+          <div class="h-full bg-brand-600 rounded-full" style="width:94%"></div>
+        </div>
+        <p class="mt-3 text-sm text-ink-500">Krajský medián 5,9 · ČR medián 5,0</p>
+      </div>
+
+      <div>
+        <div class="flex items-baseline justify-between mb-3">
+          <h3 class="text-xl lg:text-2xl font-bold text-ink-900">Materiální zabezpečení a&nbsp;vzdělání</h3>
+          <p class="text-4xl lg:text-5xl font-extrabold text-brand-700">9,7</p>
+        </div>
+        <div class="h-3 bg-ink-100 rounded-full overflow-hidden">
+          <div class="h-full bg-brand-600 rounded-full" style="width:97%"></div>
+        </div>
+        <p class="mt-3 text-sm text-ink-500">Krajský medián 5,4 · ČR medián 5,2</p>
+      </div>
+
+      <div>
+        <div class="flex items-baseline justify-between mb-3">
+          <h3 class="text-xl lg:text-2xl font-bold text-ink-900">Vztahy a&nbsp;služby</h3>
+          <p class="text-4xl lg:text-5xl font-extrabold text-warn-600">8,9</p>
+        </div>
+        <div class="h-3 bg-ink-100 rounded-full overflow-hidden">
+          <div class="h-full bg-warn-500 rounded-full" style="width:89%"></div>
+        </div>
+        <p class="mt-3 text-sm text-ink-500">Krajský medián 5,6 · ČR medián 5,0 · <span class="text-warn-700 font-semibold">slabší pilíř</span></p>
+      </div>
+
+    </div>
+
+    <p class="mt-10 text-sm text-ink-500 leading-relaxed max-w-2xl">
+      Říčany jsou nadprůměrné ve všech třech pilířích. Nejmenší rezervu mají
+      v&nbsp;oblasti vztahů a&nbsp;služeb — i&nbsp;tam ale výrazně nad krajským i&nbsp;celorepublikovým mediánem.
+    </p>
+  </div>
+</section>
+
+<!-- ================================================================
+     §4) SROVNÁNÍ S KRAJEM A ČR + teaser peer benchmarkingu
+     ================================================================ -->
+<section class="container-x mt-24 lg:mt-40">
+  <p class="label-brand mb-4">— Širší kontext</p>
+  <h2 class="text-3xl lg:text-5xl font-extrabold leading-tight max-w-3xl">
+    Jak si Říčany stojí v&nbsp;širším kontextu
+  </h2>
+
+  <div class="card mt-12 p-8 lg:p-12 overflow-x-auto">
+    <table class="w-full text-base">
+      <thead>
+        <tr class="text-left text-sm text-ink-500 border-b border-ink-200">
+          <th class="font-medium pb-4">Oblast</th>
+          <th class="font-medium pb-4 text-right">Říčany</th>
+          <th class="font-medium pb-4 text-right">Krajský medián</th>
+          <th class="font-medium pb-4 text-right">ČR medián</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-ink-100">
+        <tr>
+          <td class="py-5 font-bold text-ink-900">IKŽ celkem</td>
+          <td class="py-5 text-right text-3xl font-extrabold text-brand-700">10,0</td>
+          <td class="py-5 text-right text-xl font-medium text-ink-500">5,8</td>
+          <td class="py-5 text-right text-xl font-medium text-ink-500">5,1</td>
+        </tr>
+        <tr>
+          <td class="py-5 font-medium text-ink-700">Zdraví</td>
+          <td class="py-5 text-right text-2xl font-bold text-ink-900">9,4</td>
+          <td class="py-5 text-right text-lg text-ink-500">5,9</td>
+          <td class="py-5 text-right text-lg text-ink-500">5,0</td>
+        </tr>
+        <tr>
+          <td class="py-5 font-medium text-ink-700">Práce a&nbsp;vzdělání</td>
+          <td class="py-5 text-right text-2xl font-bold text-ink-900">9,7</td>
+          <td class="py-5 text-right text-lg text-ink-500">5,4</td>
+          <td class="py-5 text-right text-lg text-ink-500">5,2</td>
+        </tr>
+        <tr>
+          <td class="py-5 font-medium text-ink-700">Vztahy a&nbsp;služby</td>
+          <td class="py-5 text-right text-2xl font-bold text-ink-900">8,9</td>
+          <td class="py-5 text-right text-lg text-ink-500">5,6</td>
+          <td class="py-5 text-right text-lg text-ink-500">5,0</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="mt-8 text-base text-ink-700 leading-relaxed max-w-2xl">
+      Říčany jsou nad krajským i&nbsp;celorepublikovým mediánem ve všech třech pilířích.
+      Slabší relativní výsledek mají v&nbsp;oblasti služeb, kde se jejich skóre pohybuje
+      blíže krajskému průměru.
+    </p>
+  </div>
+
+  <!-- CTA peer benchmarking -->
+  <div class="mt-8 card p-8 lg:p-10 bg-brand-50 border border-brand-100">
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+      <div>
+        <h3 class="text-xl lg:text-2xl font-extrabold text-ink-900">
+          Chcete vědět, s jakými podobnými městy se mají Říčany férově srovnávat?
+        </h3>
+        <p class="mt-2 text-ink-700 max-w-xl">
+          Plný datový report obsahuje benchmarking proti skupině 12&nbsp;podobných ORP
+          podle velikosti, regionální role a&nbsp;socioekonomického profilu.
+        </p>
+      </div>
+      <a href="#kupni-blok" class="shrink-0 btn-primary whitespace-nowrap">
+        Získat detailní srovnání města
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     §5) SILNÉ STRÁNKY A RIZIKOVÉ SIGNÁLY — pouze tematicky
+     ================================================================ -->
+<section class="container-x mt-24 lg:mt-40">
+  <p class="label-brand mb-4">— Signály z&nbsp;dat</p>
+  <h2 class="text-3xl lg:text-5xl font-extrabold leading-tight max-w-3xl">
+    Kde Říčany vynikají a&nbsp;kde se objevují rizika
+  </h2>
+
+  <div class="mt-12 grid md:grid-cols-2 gap-5 lg:gap-6">
+
+    <!-- Silné stránky -->
+    <div class="card overflow-hidden">
+      <div class="bg-good-500 px-8 py-5">
+        <p class="text-white text-sm font-bold uppercase tracking-[0.14em]">Tři silné stránky</p>
+      </div>
+      <div class="p-8 lg:p-10 space-y-6">
+        <div class="flex items-start gap-5">
+          <span class="shrink-0 w-9 h-9 rounded-full bg-good-50 text-good-700 font-extrabold flex items-center justify-center">1</span>
+          <div>
+            <h3 class="text-lg font-bold text-ink-900">Zdravotní dostupnost</h3>
+            <p class="text-sm text-ink-500 mt-1">Vysoké pokrytí lékaři, pediatry, zubaři</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-5">
+          <span class="shrink-0 w-9 h-9 rounded-full bg-good-50 text-good-700 font-extrabold flex items-center justify-center">2</span>
+          <div>
+            <h3 class="text-lg font-bold text-ink-900">Ekonomická aktivita</h3>
+            <p class="text-sm text-ink-500 mt-1">Stabilní příjmy domácností nad krajem</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-5">
+          <span class="shrink-0 w-9 h-9 rounded-full bg-good-50 text-good-700 font-extrabold flex items-center justify-center">3</span>
+          <div>
+            <h3 class="text-lg font-bold text-ink-900">Dostupnost vzdělání</h3>
+            <p class="text-sm text-ink-500 mt-1">Hustá síť MŠ a&nbsp;ZŠ s&nbsp;napojením na Prahu</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rizikové signály -->
+    <div class="card overflow-hidden">
+      <div class="bg-warn-500 px-8 py-5">
+        <p class="text-white text-sm font-bold uppercase tracking-[0.14em]">Tři rizikové signály</p>
+      </div>
+      <div class="p-8 lg:p-10 space-y-6">
+        <div class="flex items-start gap-5">
+          <span class="shrink-0 w-9 h-9 rounded-full bg-warn-50 text-warn-700 font-extrabold flex items-center justify-center">1</span>
+          <div>
+            <h3 class="text-lg font-bold text-ink-900">Dostupnost bydlení</h3>
+            <p class="text-sm text-ink-500 mt-1">Rychle rostoucí ceny mohou ohrozit dostupnost</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-5">
+          <span class="shrink-0 w-9 h-9 rounded-full bg-warn-50 text-warn-700 font-extrabold flex items-center justify-center">2</span>
+          <div>
+            <h3 class="text-lg font-bold text-ink-900">Slabší vztahy a&nbsp;služby</h3>
+            <p class="text-sm text-ink-500 mt-1">Pilíř zaostává za ostatními — relativní slabina</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-5">
+          <span class="shrink-0 w-9 h-9 rounded-full bg-warn-50 text-warn-700 font-extrabold flex items-center justify-center">3</span>
+          <div>
+            <h3 class="text-lg font-bold text-ink-900">Tlak na infrastrukturu</h3>
+            <p class="text-sm text-ink-500 mt-1">Růst populace zatěžuje dopravní a&nbsp;komunální služby</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="mt-8 text-sm text-ink-500 italic max-w-3xl">
+    Veřejný profil ukazuje hlavní tematické signály. Detailní report rozkládá každou oblast
+    do konkrétních indikátorů a&nbsp;ukazuje, které z&nbsp;nich výsledek skutečně táhnou nahoru nebo dolů.
+  </p>
+</section>
+
+<!-- ================================================================
+     §7) TREND 2018–2025 — line chart
+     ================================================================ -->
+<section class="container-x mt-24 lg:mt-40">
+  <p class="label-brand mb-4">— Vývoj v čase</p>
+  <h2 class="text-3xl lg:text-5xl font-extrabold leading-tight max-w-3xl">
+    Zlepšují se Říčany, nebo ztrácejí pozici?
+  </h2>
+
+  <div class="card mt-12 p-8 lg:p-12">
+
+    <div class="flex flex-col lg:flex-row lg:items-baseline lg:justify-between gap-4 mb-8">
+      <div>
+        <p class="label-up">Pořadí v ČR · 2018–2025</p>
+        <p class="text-3xl font-extrabold text-ink-900 mt-2">8 let na 1.&nbsp;místě</p>
+      </div>
+      <div class="flex items-center gap-5 text-sm">
+        <span class="flex items-center gap-2"><i class="w-3 h-3 rounded-full bg-brand-600"></i> Říčany</span>
+        <span class="flex items-center gap-2"><i class="w-3 h-3 rounded-full bg-ink-400"></i> Krajský medián</span>
+        <span class="flex items-center gap-2"><i class="w-3 h-3 rounded-full bg-ink-200"></i> ČR medián</span>
+      </div>
+    </div>
+
+    <svg viewBox="0 0 800 280" class="w-full h-auto">
+      <g stroke="#f1f5f9" stroke-width="1">
+        <line x1="40" y1="40"  x2="780" y2="40"/>
+        <line x1="40" y1="100" x2="780" y2="100"/>
+        <line x1="40" y1="160" x2="780" y2="160"/>
+        <line x1="40" y1="220" x2="780" y2="220"/>
+      </g>
+      <g fill="#94a3b8" font-size="11" font-family="Plus Jakarta Sans">
+        <text x="32" y="44" text-anchor="end">10</text>
+        <text x="32" y="104" text-anchor="end">7,5</text>
+        <text x="32" y="164" text-anchor="end">5</text>
+        <text x="32" y="224" text-anchor="end">2,5</text>
+      </g>
+      <!-- ČR medián -->
+      <polyline fill="none" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="3,3"
+                points="60,168 162,166 264,165 366,162 468,160 570,159 672,158 774,158"/>
+      <!-- Krajský medián -->
+      <polyline fill="none" stroke="#94a3b8" stroke-width="2"
+                points="60,150 162,148 264,144 366,142 468,138 570,136 672,135 774,134"/>
+      <!-- Říčany -->
+      <polyline fill="none" stroke="#2563eb" stroke-width="3.5"
+                points="60,42 162,40 264,42 366,40 468,42 570,40 672,40 774,40"/>
+      <g fill="#2563eb">
+        <circle cx="60"  cy="42" r="4.5"/><circle cx="162" cy="40" r="4.5"/>
+        <circle cx="264" cy="42" r="4.5"/><circle cx="366" cy="40" r="4.5"/>
+        <circle cx="468" cy="42" r="4.5"/><circle cx="570" cy="40" r="4.5"/>
+        <circle cx="672" cy="40" r="4.5"/><circle cx="774" cy="40" r="6" stroke="#fff" stroke-width="2"/>
+      </g>
+      <g fill="#94a3b8" font-size="11" font-family="Plus Jakarta Sans" text-anchor="middle">
+        <text x="60"  y="260">2018</text>
+        <text x="162" y="260">2019</text>
+        <text x="264" y="260">2020</text>
+        <text x="366" y="260">2021</text>
+        <text x="468" y="260">2022</text>
+        <text x="570" y="260">2023</text>
+        <text x="672" y="260">2024</text>
+        <text x="774" y="260">2025</text>
+      </g>
+    </svg>
+
+    <p class="mt-8 text-base text-ink-700 leading-relaxed max-w-2xl">
+      Říčany si od roku 2018 udržují <strong>stabilně nejvyšší skóre</strong>.
+      Sedmiletá kontinuita naznačuje strukturální výhodu — ne výkyv.
+    </p>
+
+    <a href="#kupni-blok" class="inline-flex items-center gap-1.5 mt-5 text-brand-700 font-bold hover:gap-2.5 transition-all">
+      Zjistit, co stojí za změnou pořadí →
+    </a>
+  </div>
+</section>
+
+<!-- ================================================================
+     §6) TYP MĚSTA — datová typologie
+     ================================================================ -->
+<section class="container-x mt-24 lg:mt-40">
+  <div class="card p-8 lg:p-16">
+    <div class="grid lg:grid-cols-[1.3fr_1fr] gap-10 lg:gap-16 items-center">
+      <div>
+        <p class="label-brand mb-4">— Typologie</p>
+        <h2 class="text-3xl lg:text-5xl font-extrabold leading-tight">
+          Jaký typ města<br>data ukazují
+        </h2>
+        <p class="mt-6 text-lg text-ink-700 leading-relaxed max-w-lg">
+          Říčany mají profil <strong>metropolitního rezidenčního lídra</strong>
+          — vysokou kvalitu života v&nbsp;těsné vazbě na Prahu.
+          Silná vzdělaná populace, ekonomická aktivita a&nbsp;dostupnost služeb,
+          zároveň rostoucí tlak bydlení.
+        </p>
+        <p class="mt-4 text-sm text-ink-500 max-w-lg">
+          Plný report ukazuje, proč město do této skupiny patří, s&nbsp;jakými
+          podobnými ORP se srovnává a&nbsp;ve kterých indikátorech má největší
+          náskok nebo ztrátu.
+        </p>
+      </div>
+
+      <div class="bg-brand-600 text-white rounded-3xl p-8 lg:p-10 text-center">
+        <p class="text-[11px] font-bold uppercase tracking-[0.14em] text-brand-200">Typ města</p>
+        <p class="text-3xl lg:text-4xl font-extrabold leading-tight mt-3">
+          Metropolitní<br>rezidenční lídr
+        </p>
+        <p class="mt-6 text-sm text-brand-100">
+          1 z 8 datových typů
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     §10) CO OBSAHUJE PLNÝ REPORT — public vs paid
+     ================================================================ -->
+<section class="container-x mt-24 lg:mt-40">
+  <p class="label-brand mb-4">— Co plný report přidá</p>
+  <h2 class="text-3xl lg:text-5xl font-extrabold leading-tight max-w-3xl">
+    Co tento veřejný profil neukazuje
+  </h2>
+  <p class="mt-4 text-ink-700 max-w-2xl">
+    Veřejný profil ukazuje, kde Říčany stojí. Plný report ukazuje, proč tam stojí
+    a&nbsp;co s&nbsp;tím má vedení města dělat.
+  </p>
+
+  <div class="mt-12 grid md:grid-cols-2 gap-5 lg:gap-6">
+
+    <div class="card p-8 lg:p-10">
+      <p class="label-up mb-6">Veřejný profil · zdarma</p>
+      <ul class="space-y-4 text-ink-700">
+        <li class="flex gap-3"><span class="text-ink-400 font-bold mt-0.5">·</span> Celkové skóre a&nbsp;pořadí</li>
+        <li class="flex gap-3"><span class="text-ink-400 font-bold mt-0.5">·</span> Srovnání s&nbsp;krajem a&nbsp;ČR</li>
+        <li class="flex gap-3"><span class="text-ink-400 font-bold mt-0.5">·</span> Hlavní silné a&nbsp;slabé oblasti</li>
+        <li class="flex gap-3"><span class="text-ink-400 font-bold mt-0.5">·</span> Základní trend 2018–2025</li>
+        <li class="flex gap-3"><span class="text-ink-400 font-bold mt-0.5">·</span> Obecný typ města</li>
+      </ul>
+    </div>
+
+    <div class="rounded-3xl bg-brand-700 text-white shadow-pop p-8 lg:p-10">
+      <p class="text-[11px] font-bold uppercase tracking-[0.14em] text-brand-200 mb-6">Plný report · 19 990 Kč</p>
+      <ul class="space-y-4">
+        <li class="flex gap-3"><span class="text-brand-200 font-bold mt-0.5">+</span> Detailní rozklad 70+ ukazatelů</li>
+        <li class="flex gap-3"><span class="text-brand-200 font-bold mt-0.5">+</span> Srovnání s&nbsp;podobnými ORP (peer group)</li>
+        <li class="flex gap-3"><span class="text-brand-200 font-bold mt-0.5">+</span> Přesné indikátory, které výsledek táhnou</li>
+        <li class="flex gap-3"><span class="text-brand-200 font-bold mt-0.5">+</span> Vývoj 2018–2025 po jednotlivých oblastech</li>
+        <li class="flex gap-3"><span class="text-brand-200 font-bold mt-0.5">+</span> Diagnóza a&nbsp;priority pro vedení města</li>
+        <li class="flex gap-3"><span class="text-brand-200 font-bold mt-0.5">+</span> PDF/PPT podklad pro radu a&nbsp;zastupitelstvo</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     §11) UKÁZKA REPORTU — 4 stránky náhledů
+     ================================================================ -->
+<section class="container-x mt-24 lg:mt-40">
+  <p class="label-brand mb-4">— Ukázka</p>
+  <h2 class="text-3xl lg:text-5xl font-extrabold leading-tight max-w-3xl">
+    Jak vypadá plný datový report
+  </h2>
+  <p class="mt-4 text-ink-700 max-w-2xl">
+    72 stran připravených dat. Každá stránka je stylizovaná tak, aby šla rovnou
+    vložit do prezentace pro zastupitelstvo.
+  </p>
+
+  <div class="mt-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6">
+
+    <div>
+      <div class="aspect-[3/4] card p-5">
+        <p class="text-[10px] font-bold uppercase tracking-wider text-brand-700">01</p>
+        <h3 class="text-base font-extrabold mt-1">Executive summary</h3>
+        <div class="mt-4 space-y-2">
+          <div class="h-2 w-full bg-ink-100 rounded"></div>
+          <div class="h-2 w-5/6 bg-ink-100 rounded"></div>
+        </div>
+        <div class="mt-5 grid grid-cols-2 gap-2">
+          <div class="h-12 bg-ink-50 rounded flex items-center justify-center"><span class="text-xs font-extrabold text-ink-900">1.</span></div>
+          <div class="h-12 bg-brand-50 rounded flex items-center justify-center"><span class="text-xs font-extrabold text-brand-700">10,0</span></div>
+        </div>
+      </div>
+      <p class="mt-3 text-sm font-bold text-ink-900">Manažerské shrnutí</p>
+    </div>
+
+    <div>
+      <div class="aspect-[3/4] card p-5">
+        <p class="text-[10px] font-bold uppercase tracking-wider text-brand-700">02</p>
+        <h3 class="text-base font-extrabold mt-1">Peer group</h3>
+        <div class="mt-5 space-y-2.5">
+          <div class="h-2 w-full bg-brand-600 rounded-full"></div>
+          <div class="h-2 w-3/4 bg-brand-400 rounded-full"></div>
+          <div class="h-2 w-2/3 bg-brand-300 rounded-full"></div>
+          <div class="h-2 w-1/2 bg-brand-200 rounded-full"></div>
+          <div class="h-2 w-2/5 bg-brand-200 rounded-full"></div>
+        </div>
+      </div>
+      <p class="mt-3 text-sm font-bold text-ink-900">Srovnání s podobnými ORP</p>
+    </div>
+
+    <div>
+      <div class="aspect-[3/4] card p-5">
+        <p class="text-[10px] font-bold uppercase tracking-wider text-brand-700">03</p>
+        <h3 class="text-base font-extrabold mt-1">Detailní indikátory</h3>
+        <div class="mt-4 space-y-1.5">
+          <div class="flex items-center justify-between text-[10px]"><span class="text-ink-500">Pediatři</span><span class="font-bold text-good-600">↑</span></div>
+          <div class="h-px bg-ink-100"></div>
+          <div class="flex items-center justify-between text-[10px]"><span class="text-ink-500">Praktici</span><span class="font-bold text-good-600">↑</span></div>
+          <div class="h-px bg-ink-100"></div>
+          <div class="flex items-center justify-between text-[10px]"><span class="text-ink-500">Ceny bydlení</span><span class="font-bold text-warn-700">↓</span></div>
+        </div>
+      </div>
+      <p class="mt-3 text-sm font-bold text-ink-900">Rozklad 70+ ukazatelů</p>
+    </div>
+
+    <div>
+      <div class="aspect-[3/4] rounded-2xl bg-brand-700 text-white p-5 shadow-card">
+        <p class="text-[10px] font-bold uppercase tracking-wider text-brand-200">04</p>
+        <h3 class="text-base font-extrabold mt-1">Priority a&nbsp;doporučení</h3>
+        <div class="mt-4 space-y-3">
+          <div class="flex items-start gap-2"><span class="text-brand-200 font-bold text-xs">1.</span><div class="flex-1"><div class="h-1.5 w-full bg-white/30 rounded"></div><div class="h-1.5 w-3/4 bg-white/20 rounded mt-1"></div></div></div>
+          <div class="flex items-start gap-2"><span class="text-brand-200 font-bold text-xs">2.</span><div class="flex-1"><div class="h-1.5 w-full bg-white/30 rounded"></div><div class="h-1.5 w-2/3 bg-white/20 rounded mt-1"></div></div></div>
+          <div class="flex items-start gap-2"><span class="text-brand-200 font-bold text-xs">3.</span><div class="flex-1"><div class="h-1.5 w-full bg-white/30 rounded"></div><div class="h-1.5 w-4/5 bg-white/20 rounded mt-1"></div></div></div>
+        </div>
+      </div>
+      <p class="mt-3 text-sm font-bold text-ink-900">Datově podložené priority</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     §12 + §17) HLAVNÍ CTA BLOK — placený report + lead magnet
+     ================================================================ -->
+<section id="kupni-blok" class="container-x mt-24 lg:mt-40">
+  <div class="rounded-3xl bg-brand-700 text-white px-6 py-14 lg:px-16 lg:py-20">
+
+    <div class="grid lg:grid-cols-[1.2fr_1fr] gap-10 lg:gap-16 items-center">
+      <div>
+        <p class="text-[11px] font-bold uppercase tracking-[0.14em] text-brand-200 mb-4">— Plný datový report</p>
+        <h2 class="text-3xl lg:text-5xl font-extrabold leading-[1.05]">
+          Datový podklad pro<br>vedení města Říčany
+        </h2>
+        <p class="mt-6 text-lg text-brand-100 leading-relaxed max-w-lg">
+          Detailní report ukáže, které oblasti město táhnou nahoru, kde ztrácí proti
+          podobným městům a&nbsp;jaké priority z&nbsp;dat vyplývají pro další rozvoj.
+        </p>
+
+        <ul class="mt-8 space-y-3 text-brand-100">
+          <li class="flex gap-3"><span class="text-white font-bold">+</span> 70+ ukazatelů s&nbsp;kontextem a&nbsp;trendem</li>
+          <li class="flex gap-3"><span class="text-white font-bold">+</span> Peer benchmark proti 12 podobným ORP</li>
+          <li class="flex gap-3"><span class="text-white font-bold">+</span> Diagnóza, priority, doporučení</li>
+          <li class="flex gap-3"><span class="text-white font-bold">+</span> PDF + dashboard + Excel appendix</li>
+        </ul>
+      </div>
+
+      <div class="bg-white/10 backdrop-blur rounded-3xl p-8 lg:p-10 border border-white/20">
+        <p class="text-[11px] font-bold uppercase tracking-wider text-brand-200">Jednorázová cena</p>
+        <p class="text-5xl lg:text-6xl font-extrabold mt-2">19 990 Kč</p>
+        <p class="text-sm text-brand-200 mt-1">bez DPH · faktura na obec</p>
+
+        <div class="mt-7 space-y-3 text-sm">
+          <p class="flex gap-2"><span class="text-white">✓</span> 5 pracovních dnů</p>
+          <p class="flex gap-2"><span class="text-white">✓</span> Garance 14 dní</p>
+          <p class="flex gap-2"><span class="text-white">✓</span> Pod prahem pro VŘ</p>
+        </div>
+
+        <a href="#" class="btn-buy mt-7 w-full">Poptat detailní report →</a>
+        <a href="#" class="block text-center mt-3 text-brand-100 hover:text-white text-sm font-semibold transition-colors">
+          Vyžádat ukázku reportu
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     §12 CTA 2) SNAPSHOT — lead magnet
+     ================================================================ -->
+<section id="snapshot-cta" class="container-x mt-12">
+  <div class="card p-8 lg:p-12 grid lg:grid-cols-[1.2fr_1fr] gap-8 items-center">
+
+    <div>
+      <p class="label-brand mb-3">— Bezplatná varianta</p>
+      <h2 class="text-2xl lg:text-3xl font-extrabold leading-tight">
+        Stáhnout bezplatný snapshot města
+      </h2>
+      <p class="mt-4 text-ink-700">
+        Krátký bezplatný přehled s&nbsp;pořadím, třemi pilíři, vývojem od roku 2018
+        a&nbsp;základním srovnáním s&nbsp;krajem. PDF v&nbsp;inboxu do hodiny.
+      </p>
+    </div>
+
+    <form class="bg-ink-50 rounded-2xl p-5 lg:p-6 space-y-3">
+      <input type="text" placeholder="Vaše jméno" class="w-full h-12 px-4 rounded-xl border border-ink-200 bg-white outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-100">
+      <input type="email" placeholder="E-mail" class="w-full h-12 px-4 rounded-xl border border-ink-200 bg-white outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-100">
+      <button type="submit" class="w-full h-12 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold transition-colors">
+        Stáhnout snapshot →
+      </button>
+      <p class="text-[11px] text-ink-500 leading-tight">GDPR · žádný spam</p>
+    </form>
+  </div>
+</section>
+
+<!-- ================================================================
+     §12 CTA 3) PRO VEŘEJNOST — Vyhledat další obec
+     ================================================================ -->
+<section class="container-x mt-12 mb-24 text-center">
+  <a href="navrh-home.html#hledat" class="inline-flex items-center gap-2 text-brand-700 font-bold hover:gap-3 transition-all">
+    ← Vyhledat další obec
+  </a>
+</section>
+
+<!-- ================================================================
+     METODICKÁ POZNÁMKA (§22)
+     ================================================================ -->
+<section class="container-x mb-12">
+  <details class="card p-6 lg:p-8">
+    <summary class="cursor-pointer list-none flex items-center justify-between [&::-webkit-details-marker]:hidden">
+      <span class="font-bold text-ink-900">Metodická poznámka</span>
+      <span class="text-brand-700 text-sm font-semibold">Rozbalit</span>
+    </summary>
+    <div class="mt-4 text-sm text-ink-700 leading-relaxed space-y-2">
+      <p><strong>Data:</strong> rok 2025, pravidelná aktualizace každoročně.</p>
+      <p><strong>Jednotka:</strong> ORP (obec s&nbsp;rozšířenou působností) · 206 ORP v&nbsp;ČR.</p>
+      <p><strong>Škála:</strong> 0–10, kde 10 je nejlepší výsledek v&nbsp;žebříčku.</p>
+      <p><strong>Zdroje:</strong> ČSÚ, MF&nbsp;ČR, ÚZIS, ČHMÚ, ÚP a&nbsp;další veřejné registry.</p>
+      <p><strong>Limitace:</strong> Veřejný profil ukazuje agregované signály. Detailní rozklad obsahuje plný report.</p>
+    </div>
+  </details>
+</section>
+
+<!-- ================================================================
+     FOOTER
+     ================================================================ -->
+<footer class="bg-brand-50 mx-4 mt-12 rounded-t-3xl">
+  <div class="container-x py-12">
+    <div class="flex flex-col lg:flex-row lg:justify-between gap-8">
+      <div>
+        <h2 class="text-2xl font-semibold text-ink-900 mb-1">Kontaktujte nás</h2>
+        <a href="mailto:info@obcevdatech.cz" class="text-2xl font-semibold text-brand-700 hover:opacity-80">info@obcevdatech.cz</a>
+        <p class="mt-6 text-[13px] text-ink-500">Pomáháme českým obcím od roku 2018</p>
+      </div>
+      <div class="flex gap-12 text-[15px] font-medium text-brand-700">
+        <ul class="space-y-3"><li><a href="navrh-home.html">Domů</a></li><li><a href="#kupni-blok">Koupit report</a></li></ul>
+        <ul class="space-y-3"><li><a href="#">FAQ</a></li><li><a href="#">Kontakt</a></li></ul>
+      </div>
+    </div>
+    <hr class="my-8 border-ink-200">
+    <p class="text-sm text-ink-500">© Copyright Obce v datech 2026</p>
+  </div>
+</footer>
+
+</body>
+</html>

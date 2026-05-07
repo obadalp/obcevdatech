@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rozcestník obce · Obce v datech</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<script>
+  tailwind.config = {
+    theme: { extend: {
+      fontFamily: { sans: ['Plus Jakarta Sans','Inter','system-ui','sans-serif'], display: ['Plus Jakarta Sans','sans-serif'] },
+      colors: {
+        primary: { 50:'#f5f3ff',100:'#ede9fe',200:'#ddd6fe',300:'#c4b5fd',400:'#a78bfa',500:'#8b5cf6',600:'#7c3aed',700:'#6d28d9',800:'#5b21b6' },
+        accent:  { 50:'#ecfdf5',100:'#d1fae5',300:'#6ee7b7',400:'#34d399',500:'#10b981',600:'#059669',700:'#047857' },
+        ink:     { 900:'#0f172a',700:'#334155',500:'#64748b',400:'#94a3b8',200:'#e2e8f0',100:'#f1f5f9',50:'#f8fafc' },
+      },
+      boxShadow: {
+        card: '0 1px 3px rgba(15,23,42,.04), 0 4px 12px rgba(15,23,42,.04)',
+        pop:  '0 12px 40px rgba(15,23,42,.10)',
+        pill: '0 8px 30px rgba(0,0,0,.08), inset 0 1px 0 rgba(255,255,255,.9)',
+      },
+    }}
+  }
+</script>
+
+<style type="text/tailwindcss">
+  @layer base { html{font-family:'Plus Jakarta Sans','Inter',system-ui,sans-serif} body{@apply bg-ink-50 text-ink-900 antialiased} h1,h2,h3,h4{@apply font-display tracking-tight} }
+  @layer components {
+    .container-x { @apply max-w-[1200px] mx-auto px-4 lg:px-8; }
+    .nav-link    { @apply px-4 py-2 text-[15px] font-medium text-ink-700 hover:text-primary-700 transition-colors; }
+    .btn-buy     { @apply inline-flex items-center justify-center gap-2 h-12 px-6 rounded-xl bg-accent-500 hover:bg-accent-600 text-white font-bold text-[15px] transition-colors shadow-[0_8px_24px_-8px_rgba(16,185,129,0.5)]; }
+    .btn-outline { @apply inline-flex items-center justify-center gap-2 h-12 px-6 rounded-xl bg-white hover:bg-ink-100 text-ink-900 font-bold text-[15px] border border-ink-200 transition-colors; }
+    .btn-primary { @apply inline-flex items-center justify-center gap-2 h-12 px-6 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-bold text-[15px] transition-colors; }
+    .hero-grad   { background: linear-gradient(180deg, #fcfaff 0%, #ddd6fe 100%); }
+  }
+</style>
+</head>
+
+<body class="font-sans">
+
+<!-- HEADER (zjednodušený) -->
+<header class="sticky top-3 z-40 container-x">
+  <div class="bg-white border border-ink-200/60 shadow-pill rounded-3xl xl:rounded-full">
+    <div class="flex items-center justify-between px-4 lg:px-6 py-2 gap-4">
+      <a href="index.html" class="flex items-center shrink-0 hover:opacity-90">
+        <img src="./Výsledky IKŽ za 2025 _ Obce v datech_files/logo-D9ygtVhA.svg" alt="Obce v datech" class="h-9 w-auto">
+      </a>
+      <nav class="hidden xl:flex items-center gap-1">
+        <details class="relative group">
+          <summary class="nav-link inline-flex items-center gap-1.5 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+            Produkty
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-open:rotate-180"><path d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="absolute left-0 top-full mt-3 w-72 bg-white rounded-2xl shadow-pop border border-ink-200/60 py-2 z-50">
+            <a href="index.html#produkty" class="flex items-start gap-3 px-4 py-3 hover:bg-accent-50 transition-colors">
+              <span class="w-9 h-9 rounded-lg bg-accent-100 text-accent-700 flex items-center justify-center font-bold shrink-0">📊</span>
+              <span><span class="block text-[14px] font-bold text-ink-900">Index kvality života</span><span class="block text-[12px] text-ink-500 mt-0.5">29 indexů, 88 ukazatelů</span></span>
+            </a>
+            <a href="index.html#produkty" class="flex items-start gap-3 px-4 py-3 hover:bg-primary-50 transition-colors">
+              <span class="w-9 h-9 rounded-lg bg-primary-100 text-primary-700 flex items-center justify-center font-bold shrink-0">💰</span>
+              <span><span class="block text-[14px] font-bold text-ink-900">Ekonomika obce</span><span class="block text-[12px] text-ink-500 mt-0.5">Rozpočet, investice, dluh</span></span>
+            </a>
+            <a href="index.html#produkty" class="flex items-start gap-3 px-4 py-3 hover:bg-amber-50 transition-colors">
+              <span class="w-9 h-9 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center font-bold shrink-0">📋</span>
+              <span><span class="block text-[14px] font-bold text-ink-900">Tematická studie</span><span class="block text-[12px] text-ink-500 mt-0.5">Analýza na míru</span></span>
+            </a>
+          </div>
+        </details>
+        <a href="index.html#zebricek" class="nav-link">Žebříček obcí</a>
+        <a href="#" class="nav-link">Datové příběhy</a>
+        <a href="#" class="nav-link">O&nbsp;nás</a>
+      </nav>
+      <div class="hidden xl:flex items-center gap-4">
+        <a href="#" class="nav-utility flex items-center gap-1.5">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Přihlásit se
+        </a>
+        <a href="#" class="btn-buy h-10 text-sm">Koupit report</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- HERO — město + kontext -->
+<section class="hero-grad mx-4 mt-4 lg:-mt-20 lg:pt-32 rounded-b-3xl lg:rounded-3xl">
+  <div class="container-x py-10 lg:py-16">
+
+    <!-- Breadcrumb + zpět na hledání -->
+    <nav class="flex items-center justify-between mb-6">
+      <div class="flex items-center gap-2 text-sm text-ink-500">
+        <a href="index.html" class="hover:text-ink-700">Domů</a>
+        <span>›</span>
+        <span class="text-ink-700">Rozcestník obce</span>
+      </div>
+      <a href="index.html#hledat" class="inline-flex items-center gap-1.5 text-sm text-primary-700 font-semibold hover:underline">
+        ← Hledat jinou obec
+      </a>
+    </nav>
+
+    <!-- Hlavička s názvem obce -->
+    <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
+      <div>
+        <p class="text-xs font-bold uppercase tracking-[0.15em] text-primary-700 mb-3" id="r-type-label">— Obec</p>
+        <h1 class="text-5xl md:text-6xl lg:text-7xl font-extrabold text-ink-900 leading-[1.0]" id="r-name">
+          —
+        </h1>
+        <p class="mt-3 text-lg text-ink-500" id="r-meta">
+          —
+        </p>
+      </div>
+      <!-- Pokud obec není ORP, ukáže odkaz na ORP -->
+      <div id="r-orp-link" class="hidden bg-white rounded-2xl shadow-card p-4 lg:p-5 border-2 border-primary-100">
+        <p class="text-[10px] font-bold uppercase tracking-wider text-primary-700">Spadá pod ORP</p>
+        <a id="r-orp-link-a" href="#" class="text-xl font-extrabold text-ink-900 hover:text-primary-700 transition-colors">—</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     OBSAH — varianta podle stavu
+     ===================================================================== -->
+<main class="container-x my-12 lg:my-16">
+
+  <!-- STAV 1: ORP — všechny produkty -->
+  <div id="state-orp" class="hidden">
+    <div class="flex items-end justify-between gap-6 mb-8">
+      <div>
+        <p class="text-xs font-bold uppercase tracking-[0.15em] text-accent-700 mb-3">— Pro vaše město máme</p>
+        <h2 class="text-3xl lg:text-4xl font-extrabold leading-tight">
+          Tři produkty plně dostupné
+        </h2>
+      </div>
+    </div>
+    <div id="state-orp-cards" class="grid lg:grid-cols-3 gap-5"></div>
+  </div>
+
+  <!-- STAV 2: Obec s některými produkty -->
+  <div id="state-some" class="hidden">
+    <div class="flex items-end justify-between gap-6 mb-8">
+      <div>
+        <p class="text-xs font-bold uppercase tracking-[0.15em] text-accent-700 mb-3">— Pro vaši obec máme</p>
+        <h2 class="text-3xl lg:text-4xl font-extrabold leading-tight" id="state-some-title">
+          —
+        </h2>
+        <p class="mt-2 text-ink-700">
+          Index kvality života počítáme pro celé ORP. Zobrazte si profil <a href="#" id="state-some-orp-link" class="text-primary-700 font-semibold hover:underline">vašeho ORP</a>.
+        </p>
+      </div>
+    </div>
+    <div id="state-some-cards" class="grid md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+  </div>
+
+  <!-- STAV 3: Obec bez produktů -->
+  <div id="state-none" class="hidden">
+    <div class="bg-white rounded-3xl shadow-card p-8 lg:p-12 text-center max-w-3xl mx-auto">
+      <div class="w-16 h-16 mx-auto rounded-full bg-ink-100 flex items-center justify-center mb-5">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </div>
+      <h2 class="text-2xl lg:text-3xl font-extrabold text-ink-900">
+        Pro <span id="state-none-name">vaši obec</span> zatím nemáme samostatné produkty
+      </h2>
+      <p class="mt-4 text-ink-700 leading-relaxed">
+        Naše datové reporty se zatím zaměřují na střední a&nbsp;větší obce. Vaše obec
+        je menší, takže pro ni nemáme samostatný report kvality života ani ekonomický rating.
+      </p>
+      <div class="mt-6 p-5 bg-primary-50 rounded-2xl border border-primary-100 text-left">
+        <p class="text-sm font-bold text-primary-700 uppercase tracking-wider">Doporučení</p>
+        <p class="mt-2 text-ink-900">
+          Vaše obec spadá pod ORP <strong id="state-none-orp">—</strong>.
+          Pro tento správní obvod (zahrnující i&nbsp;vaši obec) máme všechny tři produkty.
+        </p>
+        <a id="state-none-orp-btn" href="#" class="btn-primary mt-4">
+          Zobrazit profil ORP →
+        </a>
+      </div>
+      <p class="mt-6 text-sm text-ink-500">
+        Máte specifický požadavek na data o&nbsp;vaší obci?
+        <a href="#" class="text-primary-700 font-semibold hover:underline">Napište nám</a> — můžeme udělat tematickou studii na míru.
+      </p>
+    </div>
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="hero-grad mx-4 mt-12 rounded-t-3xl">
+  <div class="container-x py-12">
+    <div class="flex flex-col lg:flex-row lg:justify-between gap-8">
+      <div>
+        <h2 class="text-2xl font-semibold text-ink-900 mb-1">Kontaktujte nás</h2>
+        <a href="mailto:info@obcevdatech.cz" class="text-2xl font-semibold text-primary-700 hover:opacity-80">info@obcevdatech.cz</a>
+      </div>
+      <p class="text-sm text-ink-500 self-end">© Obce v datech 2026</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // EMBEDDED OBCE DATA
+  const OBCE = {"Aš":{"type":"orp","kraj":"Karlovarský","orp":"Aš","obyv":12000,"products":["ikz","ekonomika","studie"]},"Benešov":{"type":"orp","kraj":"Středočeský","orp":"Benešov","obyv":12000,"products":["ikz","ekonomika","studie"]},"Beroun":{"type":"orp","kraj":"Středočeský","orp":"Beroun","obyv":12000,"products":["ikz","ekonomika","studie"]},"Bílina":{"type":"orp","kraj":"Ústecký","orp":"Bílina","obyv":12000,"products":["ikz","ekonomika","studie"]},"Bílovec":{"type":"orp","kraj":"Moravskoslezský","orp":"Bílovec","obyv":12000,"products":["ikz","ekonomika","studie"]},"Blansko":{"type":"orp","kraj":"Jihomoravský","orp":"Blansko","obyv":12000,"products":["ikz","ekonomika","studie"]},"Blatná":{"type":"orp","kraj":"Jihočeský","orp":"Blatná","obyv":12000,"products":["ikz","ekonomika","studie"]},"Blovice":{"type":"orp","kraj":"Plzeňský","orp":"Blovice","obyv":12000,"products":["ikz","ekonomika","studie"]},"Bohumín":{"type":"orp","kraj":"Moravskoslezský","orp":"Bohumín","obyv":12000,"products":["ikz","ekonomika","studie"]},"Boskovice":{"type":"orp","kraj":"Jihomoravský","orp":"Boskovice","obyv":12000,"products":["ikz","ekonomika","studie"]},"Brandýs nad Labem-Stará Boleslav":{"type":"orp","kraj":"Středočeský","orp":"Brandýs nad Labem-Stará Boleslav","obyv":12000,"products":["ikz","ekonomika","studie"]},"Brno":{"type":"orp","kraj":"Jihomoravský","orp":"Brno","obyv":380000,"products":["ikz","ekonomika","studie"]},"Broumov":{"type":"orp","kraj":"Královéhradecký","orp":"Broumov","obyv":12000,"products":["ikz","ekonomika","studie"]},"Bruntál":{"type":"orp","kraj":"Moravskoslezský","orp":"Bruntál","obyv":12000,"products":["ikz","ekonomika","studie"]},"Břeclav":{"type":"orp","kraj":"Jihomoravský","orp":"Břeclav","obyv":12000,"products":["ikz","ekonomika","studie"]},"Bučovice":{"type":"orp","kraj":"Jihomoravský","orp":"Bučovice","obyv":12000,"products":["ikz","ekonomika","studie"]},"Bystřice nad Pernštejnem":{"type":"orp","kraj":"Vysočina","orp":"Bystřice nad Pernštejnem","obyv":12000,"products":["ikz","ekonomika","studie"]},"Bystřice pod Hostýnem":{"type":"orp","kraj":"Zlínský","orp":"Bystřice pod Hostýnem","obyv":12000,"products":["ikz","ekonomika","studie"]},"Čáslav":{"type":"orp","kraj":"Středočeský","orp":"Čáslav","obyv":12000,"products":["ikz","ekonomika","studie"]},"Černošice":{"type":"orp","kraj":"Středočeský","orp":"Černošice","obyv":12000,"products":["ikz","ekonomika","studie"]},"Česká Lípa":{"type":"orp","kraj":"Liberecký","orp":"Česká Lípa","obyv":12000,"products":["ikz","ekonomika","studie"]},"Česká Třebová":{"type":"orp","kraj":"Pardubický","orp":"Česká Třebová","obyv":12000,"products":["ikz","ekonomika","studie"]},"České Budějovice":{"type":"orp","kraj":"Jihočeský","orp":"České Budějovice","obyv":95000,"products":["ikz","ekonomika","studie"]},"Český Brod":{"type":"orp","kraj":"Středočeský","orp":"Český Brod","obyv":12000,"products":["ikz","ekonomika","studie"]},"Český Krumlov":{"type":"orp","kraj":"Jihočeský","orp":"Český Krumlov","obyv":12000,"products":["ikz","ekonomika","studie"]},"Český Těšín":{"type":"orp","kraj":"Moravskoslezský","orp":"Český Těšín","obyv":12000,"products":["ikz","ekonomika","studie"]},"Dačice":{"type":"orp","kraj":"Jihočeský","orp":"Dačice","obyv":12000,"products":["ikz","ekonomika","studie"]},"Děčín":{"type":"orp","kraj":"Ústecký","orp":"Děčín","obyv":47000,"products":["ikz","ekonomika","studie"]},"Dobruška":{"type":"orp","kraj":"Královéhradecký","orp":"Dobruška","obyv":12000,"products":["ikz","ekonomika","studie"]},"Dobříš":{"type":"orp","kraj":"Středočeský","orp":"Dobříš","obyv":12000,"products":["ikz","ekonomika","studie"]},"Domažlice":{"type":"orp","kraj":"Plzeňský","orp":"Domažlice","obyv":12000,"products":["ikz","ekonomika","studie"]},"Dvůr Králové nad Labem":{"type":"orp","kraj":"Královéhradecký","orp":"Dvůr Králové nad Labem","obyv":12000,"products":["ikz","ekonomika","studie"]},"Frenštát pod Radhoštěm":{"type":"orp","kraj":"Moravskoslezský","orp":"Frenštát pod Radhoštěm","obyv":12000,"products":["ikz","ekonomika","studie"]},"Frýdek-Místek":{"type":"orp","kraj":"Moravskoslezský","orp":"Frýdek-Místek","obyv":53000,"products":["ikz","ekonomika","studie"]},"Frýdlant":{"type":"orp","kraj":"Liberecký","orp":"Frýdlant","obyv":12000,"products":["ikz","ekonomika","studie"]},"Frýdlant nad Ostravicí":{"type":"orp","kraj":"Moravskoslezský","orp":"Frýdlant nad Ostravicí","obyv":12000,"products":["ikz","ekonomika","studie"]},"Havířov":{"type":"orp","kraj":"Moravskoslezský","orp":"Havířov","obyv":70000,"products":["ikz","ekonomika","studie"]},"Havlíčkův Brod":{"type":"orp","kraj":"Vysočina","orp":"Havlíčkův Brod","obyv":12000,"products":["ikz","ekonomika","studie"]},"Hlinsko":{"type":"orp","kraj":"Pardubický","orp":"Hlinsko","obyv":12000,"products":["ikz","ekonomika","studie"]},"Hlučín":{"type":"orp","kraj":"Moravskoslezský","orp":"Hlučín","obyv":12000,"products":["ikz","ekonomika","studie"]},"Hodonín":{"type":"orp","kraj":"Jihomoravský","orp":"Hodonín","obyv":12000,"products":["ikz","ekonomika","studie"]},"Holešov":{"type":"orp","kraj":"Zlínský","orp":"Holešov","obyv":12000,"products":["ikz","ekonomika","studie"]},"Holice":{"type":"orp","kraj":"Pardubický","orp":"Holice","obyv":12000,"products":["ikz","ekonomika","studie"]},"Horažďovice":{"type":"orp","kraj":"Plzeňský","orp":"Horažďovice","obyv":12000,"products":["ikz","ekonomika","studie"]},"Horšovský Týn":{"type":"orp","kraj":"Plzeňský","orp":"Horšovský Týn","obyv":12000,"products":["ikz","ekonomika","studie"]},"Hořice":{"type":"orp","kraj":"Královéhradecký","orp":"Hořice","obyv":12000,"products":["ikz","ekonomika","studie"]},"Hořovice":{"type":"orp","kraj":"Středočeský","orp":"Hořovice","obyv":12000,"products":["ikz","ekonomika","studie"]},"Hradec Králové":{"type":"orp","kraj":"Královéhradecký","orp":"Hradec Králové","obyv":92000,"products":["ikz","ekonomika","studie"]},"Hranice":{"type":"orp","kraj":"Olomoucký","orp":"Hranice","obyv":12000,"products":["ikz","ekonomika","studie"]},"Humpolec":{"type":"orp","kraj":"Vysočina","orp":"Humpolec","obyv":12000,"products":["ikz","ekonomika","studie"]},"Hustopeče":{"type":"orp","kraj":"Jihomoravský","orp":"Hustopeče","obyv":12000,"products":["ikz","ekonomika","studie"]},"Cheb":{"type":"orp","kraj":"Karlovarský","orp":"Cheb","obyv":12000,"products":["ikz","ekonomika","studie"]},"Chomutov":{"type":"orp","kraj":"Ústecký","orp":"Chomutov","obyv":47000,"products":["ikz","ekonomika","studie"]},"Chotěboř":{"type":"orp","kraj":"Vysočina","orp":"Chotěboř","obyv":12000,"products":["ikz","ekonomika","studie"]},"Chrudim":{"type":"orp","kraj":"Pardubický","orp":"Chrudim","obyv":12000,"products":["ikz","ekonomika","studie"]},"Ivančice":{"type":"orp","kraj":"Jihomoravský","orp":"Ivančice","obyv":12000,"products":["ikz","ekonomika","studie"]},"Jablonec nad Nisou":{"type":"orp","kraj":"Liberecký","orp":"Jablonec nad Nisou","obyv":12000,"products":["ikz","ekonomika","studie"]},"Jablunkov":{"type":"orp","kraj":"Moravskoslezský","orp":"Jablunkov","obyv":12000,"products":["ikz","ekonomika","studie"]},"Jaroměř":{"type":"orp","kraj":"Královéhradecký","orp":"Jaroměř","obyv":12000,"products":["ikz","ekonomika","studie"]},"Jeseník":{"type":"orp","kraj":"Olomoucký","orp":"Jeseník","obyv":12000,"products":["ikz","ekonomika","studie"]},"Jičín":{"type":"orp","kraj":"Královéhradecký","orp":"Jičín","obyv":12000,"products":["ikz","ekonomika","studie"]},"Jihlava":{"type":"orp","kraj":"Vysočina","orp":"Jihlava","obyv":50000,"products":["ikz","ekonomika","studie"]},"Jilemnice":{"type":"orp","kraj":"Liberecký","orp":"Jilemnice","obyv":12000,"products":["ikz","ekonomika","studie"]},"Jindřichův Hradec":{"type":"orp","kraj":"Jihočeský","orp":"Jindřichův Hradec","obyv":12000,"products":["ikz","ekonomika","studie"]},"Kadaň":{"type":"orp","kraj":"Ústecký","orp":"Kadaň","obyv":12000,"products":["ikz","ekonomika","studie"]},"Kaplice":{"type":"orp","kraj":"Jihočeský","orp":"Kaplice","obyv":12000,"products":["ikz","ekonomika","studie"]},"Karlovy Vary":{"type":"orp","kraj":"Karlovarský","orp":"Karlovy Vary","obyv":45000,"products":["ikz","ekonomika","studie"]},"Karviná":{"type":"orp","kraj":"Moravskoslezský","orp":"Karviná","obyv":50000,"products":["ikz","ekonomika","studie"]},"Kladno":{"type":"orp","kraj":"Středočeský","orp":"Kladno","obyv":68000,"products":["ikz","ekonomika","studie"]},"Klatovy":{"type":"orp","kraj":"Plzeňský","orp":"Klatovy","obyv":12000,"products":["ikz","ekonomika","studie"]},"Kolín":{"type":"orp","kraj":"Středočeský","orp":"Kolín","obyv":12000,"products":["ikz","ekonomika","studie"]},"Konice":{"type":"orp","kraj":"Olomoucký","orp":"Konice","obyv":12000,"products":["ikz","ekonomika","studie"]},"Kopřivnice":{"type":"orp","kraj":"Moravskoslezský","orp":"Kopřivnice","obyv":12000,"products":["ikz","ekonomika","studie"]},"Kostelec nad Orlicí":{"type":"orp","kraj":"Královéhradecký","orp":"Kostelec nad Orlicí","obyv":12000,"products":["ikz","ekonomika","studie"]},"Kralovice":{"type":"orp","kraj":"Plzeňský","orp":"Kralovice","obyv":12000,"products":["ikz","ekonomika","studie"]},"Kralupy nad Vltavou":{"type":"orp","kraj":"Středočeský","orp":"Kralupy nad Vltavou","obyv":12000,"products":["ikz","ekonomika","studie"]},"Kraslice":{"type":"orp","kraj":"Karlovarský","orp":"Kraslice","obyv":12000,"products":["ikz","ekonomika","studie"]},"Kravaře":{"type":"orp","kraj":"Moravskoslezský","orp":"Kravaře","obyv":12000,"products":["ikz","ekonomika","studie"]},"Králíky":{"type":"orp","kraj":"Pardubický","orp":"Králíky","obyv":12000,"products":["ikz","ekonomika","studie"]},"Krnov":{"type":"orp","kraj":"Moravskoslezský","orp":"Krnov","obyv":12000,"products":["ikz","ekonomika","studie"]},"Kroměříž":{"type":"orp","kraj":"Zlínský","orp":"Kroměříž","obyv":12000,"products":["ikz","ekonomika","studie"]},"Kuřim":{"type":"orp","kraj":"Jihomoravský","orp":"Kuřim","obyv":12000,"products":["ikz","ekonomika","studie"]},"Kutná Hora":{"type":"orp","kraj":"Středočeský","orp":"Kutná Hora","obyv":12000,"products":["ikz","ekonomika","studie"]},"Kyjov":{"type":"orp","kraj":"Jihomoravský","orp":"Kyjov","obyv":12000,"products":["ikz","ekonomika","studie"]},"Lanškroun":{"type":"orp","kraj":"Pardubický","orp":"Lanškroun","obyv":12000,"products":["ikz","ekonomika","studie"]},"Liberec":{"type":"orp","kraj":"Liberecký","orp":"Liberec","obyv":105000,"products":["ikz","ekonomika","studie"]},"Lipník nad Bečvou":{"type":"orp","kraj":"Olomoucký","orp":"Lipník nad Bečvou","obyv":12000,"products":["ikz","ekonomika","studie"]},"Litoměřice":{"type":"orp","kraj":"Ústecký","orp":"Litoměřice","obyv":12000,"products":["ikz","ekonomika","studie"]},"Litomyšl":{"type":"orp","kraj":"Pardubický","orp":"Litomyšl","obyv":12000,"products":["ikz","ekonomika","studie"]},"Litovel":{"type":"orp","kraj":"Olomoucký","orp":"Litovel","obyv":12000,"products":["ikz","ekonomika","studie"]},"Litvínov":{"type":"orp","kraj":"Ústecký","orp":"Litvínov","obyv":12000,"products":["ikz","ekonomika","studie"]},"Louny":{"type":"orp","kraj":"Ústecký","orp":"Louny","obyv":12000,"products":["ikz","ekonomika","studie"]},"Lovosice":{"type":"orp","kraj":"Ústecký","orp":"Lovosice","obyv":12000,"products":["ikz","ekonomika","studie"]},"Luhačovice":{"type":"orp","kraj":"Zlínský","orp":"Luhačovice","obyv":12000,"products":["ikz","ekonomika","studie"]},"Lysá nad Labem":{"type":"orp","kraj":"Středočeský","orp":"Lysá nad Labem","obyv":12000,"products":["ikz","ekonomika","studie"]},"Mariánské Lázně":{"type":"orp","kraj":"Karlovarský","orp":"Mariánské Lázně","obyv":12000,"products":["ikz","ekonomika","studie"]},"Mělník":{"type":"orp","kraj":"Středočeský","orp":"Mělník","obyv":12000,"products":["ikz","ekonomika","studie"]},"Mikulov":{"type":"orp","kraj":"Jihomoravský","orp":"Mikulov","obyv":12000,"products":["ikz","ekonomika","studie"]},"Milevsko":{"type":"orp","kraj":"Jihočeský","orp":"Milevsko","obyv":12000,"products":["ikz","ekonomika","studie"]},"Mladá Boleslav":{"type":"orp","kraj":"Středočeský","orp":"Mladá Boleslav","obyv":44000,"products":["ikz","ekonomika","studie"]},"Mnichovo Hradiště":{"type":"orp","kraj":"Středočeský","orp":"Mnichovo Hradiště","obyv":9048,"products":["ikz","ekonomika","studie"]},"Mohelnice":{"type":"orp","kraj":"Olomoucký","orp":"Mohelnice","obyv":12000,"products":["ikz","ekonomika","studie"]},"Moravská Třebová":{"type":"orp","kraj":"Pardubický","orp":"Moravská Třebová","obyv":12000,"products":["ikz","ekonomika","studie"]},"Moravské Budějovice":{"type":"orp","kraj":"Vysočina","orp":"Moravské Budějovice","obyv":12000,"products":["ikz","ekonomika","studie"]},"Moravský Krumlov":{"type":"orp","kraj":"Jihomoravský","orp":"Moravský Krumlov","obyv":12000,"products":["ikz","ekonomika","studie"]},"Most":{"type":"orp","kraj":"Ústecký","orp":"Most","obyv":65000,"products":["ikz","ekonomika","studie"]},"Náchod":{"type":"orp","kraj":"Královéhradecký","orp":"Náchod","obyv":12000,"products":["ikz","ekonomika","studie"]},"Náměšť nad Oslavou":{"type":"orp","kraj":"Vysočina","orp":"Náměšť nad Oslavou","obyv":12000,"products":["ikz","ekonomika","studie"]},"Nepomuk":{"type":"orp","kraj":"Plzeňský","orp":"Nepomuk","obyv":12000,"products":["ikz","ekonomika","studie"]},"Neratovice":{"type":"orp","kraj":"Středočeský","orp":"Neratovice","obyv":12000,"products":["ikz","ekonomika","studie"]},"Nová Paka":{"type":"orp","kraj":"Královéhradecký","orp":"Nová Paka","obyv":12000,"products":["ikz","ekonomika","studie"]},"Nové Město nad Metují":{"type":"orp","kraj":"Královéhradecký","orp":"Nové Město nad Metují","obyv":12000,"products":["ikz","ekonomika","studie"]},"Nové Město na Moravě":{"type":"orp","kraj":"Vysočina","orp":"Nové Město na Moravě","obyv":12000,"products":["ikz","ekonomika","studie"]},"Nový Bor":{"type":"orp","kraj":"Liberecký","orp":"Nový Bor","obyv":12000,"products":["ikz","ekonomika","studie"]},"Nový Bydžov":{"type":"orp","kraj":"Královéhradecký","orp":"Nový Bydžov","obyv":12000,"products":["ikz","ekonomika","studie"]},"Nový Jičín":{"type":"orp","kraj":"Moravskoslezský","orp":"Nový Jičín","obyv":12000,"products":["ikz","ekonomika","studie"]},"Nymburk":{"type":"orp","kraj":"Středočeský","orp":"Nymburk","obyv":12000,"products":["ikz","ekonomika","studie"]},"Nýřany":{"type":"orp","kraj":"Plzeňský","orp":"Nýřany","obyv":12000,"products":["ikz","ekonomika","studie"]},"Odry":{"type":"orp","kraj":"Moravskoslezský","orp":"Odry","obyv":12000,"products":["ikz","ekonomika","studie"]},"Olomouc":{"type":"orp","kraj":"Olomoucký","orp":"Olomouc","obyv":100000,"products":["ikz","ekonomika","studie"]},"Opava":{"type":"orp","kraj":"Moravskoslezský","orp":"Opava","obyv":56000,"products":["ikz","ekonomika","studie"]},"Orlová":{"type":"orp","kraj":"Moravskoslezský","orp":"Orlová","obyv":12000,"products":["ikz","ekonomika","studie"]},"Ostrava":{"type":"orp","kraj":"Moravskoslezský","orp":"Ostrava","obyv":280000,"products":["ikz","ekonomika","studie"]},"Ostrov":{"type":"orp","kraj":"Karlovarský","orp":"Ostrov","obyv":12000,"products":["ikz","ekonomika","studie"]},"Otrokovice":{"type":"orp","kraj":"Zlínský","orp":"Otrokovice","obyv":12000,"products":["ikz","ekonomika","studie"]},"Pacov":{"type":"orp","kraj":"Vysočina","orp":"Pacov","obyv":12000,"products":["ikz","ekonomika","studie"]},"Pardubice":{"type":"orp","kraj":"Pardubický","orp":"Pardubice","obyv":90000,"products":["ikz","ekonomika","studie"]},"Pelhřimov":{"type":"orp","kraj":"Vysočina","orp":"Pelhřimov","obyv":12000,"products":["ikz","ekonomika","studie"]},"Písek":{"type":"orp","kraj":"Jihočeský","orp":"Písek","obyv":12000,"products":["ikz","ekonomika","studie"]},"Plzeň":{"type":"orp","kraj":"Plzeňský","orp":"Plzeň","obyv":175000,"products":["ikz","ekonomika","studie"]},"Podbořany":{"type":"orp","kraj":"Ústecký","orp":"Podbořany","obyv":12000,"products":["ikz","ekonomika","studie"]},"Poděbrady":{"type":"orp","kraj":"Středočeský","orp":"Poděbrady","obyv":12000,"products":["ikz","ekonomika","studie"]},"Pohořelice":{"type":"orp","kraj":"Jihomoravský","orp":"Pohořelice","obyv":12000,"products":["ikz","ekonomika","studie"]},"Polička":{"type":"orp","kraj":"Pardubický","orp":"Polička","obyv":12000,"products":["ikz","ekonomika","studie"]},"Praha":{"type":"orp","kraj":"Hlavní město Praha","orp":"Praha","obyv":1300000,"products":["ikz","ekonomika","studie"]},"Prachatice":{"type":"orp","kraj":"Jihočeský","orp":"Prachatice","obyv":12000,"products":["ikz","ekonomika","studie"]},"Prostějov":{"type":"orp","kraj":"Olomoucký","orp":"Prostějov","obyv":43000,"products":["ikz","ekonomika","studie"]},"Přelouč":{"type":"orp","kraj":"Pardubický","orp":"Přelouč","obyv":12000,"products":["ikz","ekonomika","studie"]},"Přerov":{"type":"orp","kraj":"Olomoucký","orp":"Přerov","obyv":12000,"products":["ikz","ekonomika","studie"]},"Přeštice":{"type":"orp","kraj":"Plzeňský","orp":"Přeštice","obyv":12000,"products":["ikz","ekonomika","studie"]},"Příbram":{"type":"orp","kraj":"Středočeský","orp":"Příbram","obyv":12000,"products":["ikz","ekonomika","studie"]},"Rakovník":{"type":"orp","kraj":"Středočeský","orp":"Rakovník","obyv":12000,"products":["ikz","ekonomika","studie"]},"Rokycany":{"type":"orp","kraj":"Plzeňský","orp":"Rokycany","obyv":12000,"products":["ikz","ekonomika","studie"]},"Rosice":{"type":"orp","kraj":"Jihomoravský","orp":"Rosice","obyv":12000,"products":["ikz","ekonomika","studie"]},"Roudnice nad Labem":{"type":"orp","kraj":"Ústecký","orp":"Roudnice nad Labem","obyv":12000,"products":["ikz","ekonomika","studie"]},"Rožnov pod Radhoštěm":{"type":"orp","kraj":"Zlínský","orp":"Rožnov pod Radhoštěm","obyv":12000,"products":["ikz","ekonomika","studie"]},"Rumburk":{"type":"orp","kraj":"Ústecký","orp":"Rumburk","obyv":12000,"products":["ikz","ekonomika","studie"]},"Rychnov nad Kněžnou":{"type":"orp","kraj":"Královéhradecký","orp":"Rychnov nad Kněžnou","obyv":12000,"products":["ikz","ekonomika","studie"]},"Rýmařov":{"type":"orp","kraj":"Moravskoslezský","orp":"Rýmařov","obyv":12000,"products":["ikz","ekonomika","studie"]},"Říčany":{"type":"orp","kraj":"Středočeský","orp":"Říčany","obyv":16213,"products":["ikz","ekonomika","studie"]},"Sedlčany":{"type":"orp","kraj":"Středočeský","orp":"Sedlčany","obyv":12000,"products":["ikz","ekonomika","studie"]},"Semily":{"type":"orp","kraj":"Liberecký","orp":"Semily","obyv":12000,"products":["ikz","ekonomika","studie"]},"Slaný":{"type":"orp","kraj":"Středočeský","orp":"Slaný","obyv":12000,"products":["ikz","ekonomika","studie"]},"Slavkov u Brna":{"type":"orp","kraj":"Jihomoravský","orp":"Slavkov u Brna","obyv":12000,"products":["ikz","ekonomika","studie"]},"Soběslav":{"type":"orp","kraj":"Jihočeský","orp":"Soběslav","obyv":12000,"products":["ikz","ekonomika","studie"]},"Sokolov":{"type":"orp","kraj":"Karlovarský","orp":"Sokolov","obyv":12000,"products":["ikz","ekonomika","studie"]},"Stod":{"type":"orp","kraj":"Plzeňský","orp":"Stod","obyv":12000,"products":["ikz","ekonomika","studie"]},"Strakonice":{"type":"orp","kraj":"Jihočeský","orp":"Strakonice","obyv":12000,"products":["ikz","ekonomika","studie"]},"Stříbro":{"type":"orp","kraj":"Plzeňský","orp":"Stříbro","obyv":12000,"products":["ikz","ekonomika","studie"]},"Sušice":{"type":"orp","kraj":"Plzeňský","orp":"Sušice","obyv":12000,"products":["ikz","ekonomika","studie"]},"Světlá nad Sázavou":{"type":"orp","kraj":"Vysočina","orp":"Světlá nad Sázavou","obyv":12000,"products":["ikz","ekonomika","studie"]},"Svitavy":{"type":"orp","kraj":"Pardubický","orp":"Svitavy","obyv":12000,"products":["ikz","ekonomika","studie"]},"Šlapanice":{"type":"orp","kraj":"Jihomoravský","orp":"Šlapanice","obyv":12000,"products":["ikz","ekonomika","studie"]},"Šternberk":{"type":"orp","kraj":"Olomoucký","orp":"Šternberk","obyv":12000,"products":["ikz","ekonomika","studie"]},"Šumperk":{"type":"orp","kraj":"Olomoucký","orp":"Šumperk","obyv":12000,"products":["ikz","ekonomika","studie"]},"Tachov":{"type":"orp","kraj":"Plzeňský","orp":"Tachov","obyv":12000,"products":["ikz","ekonomika","studie"]},"Tanvald":{"type":"orp","kraj":"Liberecký","orp":"Tanvald","obyv":12000,"products":["ikz","ekonomika","studie"]},"Tábor":{"type":"orp","kraj":"Jihočeský","orp":"Tábor","obyv":12000,"products":["ikz","ekonomika","studie"]},"Telč":{"type":"orp","kraj":"Vysočina","orp":"Telč","obyv":12000,"products":["ikz","ekonomika","studie"]},"Teplice":{"type":"orp","kraj":"Ústecký","orp":"Teplice","obyv":48000,"products":["ikz","ekonomika","studie"]},"Tišnov":{"type":"orp","kraj":"Jihomoravský","orp":"Tišnov","obyv":12000,"products":["ikz","ekonomika","studie"]},"Trhové Sviny":{"type":"orp","kraj":"Jihočeský","orp":"Trhové Sviny","obyv":12000,"products":["ikz","ekonomika","studie"]},"Trutnov":{"type":"orp","kraj":"Královéhradecký","orp":"Trutnov","obyv":12000,"products":["ikz","ekonomika","studie"]},"Třebíč":{"type":"orp","kraj":"Vysočina","orp":"Třebíč","obyv":12000,"products":["ikz","ekonomika","studie"]},"Třeboň":{"type":"orp","kraj":"Jihočeský","orp":"Třeboň","obyv":12000,"products":["ikz","ekonomika","studie"]},"Třinec":{"type":"orp","kraj":"Moravskoslezský","orp":"Třinec","obyv":33000,"products":["ikz","ekonomika","studie"]},"Turnov":{"type":"orp","kraj":"Liberecký","orp":"Turnov","obyv":12000,"products":["ikz","ekonomika","studie"]},"Týn nad Vltavou":{"type":"orp","kraj":"Jihočeský","orp":"Týn nad Vltavou","obyv":12000,"products":["ikz","ekonomika","studie"]},"Uherské Hradiště":{"type":"orp","kraj":"Zlínský","orp":"Uherské Hradiště","obyv":12000,"products":["ikz","ekonomika","studie"]},"Uherský Brod":{"type":"orp","kraj":"Zlínský","orp":"Uherský Brod","obyv":12000,"products":["ikz","ekonomika","studie"]},"Uničov":{"type":"orp","kraj":"Olomoucký","orp":"Uničov","obyv":12000,"products":["ikz","ekonomika","studie"]},"Ústí nad Labem":{"type":"orp","kraj":"Ústecký","orp":"Ústí nad Labem","obyv":92000,"products":["ikz","ekonomika","studie"]},"Ústí nad Orlicí":{"type":"orp","kraj":"Pardubický","orp":"Ústí nad Orlicí","obyv":12000,"products":["ikz","ekonomika","studie"]},"Valašské Klobouky":{"type":"orp","kraj":"Zlínský","orp":"Valašské Klobouky","obyv":12000,"products":["ikz","ekonomika","studie"]},"Valašské Meziříčí":{"type":"orp","kraj":"Zlínský","orp":"Valašské Meziříčí","obyv":12000,"products":["ikz","ekonomika","studie"]},"Varnsdorf":{"type":"orp","kraj":"Ústecký","orp":"Varnsdorf","obyv":12000,"products":["ikz","ekonomika","studie"]},"Velké Meziříčí":{"type":"orp","kraj":"Vysočina","orp":"Velké Meziříčí","obyv":12000,"products":["ikz","ekonomika","studie"]},"Veselí nad Moravou":{"type":"orp","kraj":"Jihomoravský","orp":"Veselí nad Moravou","obyv":12000,"products":["ikz","ekonomika","studie"]},"Vimperk":{"type":"orp","kraj":"Jihočeský","orp":"Vimperk","obyv":12000,"products":["ikz","ekonomika","studie"]},"Vizovice":{"type":"orp","kraj":"Zlínský","orp":"Vizovice","obyv":12000,"products":["ikz","ekonomika","studie"]},"Vítkov":{"type":"orp","kraj":"Moravskoslezský","orp":"Vítkov","obyv":12000,"products":["ikz","ekonomika","studie"]},"Vlašim":{"type":"orp","kraj":"Středočeský","orp":"Vlašim","obyv":12000,"products":["ikz","ekonomika","studie"]},"Vodňany":{"type":"orp","kraj":"Jihočeský","orp":"Vodňany","obyv":12000,"products":["ikz","ekonomika","studie"]},"Votice":{"type":"orp","kraj":"Středočeský","orp":"Votice","obyv":12000,"products":["ikz","ekonomika","studie"]},"Vrchlabí":{"type":"orp","kraj":"Královéhradecký","orp":"Vrchlabí","obyv":12000,"products":["ikz","ekonomika","studie"]},"Vsetín":{"type":"orp","kraj":"Zlínský","orp":"Vsetín","obyv":12000,"products":["ikz","ekonomika","studie"]},"Vysoké Mýto":{"type":"orp","kraj":"Pardubický","orp":"Vysoké Mýto","obyv":12000,"products":["ikz","ekonomika","studie"]},"Vyškov":{"type":"orp","kraj":"Jihomoravský","orp":"Vyškov","obyv":12000,"products":["ikz","ekonomika","studie"]},"Zábřeh":{"type":"orp","kraj":"Olomoucký","orp":"Zábřeh","obyv":12000,"products":["ikz","ekonomika","studie"]},"Zlín":{"type":"orp","kraj":"Zlínský","orp":"Zlín","obyv":74000,"products":["ikz","ekonomika","studie"]},"Znojmo":{"type":"orp","kraj":"Jihomoravský","orp":"Znojmo","obyv":12000,"products":["ikz","ekonomika","studie"]},"Žamberk":{"type":"orp","kraj":"Pardubický","orp":"Žamberk","obyv":12000,"products":["ikz","ekonomika","studie"]},"Žatec":{"type":"orp","kraj":"Ústecký","orp":"Žatec","obyv":12000,"products":["ikz","ekonomika","studie"]},"Žďár nad Sázavou":{"type":"orp","kraj":"Vysočina","orp":"Žďár nad Sázavou","obyv":12000,"products":["ikz","ekonomika","studie"]},"Železný Brod":{"type":"orp","kraj":"Liberecký","orp":"Železný Brod","obyv":12000,"products":["ikz","ekonomika","studie"]},"Židlochovice":{"type":"orp","kraj":"Jihomoravský","orp":"Židlochovice","obyv":12000,"products":["ikz","ekonomika","studie"]},"Hradištko":{"type":"obec","kraj":"Středočeský","orp":"Brandýs nad Labem-Stará Boleslav","obyv":1942,"products":["ekonomika"]},"Velké Popovice":{"type":"obec","kraj":"Středočeský","orp":"Říčany","obyv":2980,"products":["ekonomika","studie"]},"Mukařov":{"type":"obec","kraj":"Středočeský","orp":"Říčany","obyv":2840,"products":["ekonomika"]},"Tehov":{"type":"obec","kraj":"Středočeský","orp":"Říčany","obyv":1230,"products":["ekonomika"]},"Klokočná":{"type":"obec","kraj":"Středočeský","orp":"Říčany","obyv":380,"products":[]},"Stříbrná Skalice":{"type":"obec","kraj":"Středočeský","orp":"Říčany","obyv":1490,"products":["ekonomika"]},"Kostelec n. Č. l.":{"type":"obec","kraj":"Středočeský","orp":"Říčany","obyv":4250,"products":["ekonomika","studie"]},"Chocerady":{"type":"obec","kraj":"Středočeský","orp":"Benešov","obyv":1820,"products":["ekonomika"]},"Doksy":{"type":"obec","kraj":"Středočeský","orp":"Kladno","obyv":1190,"products":["ekonomika"]},"Hvozdnice":{"type":"obec","kraj":"Středočeský","orp":"Praha-západ","obyv":280,"products":[]},"Modřice":{"type":"obec","kraj":"Jihomoravský","orp":"Šlapanice","obyv":5390,"products":["ekonomika","studie"]},"Šlapanice (obec)":{"type":"obec","kraj":"Jihomoravský","orp":"Šlapanice","obyv":7340,"products":["ekonomika","studie"]},"Pozořice":{"type":"obec","kraj":"Jihomoravský","orp":"Šlapanice","obyv":2570,"products":["ekonomika"]},"Sivice":{"type":"obec","kraj":"Jihomoravský","orp":"Šlapanice","obyv":920,"products":[]},"Hostěnice":{"type":"obec","kraj":"Jihomoravský","orp":"Šlapanice","obyv":670,"products":[]},"Tvarožná":{"type":"obec","kraj":"Jihomoravský","orp":"Šlapanice","obyv":1080,"products":["ekonomika"]},"Drnovice":{"type":"obec","kraj":"Jihomoravský","orp":"Vyškov","obyv":2450,"products":["ekonomika"]},"Vlachovice":{"type":"obec","kraj":"Zlínský","orp":"Valašské Klobouky","obyv":580,"products":[]},"Brumov-Bylnice":{"type":"obec","kraj":"Zlínský","orp":"Valašské Klobouky","obyv":5310,"products":["ekonomika","studie"]},"Slavičín":{"type":"obec","kraj":"Zlínský","orp":"Luhačovice","obyv":6840,"products":["ekonomika","studie"]},"Petřvald":{"type":"obec","kraj":"Moravskoslezský","orp":"Karviná","obyv":7180,"products":["ekonomika","studie"]},"Dolní Lutyně":{"type":"obec","kraj":"Moravskoslezský","orp":"Bohumín","obyv":4730,"products":["ekonomika"]},"Velký Týnec":{"type":"obec","kraj":"Olomoucký","orp":"Olomouc","obyv":2640,"products":["ekonomika"]},"Příkazy":{"type":"obec","kraj":"Olomoucký","orp":"Olomouc","obyv":1200,"products":["ekonomika"]},"Stod (obec)":{"type":"obec","kraj":"Plzeňský","orp":"Stod","obyv":3650,"products":["ekonomika"]},"Štěnovice":{"type":"obec","kraj":"Plzeňský","orp":"Plzeň","obyv":2380,"products":["ekonomika"]},"Dýšina":{"type":"obec","kraj":"Plzeňský","orp":"Plzeň","obyv":1720,"products":["ekonomika"]},"Habartov":{"type":"obec","kraj":"Karlovarský","orp":"Sokolov","obyv":4870,"products":["ekonomika","studie"]},"Bukovany":{"type":"obec","kraj":"Karlovarský","orp":"Sokolov","obyv":2280,"products":["ekonomika"]},"Královské Poříčí":{"type":"obec","kraj":"Karlovarský","orp":"Sokolov","obyv":700,"products":[]},"Bechlín":{"type":"obec","kraj":"Ústecký","orp":"Roudnice nad Labem","obyv":850,"products":[]},"Lovosice (obec)":{"type":"obec","kraj":"Ústecký","orp":"Lovosice","obyv":8400,"products":["ekonomika","studie"]},"Hodkovice n. Mohelkou":{"type":"obec","kraj":"Liberecký","orp":"Liberec","obyv":2790,"products":["ekonomika"]},"Bedřichov":{"type":"obec","kraj":"Liberecký","orp":"Jablonec nad Nisou","obyv":380,"products":[]},"Lázně Bělohrad":{"type":"obec","kraj":"Královéhradecký","orp":"Jičín","obyv":3680,"products":["ekonomika","studie"]},"Pilníkov":{"type":"obec","kraj":"Královéhradecký","orp":"Trutnov","obyv":1190,"products":["ekonomika"]},"Choltice":{"type":"obec","kraj":"Pardubický","orp":"Přelouč","obyv":1320,"products":["ekonomika"]},"Bezděkov":{"type":"obec","kraj":"Plzeňský","orp":"Klatovy","obyv":360,"products":[]},"Jaroměřice n. Rokytnou":{"type":"obec","kraj":"Vysočina","orp":"Moravské Budějovice","obyv":4290,"products":["ekonomika","studie"]},"Telč (obec varianta)":{"type":"obec","kraj":"Vysočina","orp":"Telč","obyv":5320,"products":["ekonomika","studie"]},"Chvalšiny":{"type":"obec","kraj":"Jihočeský","orp":"Český Krumlov","obyv":870,"products":[]},"Kaplice (obec)":{"type":"obec","kraj":"Jihočeský","orp":"Kaplice","obyv":7220,"products":["ekonomika","studie"]},"Velešín":{"type":"obec","kraj":"Jihočeský","orp":"Český Krumlov","obyv":4060,"products":["ekonomika"]},"Praha-Suchdol":{"type":"obec","kraj":"Praha","orp":"Praha","obyv":7320,"products":["ekonomika","studie"]},"Praha-Troja":{"type":"obec","kraj":"Praha","orp":"Praha","obyv":1240,"products":["ekonomika"]},"Praha-Klánovice":{"type":"obec","kraj":"Praha","orp":"Praha","obyv":3640,"products":["ekonomika"]},"Černošice (obec)":{"type":"obec","kraj":"Středočeský","orp":"Černošice","obyv":7340,"products":["ekonomika","studie"]},"Roztoky":{"type":"obec","kraj":"Středočeský","orp":"Černošice","obyv":8650,"products":["ekonomika","studie"]},"Hostivice":{"type":"obec","kraj":"Středočeský","orp":"Praha-západ","obyv":9280,"products":["ekonomika","studie"]},"Úvaly":{"type":"obec","kraj":"Středočeský","orp":"Brandýs nad Labem-Stará Boleslav","obyv":7430,"products":["ekonomika","studie"]}};
+
+  // PRODUCT METADATA
+  const PRODUCTS = {
+    ikz: {
+      title: 'Index kvality života',
+      subtitle: 'Roční report — 29 indexů, 3 pilíře, 8letá historie',
+      icon: '📊',
+      color: 'accent',
+      profileUrl: 'navrh-profil-obce.html',
+      buyUrl: '#kupni',
+      price: '19 990 Kč'
+    },
+    ekonomika: {
+      title: 'Ekonomika obce',
+      subtitle: 'Rating obce, hospodaření, výhled rozpočtu, manažerské shrnutí',
+      icon: '💰',
+      color: 'primary',
+      profileUrl: '#',
+      buyUrl: '#kupni',
+      price: 'Na vyžádání'
+    },
+    studie: {
+      title: 'Tematická studie',
+      subtitle: 'Bydlení, doprava, vzdělání, demografie — custom dle zadání',
+      icon: '📋',
+      color: 'amber',
+      profileUrl: '#',
+      buyUrl: '#kupni',
+      price: 'Custom'
+    },
+  };
+
+  // EMBEDDED IKŽ MINI DATA — pro data preview
+  const IKZ = {"Aš":{"s":2.1,"rc":191,"rk":6,"p1":2.7,"p2":3.6,"p3":2.5},"Benešov":{"s":6.9,"rc":20,"rk":6,"p1":8.6,"p2":6.6,"p3":5.2},"Beroun":{"s":6.1,"rc":37,"rk":11,"p1":7.2,"p2":4.3,"p3":7.5},"Blansko":{"s":6.3,"rc":31,"rk":11,"p1":8.8,"p2":5.2,"p3":5.1},"Blatná":{"s":4.9,"rc":80,"rk":12,"p1":6.6,"p2":4.1,"p3":5.1},"Blovice":{"s":6.0,"rc":44,"rk":3,"p1":6.1,"p2":7.4,"p3":4.9},"Bohumín":{"s":1.7,"rc":197,"rk":17,"p1":1.5,"p2":1.6,"p3":5.4},"Boskovice":{"s":6.0,"rc":43,"rk":13,"p1":7.2,"p2":3.1,"p3":8.7},"Brandýs nad Labem-Stará Boleslav":{"s":8.3,"rc":6,"rk":2,"p1":8.6,"p2":7.9,"p3":7.9},"Brno":{"s":8.2,"rc":7,"rk":4,"p1":8.3,"p2":4.2,"p3":8.4},"Broumov":{"s":2.6,"rc":178,"rk":15,"p1":6.5,"p2":3.0,"p3":null},"Bruntál":{"s":2.1,"rc":193,"rk":16,"p1":5.8,"p2":1.9,"p3":2.7},"Bučovice":{"s":5.4,"rc":62,"rk":15,"p1":7.3,"p2":3.8,"p3":5.9},"Bystřice nad Pernštejnem":{"s":4.2,"rc":128,"rk":11,"p1":6.3,"p2":3.8,"p3":3.7},"Bystřice pod Hostýnem":{"s":4.1,"rc":135,"rk":8,"p1":5.6,"p2":4.1,"p3":3.9},"Bílina":{"s":2.1,"rc":188,"rk":10,"p1":1.7,"p2":4.7,"p3":2.4},"Bílovec":{"s":5.5,"rc":59,"rk":2,"p1":5.0,"p2":5.3,"p3":7.5},"Břeclav":{"s":3.9,"rc":143,"rk":18,"p1":6.6,"p2":2.9,"p3":5.0},"Cheb":{"s":4.6,"rc":98,"rk":1,"p1":4.8,"p2":6.1,"p3":4.1},"Chomutov":{"s":2.5,"rc":180,"rk":7,"p1":3.1,"p2":2.7,"p3":4.3},"Chotěboř":{"s":4.8,"rc":86,"rk":7,"p1":7.9,"p2":3.2,"p3":4.2},"Chrudim":{"s":5.2,"rc":75,"rk":9,"p1":6.0,"p2":5.1,"p3":5.3},"Dačice":{"s":5.4,"rc":63,"rk":8,"p1":7.4,"p2":4.2,"p3":5.3},"Dobruška":{"s":5.0,"rc":78,"rk":4,"p1":8.1,"p2":4.3,"p3":4.3},"Dobříš":{"s":6.3,"rc":32,"rk":10,"p1":8.1,"p2":4.2,"p3":5.7},"Domažlice":{"s":6.5,"rc":30,"rk":1,"p1":9.0,"p2":6.5,"p3":3.7},"Dvůr Králové nad Labem":{"s":4.0,"rc":142,"rk":12,"p1":5.7,"p2":3.8,"p3":3.7},"Děčín":{"s":2.1,"rc":189,"rk":11,"p1":4.9,"p2":2.4,"p3":1.0},"Frenštát pod Radhoštěm":{"s":3.4,"rc":164,"rk":9,"p1":4.7,"p2":4.2,"p3":2.8},"Frýdek-Místek":{"s":4.2,"rc":126,"rk":3,"p1":5.8,"p2":3.6,"p3":4.6},"Frýdlant":{"s":1.7,"rc":196,"rk":10,"p1":4.7,"p2":null,"p3":3.2},"Frýdlant nad Ostravicí":{"s":6.2,"rc":34,"rk":1,"p1":7.0,"p2":5.7,"p3":6.5},"Havlíčkův Brod":{"s":6.0,"rc":38,"rk":2,"p1":8.8,"p2":4.5,"p3":4.9},"Havířov":{"s":1.2,"rc":199,"rk":19,"p1":2.7,"p2":1.4,"p3":2.6},"Hlinsko":{"s":6.8,"rc":23,"rk":1,"p1":8.2,"p2":7.5,"p3":4.3},"Hlučín":{"s":2.8,"rc":175,"rk":13,"p1":3.7,"p2":2.9,"p3":4.2},"Hodonín":{"s":3.5,"rc":161,"rk":19,"p1":6.9,"p2":0.8,"p3":4.5},"Holešov":{"s":4.7,"rc":92,"rk":2,"p1":6.1,"p2":3.9,"p3":5.3},"Holice":{"s":5.5,"rc":56,"rk":7,"p1":6.1,"p2":4.8,"p3":6.8},"Horažďovice":{"s":4.5,"rc":101,"rk":10,"p1":7.6,"p2":3.4,"p3":3.4},"Horšovský Týn":{"s":3.5,"rc":162,"rk":14,"p1":5.6,"p2":6.0,"p3":1.9},"Hořice":{"s":4.6,"rc":94,"rk":6,"p1":5.7,"p2":6.4,"p3":3.4},"Hořovice":{"s":8.2,"rc":8,"rk":3,"p1":8.7,"p2":6.5,"p3":5.8},"Hradec Králové":{"s":6.0,"rc":39,"rk":2,"p1":7.9,"p2":3.9,"p3":7.0},"Hranice":{"s":5.4,"rc":61,"rk":2,"p1":6.9,"p2":4.0,"p3":6.2},"Humpolec":{"s":5.0,"rc":79,"rk":6,"p1":6.8,"p2":3.8,"p3":5.3},"Hustopeče":{"s":8.4,"rc":5,"rk":3,"p1":9.6,"p2":7.2,"p3":7.8},"Ivančice":{"s":6.9,"rc":19,"rk":10,"p1":7.7,"p2":6.7,"p3":6.3},"Jablonec nad Nisou":{"s":3.6,"rc":157,"rk":6,"p1":6.8,"p2":2.9,"p3":2.4},"Jablunkov":{"s":3.8,"rc":153,"rk":7,"p1":5.5,"p2":3.7,"p3":3.7},"Jaroměř":{"s":2.9,"rc":172,"rk":14,"p1":5.6,"p2":1.7,"p3":3.3},"Jeseník":{"s":3.0,"rc":171,"rk":13,"p1":6.6,"p2":3.1,"p3":0.5},"Jihlava":{"s":5.5,"rc":57,"rk":4,"p1":7.3,"p2":3.7,"p3":6.4},"Jilemnice":{"s":5.7,"rc":51,"rk":2,"p1":9.7,"p2":3.7,"p3":3.6},"Jindřichův Hradec":{"s":4.7,"rc":93,"rk":13,"p1":7.9,"p2":3.0,"p3":3.9},"Jičín":{"s":5.4,"rc":60,"rk":3,"p1":7.6,"p2":5.0,"p3":4.1},"Kadaň":{"s":2.0,"rc":195,"rk":12,"p1":2.3,"p2":3.3,"p3":3.3},"Kaplice":{"s":6.0,"rc":40,"rk":4,"p1":7.5,"p2":6.4,"p3":4.3},"Karlovy Vary":{"s":4.3,"rc":117,"rk":2,"p1":6.8,"p2":2.8,"p3":4.5},"Karviná":{"s":0.1,"rc":205,"rk":21,"p1":0.4,"p2":1.9,"p3":1.7},"Kladno":{"s":4.6,"rc":100,"rk":21,"p1":5.7,"p2":4.4,"p3":4.9},"Klatovy":{"s":5.0,"rc":77,"rk":6,"p1":7.8,"p2":4.9,"p3":2.8},"Kolín":{"s":4.8,"rc":87,"rk":20,"p1":5.3,"p2":3.0,"p3":7.9},"Konice":{"s":5.2,"rc":74,"rk":4,"p1":6.0,"p2":6.0,"p3":4.3},"Kopřivnice":{"s":3.1,"rc":168,"rk":11,"p1":3.3,"p2":5.8,"p3":1.8},"Kostelec nad Orlicí":{"s":4.9,"rc":83,"rk":5,"p1":5.8,"p2":3.8,"p3":6.5},"Kralovice":{"s":3.8,"rc":151,"rk":12,"p1":6.3,"p2":4.3,"p3":1.9},"Kralupy nad Vltavou":{"s":7.0,"rc":16,"rk":5,"p1":6.1,"p2":6.9,"p3":8.4},"Kraslice":{"s":2.1,"rc":192,"rk":7,"p1":3.9,"p2":3.7,"p3":0.7},"Kravaře":{"s":3.9,"rc":144,"rk":6,"p1":4.6,"p2":3.2,"p3":6.0},"Krnov":{"s":2.1,"rc":190,"rk":15,"p1":4.0,"p2":1.1,"p3":3.9},"Kroměříž":{"s":4.0,"rc":138,"rk":9,"p1":5.3,"p2":3.6,"p3":4.9},"Králíky":{"s":2.9,"rc":174,"rk":15,"p1":4.5,"p2":3.4,"p3":2.6},"Kutná Hora":{"s":4.0,"rc":139,"rk":25,"p1":4.3,"p2":4.9,"p3":4.5},"Kuřim":{"s":8.6,"rc":4,"rk":2,"p1":9.6,"p2":7.6,"p3":7.8},"Kyjov":{"s":5.9,"rc":46,"rk":14,"p1":9.2,"p2":2.6,"p3":6.3},"Lanškroun":{"s":4.4,"rc":113,"rk":12,"p1":5.9,"p2":5.0,"p3":3.2},"Liberec":{"s":4.5,"rc":103,"rk":4,"p1":6.7,"p2":2.7,"p3":5.4},"Lipník nad Bečvou":{"s":4.9,"rc":82,"rk":5,"p1":6.6,"p2":4.3,"p3":4.8},"Litomyšl":{"s":6.6,"rc":27,"rk":2,"p1":8.4,"p2":5.5,"p3":5.9},"Litoměřice":{"s":3.7,"rc":155,"rk":3,"p1":5.3,"p2":3.5,"p3":3.9},"Litovel":{"s":4.6,"rc":95,"rk":7,"p1":6.7,"p2":4.7,"p3":3.3},"Litvínov":{"s":0.6,"rc":203,"rk":15,"p1":1.6,"p2":2.1,"p3":1.4},"Louny":{"s":2.8,"rc":176,"rk":5,"p1":3.8,"p2":2.2,"p3":4.7},"Lovosice":{"s":4.4,"rc":111,"rk":1,"p1":5.6,"p2":3.9,"p3":5.2},"Luhačovice":{"s":4.4,"rc":114,"rk":4,"p1":7.2,"p2":3.4,"p3":3.5},"Lysá nad Labem":{"s":5.3,"rc":66,"rk":15,"p1":5.2,"p2":4.5,"p3":7.8},"Mariánské Lázně":{"s":3.0,"rc":170,"rk":3,"p1":5.9,"p2":2.7,"p3":2.0},"Mikulov":{"s":4.2,"rc":124,"rk":17,"p1":5.9,"p2":3.1,"p3":5.1},"Milevsko":{"s":5.9,"rc":45,"rk":5,"p1":8.1,"p2":5.0,"p3":5.0},"Mladá Boleslav":{"s":6.8,"rc":25,"rk":8,"p1":6.1,"p2":7.4,"p3":7.4},"Mnichovo Hradiště":{"s":7.1,"rc":14,"rk":4,"p1":6.2,"p2":8.3,"p3":7.1},"Mohelnice":{"s":5.4,"rc":64,"rk":3,"p1":5.9,"p2":2.8,"p3":9.1},"Moravská Třebová":{"s":3.0,"rc":169,"rk":14,"p1":4.8,"p2":4.1,"p3":1.8},"Moravské Budějovice":{"s":4.3,"rc":115,"rk":10,"p1":7.5,"p2":2.8,"p3":3.6},"Moravský Krumlov":{"s":5.2,"rc":69,"rk":16,"p1":6.2,"p2":6.2,"p3":4.0},"Most":{"s":0.7,"rc":202,"rk":14,"p1":1.7,"p2":2.1,"p3":1.3},"Mělník":{"s":4.5,"rc":104,"rk":22,"p1":5.1,"p2":5.8,"p3":3.7},"Nepomuk":{"s":6.2,"rc":35,"rk":2,"p1":7.4,"p2":5.0,"p3":6.6},"Neratovice":{"s":5.5,"rc":54,"rk":13,"p1":6.7,"p2":4.2,"p3":6.8},"Nová Paka":{"s":4.5,"rc":107,"rk":8,"p1":6.0,"p2":5.7,"p3":2.5},"Nové Město na Moravě":{"s":4.6,"rc":97,"rk":8,"p1":8.6,"p2":1.5,"p3":3.5},"Nové Město nad Metují":{"s":4.2,"rc":125,"rk":11,"p1":8.0,"p2":4.3,"p3":2.1},"Nový Bor":{"s":3.6,"rc":158,"rk":7,"p1":6.9,"p2":2.6,"p3":2.7},"Nový Bydžov":{"s":4.5,"rc":106,"rk":7,"p1":6.3,"p2":4.3,"p3":3.8},"Nový Jičín":{"s":3.7,"rc":156,"rk":8,"p1":4.6,"p2":4.6,"p3":3.3},"Nymburk":{"s":6.0,"rc":42,"rk":12,"p1":5.5,"p2":6.4,"p3":7.0},"Náchod":{"s":4.4,"rc":109,"rk":9,"p1":8.3,"p2":3.2,"p3":2.4},"Náměšť nad Oslavou":{"s":3.9,"rc":149,"rk":14,"p1":7.6,"p2":3.1,"p3":1.7},"Nýřany":{"s":4.9,"rc":84,"rk":7,"p1":6.6,"p2":5.0,"p3":3.9},"Odry":{"s":4.1,"rc":134,"rk":5,"p1":4.6,"p2":4.1,"p3":5.4},"Olomouc":{"s":5.7,"rc":50,"rk":1,"p1":7.0,"p2":3.7,"p3":7.4},"Opava":{"s":4.2,"rc":129,"rk":4,"p1":5.1,"p2":3.5,"p3":5.6},"Orlová":{"s":0.0,"rc":206,"rk":22,"p1":null,"p2":1.7,"p3":2.2},"Ostrava":{"s":2.9,"rc":173,"rk":12,"p1":3.0,"p2":1.9,"p3":6.6},"Ostrov":{"s":2.4,"rc":183,"rk":5,"p1":4.8,"p2":3.1,"p3":1.1},"Otrokovice":{"s":4.3,"rc":120,"rk":6,"p1":5.1,"p2":5.7,"p3":3.2},"Pacov":{"s":6.9,"rc":17,"rk":1,"p1":7.7,"p2":6.4,"p3":6.8},"Pardubice":{"s":5.3,"rc":67,"rk":8,"p1":6.5,"p2":4.0,"p3":6.5},"Pelhřimov":{"s":5.2,"rc":73,"rk":5,"p1":7.4,"p2":4.8,"p3":4.0},"Plzeň":{"s":5.4,"rc":65,"rk":5,"p1":7.1,"p2":3.5,"p3":6.5},"Podbořany":{"s":2.2,"rc":186,"rk":9,"p1":2.6,"p2":3.4,"p3":3.2},"Poděbrady":{"s":5.2,"rc":71,"rk":17,"p1":6.1,"p2":3.3,"p3":7.7},"Pohořelice":{"s":7.7,"rc":12,"rk":7,"p1":7.0,"p2":7.9,"p3":8.2},"Polička":{"s":6.5,"rc":29,"rk":4,"p1":6.4,"p2":8.1,"p3":5.3},"Prachatice":{"s":6.1,"rc":36,"rk":3,"p1":8.9,"p2":6.2,"p3":2.9},"Praha":{"s":8.8,"rc":2,"rk":1,"p1":9.4,"p2":6.8,"p3":9.6},"Prostějov":{"s":4.2,"rc":122,"rk":8,"p1":6.2,"p2":3.6,"p3":4.5},"Písek":{"s":5.2,"rc":70,"rk":9,"p1":7.3,"p2":3.4,"p3":5.9},"Přelouč":{"s":4.8,"rc":90,"rk":11,"p1":4.3,"p2":6.1,"p3":5.3},"Přerov":{"s":4.1,"rc":133,"rk":10,"p1":5.4,"p2":4.3,"p3":4.3},"Přeštice":{"s":5.7,"rc":48,"rk":4,"p1":7.8,"p2":4.2,"p3":5.1},"Příbram":{"s":3.9,"rc":148,"rk":26,"p1":6.7,"p2":3.5,"p3":2.7},"Rakovník":{"s":5.3,"rc":68,"rk":16,"p1":6.1,"p2":6.2,"p3":4.3},"Rokycany":{"s":4.8,"rc":91,"rk":8,"p1":7.9,"p2":3.8,"p3":4.0},"Rosice":{"s":7.4,"rc":13,"rk":8,"p1":6.6,"p2":6.3,"p3":9.1},"Roudnice nad Labem":{"s":4.3,"rc":116,"rk":2,"p1":6.5,"p2":3.5,"p3":4.1},"Rožnov pod Radhoštěm":{"s":4.4,"rc":112,"rk":3,"p1":6.8,"p2":3.4,"p3":1.1},"Rumburk":{"s":0.9,"rc":201,"rk":13,"p1":4.0,"p2":1.9,"p3":2.0},"Rychnov nad Kněžnou":{"s":6.9,"rc":21,"rk":1,"p1":7.5,"p2":7.7,"p3":3.8},"Rýmařov":{"s":1.6,"rc":198,"rk":18,"p1":4.8,"p2":2.3,"p3":2.5},"Sedlčany":{"s":4.2,"rc":121,"rk":24,"p1":7.0,"p2":2.6,"p3":4.4},"Semily":{"s":4.5,"rc":105,"rk":5,"p1":7.9,"p2":3.1,"p3":3.3},"Slaný":{"s":6.8,"rc":26,"rk":9,"p1":5.5,"p2":6.9,"p3":8.7},"Slavkov u Brna":{"s":8.7,"rc":3,"rk":1,"p1":8.7,"p2":6.5,"p3":9.1},"Soběslav":{"s":7.8,"rc":10,"rk":1,"p1":8.7,"p2":5.5,"p3":6.8},"Sokolov":{"s":2.5,"rc":181,"rk":4,"p1":4.7,"p2":4.0,"p3":2.5},"Stod":{"s":4.6,"rc":96,"rk":9,"p1":6.6,"p2":5.1,"p3":3.2},"Strakonice":{"s":3.9,"rc":147,"rk":17,"p1":6.6,"p2":2.7,"p3":4.0},"Stříbro":{"s":4.0,"rc":137,"rk":11,"p1":4.8,"p2":6.1,"p3":2.2},"Sušice":{"s":3.8,"rc":152,"rk":13,"p1":7.0,"p2":3.5,"p3":3.1},"Svitavy":{"s":4.0,"rc":136,"rk":13,"p1":5.7,"p2":3.9,"p3":3.8},"Světlá nad Sázavou":{"s":3.9,"rc":150,"rk":15,"p1":6.2,"p2":3.7,"p3":3.3},"Tachov":{"s":2.2,"rc":185,"rk":15,"p1":4.5,"p2":3.3,"p3":0.8},"Tanvald":{"s":2.2,"rc":184,"rk":8,"p1":7.0,"p2":0.5,"p3":1.0},"Telč":{"s":4.0,"rc":140,"rk":13,"p1":6.5,"p2":3.9,"p3":2.6},"Teplice":{"s":2.7,"rc":177,"rk":6,"p1":3.9,"p2":2.4,"p3":4.3},"Tišnov":{"s":6.2,"rc":33,"rk":12,"p1":7.8,"p2":5.0,"p3":6.2},"Trhové Sviny":{"s":4.2,"rc":123,"rk":15,"p1":5.9,"p2":2.7,"p3":6.0},"Trutnov":{"s":3.6,"rc":159,"rk":13,"p1":5.8,"p2":3.2,"p3":2.7},"Turnov":{"s":6.8,"rc":24,"rk":1,"p1":9.2,"p2":4.8,"p3":6.3},"Tábor":{"s":5.2,"rc":72,"rk":10,"p1":7.3,"p2":2.7,"p3":6.7},"Týn nad Vltavou":{"s":4.5,"rc":108,"rk":14,"p1":6.2,"p2":4.3,"p3":4.0},"Třeboň":{"s":7.0,"rc":15,"rk":2,"p1":8.6,"p2":3.6,"p3":8.1},"Třebíč":{"s":4.1,"rc":131,"rk":12,"p1":7.3,"p2":3.1,"p3":2.8},"Třinec":{"s":2.1,"rc":187,"rk":14,"p1":3.6,"p2":4.2,"p3":2.5},"Uherské Hradiště":{"s":4.3,"rc":119,"rk":5,"p1":6.6,"p2":3.8,"p3":3.6},"Uherský Brod":{"s":4.2,"rc":127,"rk":7,"p1":5.8,"p2":4.4,"p3":3.6},"Uničov":{"s":4.2,"rc":130,"rk":9,"p1":5.1,"p2":4.4,"p3":4.4},"Valašské Klobouky":{"s":4.0,"rc":141,"rk":10,"p1":6.5,"p2":3.0,"p3":3.7},"Valašské Meziříčí":{"s":3.9,"rc":146,"rk":11,"p1":6.5,"p2":3.8,"p3":2.5},"Varnsdorf":{"s":3.1,"rc":167,"rk":4,"p1":5.6,"p2":2.2,"p3":3.4},"Velké Meziříčí":{"s":4.6,"rc":99,"rk":9,"p1":6.2,"p2":3.4,"p3":5.5},"Veselí nad Moravou":{"s":3.5,"rc":163,"rk":20,"p1":5.4,"p2":2.0,"p3":4.9},"Vimperk":{"s":5.1,"rc":76,"rk":11,"p1":8.6,"p2":4.1,"p3":2.8},"Vizovice":{"s":3.5,"rc":160,"rk":12,"p1":6.2,"p2":3.3,"p3":2.4},"Vlašim":{"s":4.4,"rc":110,"rk":23,"p1":6.2,"p2":3.6,"p3":4.7},"Vodňany":{"s":4.1,"rc":132,"rk":16,"p1":5.7,"p2":4.3,"p3":3.7},"Votice":{"s":5.5,"rc":55,"rk":14,"p1":6.3,"p2":4.3,"p3":7.2},"Vrchlabí":{"s":4.3,"rc":118,"rk":10,"p1":7.3,"p2":4.0,"p3":2.4},"Vsetín":{"s":3.2,"rc":166,"rk":13,"p1":5.4,"p2":2.7,"p3":3.1},"Vysoké Mýto":{"s":6.5,"rc":28,"rk":3,"p1":6.9,"p2":6.6,"p3":6.9},"Vyškov":{"s":7.7,"rc":11,"rk":6,"p1":8.7,"p2":4.3,"p3":10.0},"Vítkov":{"s":1.1,"rc":200,"rk":20,"p1":3.0,"p2":1.2,"p3":2.1},"Zlín":{"s":5.6,"rc":53,"rk":1,"p1":7.2,"p2":4.0,"p3":5.1},"Znojmo":{"s":2.6,"rc":179,"rk":21,"p1":5.7,"p2":1.5,"p3":3.4},"Zábřeh":{"s":3.8,"rc":154,"rk":12,"p1":6.0,"p2":3.3,"p3":3.4},"Ústí nad Labem":{"s":2.4,"rc":182,"rk":8,"p1":4.2,"p2":1.3,"p3":4.3},"Ústí nad Orlicí":{"s":5.6,"rc":52,"rk":6,"p1":7.4,"p2":4.7,"p3":5.3},"Černošice":{"s":6.8,"rc":22,"rk":7,"p1":7.9,"p2":5.3,"p3":7.4},"Česká Lípa":{"s":2.1,"rc":194,"rk":9,"p1":4.7,"p2":3.1,"p3":0.4},"Česká Třebová":{"s":4.8,"rc":88,"rk":10,"p1":6.2,"p2":5.1,"p3":4.1},"České Budějovice":{"s":5.5,"rc":58,"rk":7,"p1":7.9,"p2":3.2,"p3":6.2},"Český Brod":{"s":4.9,"rc":85,"rk":19,"p1":5.1,"p2":5.1,"p3":5.8},"Český Krumlov":{"s":5.7,"rc":49,"rk":6,"p1":7.5,"p2":6.0,"p3":3.8},"Český Těšín":{"s":3.3,"rc":165,"rk":10,"p1":2.7,"p2":4.9,"p3":4.7},"Čáslav":{"s":4.9,"rc":81,"rk":18,"p1":6.4,"p2":3.8,"p3":5.7},"Říčany":{"s":10.0,"rc":1,"rk":1,"p1":10.0,"p2":10.0,"p3":7.1},"Šlapanice":{"s":8.0,"rc":9,"rk":5,"p1":8.9,"p2":7.4,"p3":6.8},"Šternberk":{"s":4.8,"rc":89,"rk":6,"p1":7.2,"p2":4.0,"p3":3.9},"Šumperk":{"s":3.9,"rc":145,"rk":11,"p1":7.1,"p2":3.3,"p3":2.5},"Žamberk":{"s":6.0,"rc":41,"rk":5,"p1":9.2,"p2":5.9,"p3":3.9},"Žatec":{"s":0.5,"rc":204,"rk":16,"p1":2.4,"p2":2.0,"p3":1.9},"Železný Brod":{"s":4.5,"rc":102,"rk":3,"p1":7.1,"p2":3.3,"p3":3.4},"Židlochovice":{"s":6.9,"rc":18,"rk":9,"p1":8.5,"p2":5.5,"p3":5.7},"Žďár nad Sázavou":{"s":5.8,"rc":47,"rk":3,"p1":8.6,"p2":4.1,"p3":3.9}};
+
+  // Read URL ?obec=NAME or default to Říčany
+  const params = new URLSearchParams(window.location.search);
+  const obecName = decodeURIComponent(params.get('obec') || 'Říčany');
+  const obec = OBCE[obecName];
+
+  // Render
+  const nameEl = document.getElementById('r-name');
+  const metaEl = document.getElementById('r-meta');
+  const typeEl = document.getElementById('r-type-label');
+  const orpLinkBox = document.getElementById('r-orp-link');
+  const orpLinkA = document.getElementById('r-orp-link-a');
+
+  if (!obec) {
+    nameEl.textContent = obecName;
+    metaEl.textContent = 'Obec nebyla nalezena v naší databázi.';
+    document.getElementById('state-none').classList.remove('hidden');
+    document.getElementById('state-none-name').textContent = obecName;
+    document.getElementById('state-none-orp').textContent = '(neznámé)';
+    return;
+  }
+
+  nameEl.textContent = obecName;
+  typeEl.textContent = obec.type === 'orp' ? '— ORP' : '— Obec';
+  const obyvFmt = obec.obyv ? new Intl.NumberFormat('cs-CZ').format(obec.obyv) + ' obyvatel' : '';
+  metaEl.textContent = obec.kraj + ' kraj · ' + obyvFmt;
+
+  // ORP link box (jen pro obce, ne pro ORP samotné)
+  if (obec.type === 'obec') {
+    orpLinkBox.classList.remove('hidden');
+    orpLinkA.textContent = obec.orp;
+    orpLinkA.href = '?obec=' + encodeURIComponent(obec.orp);
+  }
+
+  // Build product card HTML
+  function buildCard(prodKey) {
+    const p = PRODUCTS[prodKey];
+    if (!p) return '';
+    const colorClasses = {
+      accent: 'from-accent-500 to-accent-600 border-accent-100',
+      primary: 'from-primary-600 to-primary-700 border-primary-100',
+      amber: 'from-amber-500 to-amber-600 border-amber-100',
+    };
+
+    // Pro IKŽ: ukázat data preview se skóre + 3 pilíře (jen pokud máme reálná data)
+    let dataPreview = '';
+    let profileHref = p.profileUrl;
+    if (prodKey === 'ikz' && IKZ[obecName]) {
+      const ik = IKZ[obecName];
+      const fmt = v => v == null ? '—' : v.toFixed(1).replace('.', ',');
+      profileHref = p.profileUrl + '?obec=' + encodeURIComponent(obecName);
+      dataPreview =
+        '<div class="bg-accent-50 rounded-2xl p-4 mt-4">' +
+          '<div class="flex items-baseline justify-between">' +
+            '<span class="text-[10px] font-bold uppercase tracking-wider text-accent-700">Skóre kvality života 2025</span>' +
+            '<span class="text-[11px] text-ink-500">' + ik.rc + '. místo z 206</span>' +
+          '</div>' +
+          '<p class="text-4xl font-extrabold text-accent-700 mt-1">' + fmt(ik.s) + '<span class="text-base font-medium text-ink-500"> / 10</span></p>' +
+          '<div class="mt-3 space-y-2">' +
+            '<div>' +
+              '<div class="flex justify-between text-[11px] mb-1"><span class="text-ink-700 font-semibold">Zdraví a živ. prostředí</span><span class="font-bold text-accent-700">' + fmt(ik.p1) + '</span></div>' +
+              '<div class="h-1.5 bg-white rounded-full overflow-hidden"><div class="h-full bg-accent-500" style="width:' + ((ik.p1||0)*10) + '%"></div></div>' +
+            '</div>' +
+            '<div>' +
+              '<div class="flex justify-between text-[11px] mb-1"><span class="text-ink-700 font-semibold">Materiál. zabezp. a vzděl.</span><span class="font-bold text-accent-700">' + fmt(ik.p2) + '</span></div>' +
+              '<div class="h-1.5 bg-white rounded-full overflow-hidden"><div class="h-full bg-accent-500" style="width:' + ((ik.p2||0)*10) + '%"></div></div>' +
+            '</div>' +
+            '<div>' +
+              '<div class="flex justify-between text-[11px] mb-1"><span class="text-ink-700 font-semibold">Vztahy a služby</span><span class="font-bold text-accent-700">' + fmt(ik.p3) + '</span></div>' +
+              '<div class="h-1.5 bg-white rounded-full overflow-hidden"><div class="h-full bg-accent-500" style="width:' + ((ik.p3||0)*10) + '%"></div></div>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+    }
+
+    return '<article id="' + prodKey + '" class="bg-white rounded-3xl shadow-card overflow-hidden flex flex-col hover:shadow-pop transition-shadow scroll-mt-24">' +
+      '<div class="bg-gradient-to-br ' + colorClasses[p.color] + ' p-6 text-white">' +
+        '<p class="text-3xl">' + p.icon + '</p>' +
+        '<h3 class="text-xl lg:text-2xl font-extrabold mt-2">' + p.title + '</h3>' +
+      '</div>' +
+      '<div class="p-6 flex-1 flex flex-col">' +
+        '<p class="text-sm text-ink-700 leading-relaxed">' + p.subtitle + '</p>' +
+        dataPreview +
+        '<div class="mt-auto pt-4 border-t border-ink-100">' +
+          '<p class="text-[11px] text-ink-500 uppercase tracking-wider mt-2">Cena</p>' +
+          '<p class="text-lg font-extrabold text-ink-900">' + p.price + '</p>' +
+        '</div>' +
+        '<div class="mt-4 flex gap-2">' +
+          '<a href="' + profileHref + '" class="flex-1 inline-flex items-center justify-center h-11 px-4 rounded-xl bg-ink-100 hover:bg-ink-200 text-ink-900 font-bold text-sm transition-colors">Profil</a>' +
+          '<a href="' + p.buyUrl + '" class="flex-1 inline-flex items-center justify-center h-11 px-4 rounded-xl bg-' + p.color + '-500 hover:bg-' + p.color + '-600 text-white font-bold text-sm transition-colors">Koupit</a>' +
+        '</div>' +
+      '</div>' +
+    '</article>';
+  }
+
+  // Decide state
+  if (obec.products.length === 0) {
+    // Stav 3: žádné produkty
+    document.getElementById('state-none').classList.remove('hidden');
+    document.getElementById('state-none-name').textContent = obecName;
+    document.getElementById('state-none-orp').textContent = obec.orp;
+    document.getElementById('state-none-orp-btn').href = '?obec=' + encodeURIComponent(obec.orp);
+  } else if (obec.type === 'orp') {
+    // Stav 1: ORP, všechny produkty
+    document.getElementById('state-orp').classList.remove('hidden');
+    const cards = obec.products.map(buildCard).join('');
+    document.getElementById('state-orp-cards').innerHTML = cards;
+  } else {
+    // Stav 2: Obec s některými produkty
+    document.getElementById('state-some').classList.remove('hidden');
+    const titleMap = { 1: '1 produkt dostupný', 2: '2 produkty dostupné', 3: '3 produkty dostupné' };
+    document.getElementById('state-some-title').textContent = titleMap[obec.products.length] || obec.products.length + ' produktů dostupných';
+    document.getElementById('state-some-orp-link').href = '?obec=' + encodeURIComponent(obec.orp);
+    const cards = obec.products.map(buildCard).join('');
+    document.getElementById('state-some-cards').innerHTML = cards;
+  }
+
+  // Smooth-scroll na anchor (#ikz, #ekonomika, #studie) z URL
+  if (window.location.hash) {
+    setTimeout(() => {
+      const t = document.getElementById(window.location.hash.slice(1));
+      if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 150);
+  }
+})();
+</script>
+
+</body>
+</html>

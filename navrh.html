@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Výsledky IKŽ za 2025 — návrh (čistá verze)</title>
+
+<!-- Tailwind CDN (rychlá iterace bez build kroku) -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Lucide ikony -->
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+<!-- Fonty -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- ========================================================
+     KONFIGURACE TAILWINDU + DESIGN TOKENY
+     ======================================================== -->
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          sans:    ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
+          display: ['Plus Jakarta Sans', 'sans-serif'],
+        },
+        colors: {
+          // Primární — fialová z původního webu
+          primary: {
+            50:  '#f5f3ff',
+            100: '#ede9fe',
+            200: '#ddd6fe',
+            300: '#c4b5fd',
+            400: '#a78bfa',
+            500: '#8b5cf6',
+            600: '#7c3aed',
+            700: '#6d28d9',
+            800: '#5b21b6',
+          },
+          surface: {
+            DEFAULT: '#ffffff',
+            alt:     '#fafbfc',
+            muted:   '#f3f4f6',
+          },
+          ink: {
+            900: '#0f172a',
+            700: '#334155',
+            500: '#64748b',
+            400: '#94a3b8',
+            200: '#e2e8f0',
+          },
+        },
+        boxShadow: {
+          card: '0 1px 3px rgba(15, 23, 42, 0.04), 0 4px 12px rgba(15, 23, 42, 0.04)',
+          pill: '0 8px 30px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)',
+        },
+        borderRadius: {
+          '4xl': '2rem',
+        },
+      }
+    }
+  }
+</script>
+
+<style type="text/tailwindcss">
+  @layer base {
+    html { font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif; }
+    body { @apply bg-white text-ink-900 antialiased; }
+    h1, h2, h3, h4 { @apply font-display tracking-tight; }
+  }
+  @layer components {
+    .container-x   { @apply max-w-[1280px] mx-auto px-4 lg:px-8; }
+    .nav-link      { @apply px-4 py-2 text-[15px] font-medium text-ink-700 hover:text-primary-700 transition-colors; }
+    .btn-primary   { @apply inline-flex items-center justify-center gap-2 h-11 px-5 rounded-xl bg-primary-600 text-white font-semibold hover:bg-primary-700 transition-all shadow-sm hover:shadow-md; }
+    .btn-secondary { @apply inline-flex items-center justify-center gap-2 h-11 px-5 rounded-xl bg-primary-50 text-primary-700 font-semibold hover:bg-primary-100 transition-all; }
+    .btn-ghost     { @apply inline-flex items-center justify-center gap-2 h-10 px-4 rounded-lg text-ink-700 hover:text-primary-700 hover:bg-primary-50 transition-all text-sm font-medium; }
+    .tab-trigger   { @apply flex-1 whitespace-nowrap py-4 px-6 text-[15px] font-medium text-ink-500 border-b-2 border-transparent hover:text-primary-700 transition-colors cursor-pointer; }
+    .tab-trigger.active { @apply text-primary-700 border-primary-600; }
+    .hero-gradient { background: linear-gradient(180deg, #fcfaff 0%, #ddd6fe 100%); }
+    .surface-alt   { background: #fafbfc; }
+  }
+</style>
+</head>
+
+<body class="font-sans">
+
+<!-- =================================================================
+     1) HEADER — sticky pill s logem, navigací a tlačítky
+     ================================================================= -->
+<header class="sticky top-3 z-40 container-x">
+  <div class="bg-white border border-ink-200/60 shadow-pill rounded-full">
+    <div class="flex items-center justify-between px-6 py-2">
+
+      <!-- LOGO -->
+      <a href="#" class="flex items-center shrink-0 hover:opacity-90 transition-opacity">
+        <img src="./Výsledky IKŽ za 2025 _ Obce v datech_files/logo-D9ygtVhA.svg"
+             alt="Obce v datech"
+             class="h-9 w-auto">
+      </a>
+
+      <!-- NAVIGACE -->
+      <nav class="hidden xl:flex items-center gap-1">
+        <button class="nav-link inline-flex items-center gap-1">
+          Produkty
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <a href="#" class="nav-link">O projektu</a>
+        <a href="#" class="nav-link">Ceník</a>
+        <a href="#" class="nav-link">Blog</a>
+        <a href="#" class="nav-link">Kontakt</a>
+      </nav>
+
+      <!-- AKCE -->
+      <div class="hidden xl:flex items-center gap-2">
+        <a href="#" class="btn-ghost">Přihlásit se</a>
+        <a href="#" class="btn-secondary">Registrovat se</a>
+      </div>
+
+      <!-- MOBILNÍ MENU -->
+      <button class="xl:hidden p-2 rounded-lg hover:bg-primary-50">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16M4 12h16M4 19h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- =================================================================
+     2) HERO — fialový gradient, breadcrumb, nadpis, popis
+     ================================================================= -->
+<section class="hero-gradient mt-4 mx-4 lg:-mt-20 lg:pt-32 rounded-b-3xl lg:rounded-3xl">
+  <div class="container-x py-8 lg:pb-16 lg:pt-8">
+
+    <!-- Breadcrumb -->
+    <nav class="flex items-center gap-2 text-sm text-ink-500 mb-6">
+      <a href="#" class="hover:text-ink-700 transition-colors">Domů</a>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+      <span class="text-ink-700">Výsledky IKŽ za 2025</span>
+    </nav>
+
+    <!-- Nadpis -->
+    <h1 class="text-4xl lg:text-6xl font-extrabold text-ink-900 leading-[1.05] max-w-3xl">
+      Výsledky IKŽ za 2025
+    </h1>
+
+    <!-- Popis -->
+    <p class="mt-6 text-lg text-ink-700 max-w-2xl leading-relaxed">
+      Index kvality života (IKŽ) je komplexní ukazatel, který měří, jak se žije
+      v&nbsp;obcích s&nbsp;rozšířenou působností po celé ČR.
+    </p>
+
+    <!-- Odkaz na metodiku -->
+    <a href="#" class="inline-flex items-center gap-2 mt-6 text-primary-700 font-medium hover:underline">
+      Zjistěte více o IKŽ a metodice sběru dat
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- =================================================================
+     3) ZÁLOŽKY + OBSAH (mapa, kvadranty, distance, profil)
+     ================================================================= -->
+<main class="container-x py-12">
+  <div class="bg-surface-alt rounded-3xl">
+
+    <!-- ZÁLOŽKY -->
+    <div role="tablist" class="flex border-b border-ink-200 px-2 lg:px-8">
+      <button class="tab-trigger active" data-tab="map">Mapa</button>
+      <button class="tab-trigger"        data-tab="quadrant">Kvadrantová analýza</button>
+      <button class="tab-trigger"        data-tab="distance">Distanční analýza</button>
+      <button class="tab-trigger"        data-tab="spider">Profil kvality života</button>
+    </div>
+
+    <div class="p-4 lg:p-8">
+
+      <!-- FILTRY (vyhledávání + kraj + přepínač zobrazení) -->
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+
+        <!-- Vyhledávání obce -->
+        <div class="relative w-full md:max-w-sm">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+               class="absolute left-3 top-1/2 -translate-y-1/2 text-ink-400 pointer-events-none">
+            <path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/>
+          </svg>
+          <input id="search" type="text" placeholder="Zadejte název obce"
+                 class="w-full h-12 pl-10 pr-4 rounded-xl border border-ink-200 bg-white text-ink-900 placeholder:text-ink-400
+                        focus:outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-100 transition">
+        </div>
+
+        <!-- Filtr kraj -->
+        <div class="flex items-center gap-3">
+          <select id="region" class="h-12 px-4 rounded-xl border border-ink-200 bg-white text-ink-700 focus:outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-100">
+            <option value="">Všechny kraje</option>
+            <option>Středočeský</option>
+            <option>Jihomoravský</option>
+            <option>Praha</option>
+            <option>Plzeňský</option>
+          </select>
+
+          <button class="btn-ghost">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+            Zobrazit jako seznam
+          </button>
+        </div>
+      </div>
+
+      <!-- HLAVNÍ MŘÍŽKA: list obcí + mapa -->
+      <div class="grid xl:grid-cols-3 gap-8 min-h-[680px]">
+
+        <!-- LEVÝ SLOUPEC: žebříček obcí (scrollovatelný) -->
+        <aside class="xl:col-span-1">
+          <div class="flex items-center justify-between mb-3">
+            <h2 class="text-sm font-semibold text-ink-700 uppercase tracking-wider">
+              Žebříček 2025
+            </h2>
+            <span id="city-count" class="text-xs text-ink-500"></span>
+          </div>
+          <div id="city-list"
+               class="grid gap-3 max-h-[640px] overflow-y-auto pr-2 custom-scrollbar">
+            <!-- karty se vyrenderují JS -->
+          </div>
+        </aside>
+
+        <!-- PRAVÝ SLOUPEC: mapa ČR (placeholder se SVG bublinami) -->
+        <div class="xl:col-span-2">
+          <div class="relative h-full min-h-[640px] rounded-2xl bg-white border border-ink-200 overflow-hidden">
+
+            <!-- Legenda -->
+            <div class="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur rounded-xl border border-ink-200 p-3 shadow-card">
+              <p class="text-xs font-semibold text-ink-700 uppercase mb-2">Hodnocení IKŽ</p>
+              <div class="flex flex-col gap-1.5 text-xs">
+                <span class="flex items-center gap-2"><i class="w-3 h-3 rounded-full bg-emerald-500"></i> 6–10 nejvyšší</span>
+                <span class="flex items-center gap-2"><i class="w-3 h-3 rounded-full bg-amber-400"></i> 4–6 průměrné</span>
+                <span class="flex items-center gap-2"><i class="w-3 h-3 rounded-full bg-red-400"></i> 0–4 nejnižší</span>
+              </div>
+            </div>
+
+            <!-- Ovládání mapy -->
+            <div class="absolute top-4 right-4 z-10 flex flex-col gap-1 bg-white rounded-xl border border-ink-200 shadow-card">
+              <button class="p-2 hover:bg-ink-200/40 rounded-t-xl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5v14"/></svg></button>
+              <button class="p-2 hover:bg-ink-200/40 rounded-b-xl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/></svg></button>
+            </div>
+
+            <!-- Placeholder mapy (zde se v ostrém webu načítá Google Map / Mapy.cz) -->
+            <div class="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-emerald-50 via-amber-50 to-red-50">
+              <div class="text-center">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" class="mx-auto text-ink-400 mb-3">
+                  <path d="M9 20l-5.447-2.724A1 1 0 0 1 3 16.382V5.618a1 1 0 0 1 1.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0 0 21 18.382V7.618a1 1 0 0 0-.553-.894L15 4m0 13V4m0 0L9 7"/>
+                </svg>
+                <p class="text-ink-500 text-sm font-medium">Interaktivní mapa ČR (placeholder)</p>
+                <p class="text-ink-400 text-xs mt-1">V produkční verzi: 206 obcí jako bubliny barvené podle skóre</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- =================================================================
+     4) FOOTER — kontakt, navigace, copyright
+     ================================================================= -->
+<footer class="hero-gradient mx-4 mt-12 rounded-t-3xl">
+  <div class="container-x py-12 lg:py-16">
+
+    <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-12 lg:gap-16">
+
+      <!-- KONTAKT -->
+      <div>
+        <h2 class="text-2xl font-semibold text-ink-900 mb-1">Kontaktujte nás</h2>
+        <a href="mailto:info@obcevdatech.cz"
+           class="text-2xl font-semibold text-primary-700 hover:opacity-80 transition-opacity">
+          info@obcevdatech.cz
+        </a>
+      </div>
+
+      <!-- ODKAZY -->
+      <div class="flex flex-col gap-8 lg:flex-row lg:gap-24">
+        <ul class="flex flex-col gap-3 text-[15px] font-medium text-primary-700">
+          <li><a href="#" class="hover:opacity-80">Index kvality života</a></li>
+          <li><a href="#" class="hover:opacity-80">Ekonomika obce</a></li>
+          <li><a href="#" class="hover:opacity-80">Tematické studie</a></li>
+        </ul>
+        <ul class="flex flex-col gap-3 text-[15px] font-medium text-primary-700">
+          <li><a href="#" class="hover:opacity-80">O projektu</a></li>
+          <li><a href="#" class="hover:opacity-80">Ceník</a></li>
+          <li><a href="#" class="hover:opacity-80">Blog</a></li>
+          <li><a href="#" class="hover:opacity-80">FAQ</a></li>
+          <li><a href="#" class="hover:opacity-80">Kontakt</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <hr class="my-10 border-ink-200">
+
+    <div class="flex flex-col-reverse gap-4 lg:flex-row lg:items-center lg:justify-between text-sm text-ink-500">
+      <p>© Copyright Obce v datech 2026</p>
+      <a href="#" class="hover:text-ink-700 transition-colors">Obchodní podmínky</a>
+    </div>
+  </div>
+</footer>
+
+<!-- =================================================================
+     STYLY KARET MĚST (scrollbar, transitions)
+     ================================================================= -->
+<style>
+  .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+  .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+  .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+  .city-card {
+    position: relative;
+    display: block;
+    border-radius: 1.25rem;
+    overflow: hidden;
+    min-height: 200px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    text-decoration: none;
+  }
+  .city-card:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(15,23,42,0.12); }
+  .city-card .photo { position: absolute; inset: 0; background-size: cover; background-position: center; }
+  .city-card .overlay { position: absolute; inset: 0; background: rgba(15,23,42,0.45); }
+  .city-card .name { position: relative; z-index: 2; color: white; font-weight: 700; font-size: 1.15rem; text-align: center;
+                     padding: 1rem; display: flex; align-items: center; justify-content: center; min-height: 200px; }
+  .city-card .rank { position: absolute; top: 0; left: 0; z-index: 2; background: #1e293b; color: white;
+                     padding: 0.6rem 1rem; border-radius: 0 0 1rem 0; font-weight: 700; font-size: 1.1rem; }
+  .city-card .score { position: absolute; bottom: 0; right: 0; z-index: 2; background: #10b981; color: white;
+                      padding: 0.4rem 0.8rem; border-radius: 1rem 0 0 0; text-align: center; min-width: 80px; }
+  .city-card .score .label { font-size: 0.7rem; opacity: 0.95; display: block; }
+  .city-card .score .value { font-size: 1.4rem; font-weight: 800; line-height: 1.1; }
+</style>
+
+<!-- =================================================================
+     DATA OBCÍ + RENDER
+     ================================================================= -->
+<script>
+  // Data 206 obcí (rank, score, name) — vygenerované z původního webu
+  const CITIES = [{"rank":1,"score":"10.0","name":"Říčany"},{"rank":2,"score":"9.2","name":"Praha"},{"rank":3,"score":"9.0","name":"Kuřim"},{"rank":4,"score":"8.9","name":"Hustopeče"},{"rank":5,"score":"8.7","name":"Brandýs nad Labem-Stará Boleslav"},{"rank":6,"score":"8.6","name":"Slavkov u Brna"},{"rank":7,"score":"8.3","name":"Šlapanice"},{"rank":8,"score":"8.1","name":"Pohořelice"},{"rank":9,"score":"7.9","name":"Vyškov"},{"rank":10,"score":"7.5","name":"Rosice"},{"rank":11,"score":"7.5","name":"Hořovice"},{"rank":12,"score":"7.4","name":"Mnichovo Hradiště"},{"rank":13,"score":"7.4","name":"Soběslav"},{"rank":14,"score":"7.3","name":"Kralupy nad Vltavou"},{"rank":15,"score":"7.3","name":"Pacov"},{"rank":16,"score":"7.2","name":"Ivančice"},{"rank":17,"score":"7.2","name":"Benešov"},{"rank":18,"score":"7.1","name":"Brno"},{"rank":19,"score":"7.1","name":"Černošice"},{"rank":20,"score":"7.1","name":"Hlinsko"},{"rank":21,"score":"7.1","name":"Turnov"},{"rank":22,"score":"7.1","name":"Mladá Boleslav"},{"rank":23,"score":"7.1","name":"Slaný"},{"rank":24,"score":"7.0","name":"Vysoké Mýto"},{"rank":25,"score":"6.9","name":"Třeboň"},{"rank":26,"score":"6.9","name":"Židlochovice"},{"rank":27,"score":"6.9","name":"Litomyšl"},{"rank":28,"score":"6.9","name":"Polička"},{"rank":29,"score":"6.8","name":"Domažlice"},{"rank":30,"score":"6.8","name":"Žamberk"},{"rank":31,"score":"6.7","name":"Rychnov nad Kněžnou"},{"rank":32,"score":"6.7","name":"Blansko"},{"rank":33,"score":"6.5","name":"Tišnov"},{"rank":34,"score":"6.5","name":"Frýdlant nad Ostravicí"},{"rank":35,"score":"6.5","name":"Nepomuk"},{"rank":36,"score":"6.4","name":"Prachatice"},{"rank":37,"score":"6.4","name":"Beroun"},{"rank":38,"score":"6.3","name":"Havlíčkův Brod"},{"rank":39,"score":"6.3","name":"Hradec Králové"},{"rank":40,"score":"6.3","name":"Kaplice"},{"rank":41,"score":"6.3","name":"Nymburk"},{"rank":42,"score":"6.3","name":"Boskovice"},{"rank":43,"score":"6.3","name":"Blovice"},{"rank":44,"score":"6.2","name":"Milevsko"},{"rank":45,"score":"6.2","name":"Kyjov"},{"rank":46,"score":"6.1","name":"Dobříš"},{"rank":47,"score":"5.9","name":"Český Krumlov"},{"rank":48,"score":"5.9","name":"Olomouc"},{"rank":49,"score":"5.9","name":"Jilemnice"},{"rank":50,"score":"5.9","name":"Ústí nad Orlicí"},{"rank":51,"score":"5.8","name":"Neratovice"},{"rank":52,"score":"5.8","name":"Votice"},{"rank":53,"score":"5.8","name":"Holice"},{"rank":54,"score":"5.8","name":"Přeštice"},{"rank":55,"score":"5.8","name":"Jihlava"},{"rank":56,"score":"5.8","name":"České Budějovice"},{"rank":57,"score":"5.8","name":"Bílovec"},{"rank":58,"score":"5.7","name":"Žďár nad Sázavou"},{"rank":59,"score":"5.7","name":"Dobruška"},{"rank":60,"score":"5.7","name":"Jičín"},{"rank":61,"score":"5.6","name":"Hranice"},{"rank":62,"score":"5.6","name":"Bučovice"},{"rank":63,"score":"5.6","name":"Dačice"},{"rank":64,"score":"5.6","name":"Mohelnice"},{"rank":65,"score":"5.6","name":"Plzeň"},{"rank":66,"score":"5.6","name":"Lysá nad Labem"},{"rank":67,"score":"5.6","name":"Pardubice"},{"rank":68,"score":"5.5","name":"Rakovník"},{"rank":69,"score":"5.5","name":"Moravský Krumlov"},{"rank":70,"score":"5.5","name":"Písek"},{"rank":71,"score":"5.5","name":"Poděbrady"},{"rank":72,"score":"5.5","name":"Tábor"},{"rank":73,"score":"5.4","name":"Pelhřimov"},{"rank":74,"score":"5.4","name":"Konice"},{"rank":75,"score":"5.4","name":"Chrudim"},{"rank":76,"score":"5.4","name":"Zlín"},{"rank":77,"score":"5.3","name":"Vimperk"},{"rank":78,"score":"5.3","name":"Klatovy"},{"rank":79,"score":"5.3","name":"Rokycany"},{"rank":80,"score":"5.2","name":"Humpolec"},{"rank":81,"score":"5.2","name":"Blatná"},{"rank":82,"score":"5.1","name":"Hořice"},{"rank":83,"score":"5.1","name":"Čáslav"},{"rank":84,"score":"5.1","name":"Lipník nad Bečvou"},{"rank":85,"score":"5.1","name":"Kostelec nad Orlicí"},{"rank":86,"score":"5.1","name":"Nýřany"},{"rank":87,"score":"5.1","name":"Český Brod"},{"rank":88,"score":"5.1","name":"Chotěboř"},{"rank":89,"score":"5.0","name":"Kolín"},{"rank":90,"score":"5.0","name":"Česká Třebová"},{"rank":91,"score":"5.0","name":"Přelouč"},{"rank":92,"score":"5.0","name":"Šternberk"},{"rank":93,"score":"4.9","name":"Holešov"},{"rank":94,"score":"4.9","name":"Stod"},{"rank":95,"score":"4.9","name":"Jindřichův Hradec"},{"rank":96,"score":"4.9","name":"Nové Město nad Metují"},{"rank":97,"score":"4.8","name":"Litovel"},{"rank":98,"score":"4.8","name":"Cheb"},{"rank":99,"score":"4.8","name":"Velké Meziříčí"},{"rank":100,"score":"4.8","name":"Kladno"},{"rank":101,"score":"4.8","name":"Horažďovice"},{"rank":102,"score":"4.7","name":"Liberec"},{"rank":103,"score":"4.7","name":"Mělník"},{"rank":104,"score":"4.7","name":"Semily"},{"rank":105,"score":"4.7","name":"Nový Bydžov"},{"rank":106,"score":"4.7","name":"Nová Paka"},{"rank":107,"score":"4.7","name":"Týn nad Vltavou"},{"rank":108,"score":"4.6","name":"Náchod"},{"rank":109,"score":"4.6","name":"Břeclav"},{"rank":110,"score":"4.6","name":"Vlašim"},{"rank":111,"score":"4.6","name":"Lovosice"},{"rank":112,"score":"4.6","name":"Lanškroun"},{"rank":113,"score":"4.6","name":"Luhačovice"},{"rank":114,"score":"4.5","name":"Moravské Budějovice"},{"rank":115,"score":"4.5","name":"Prostějov"},{"rank":116,"score":"4.5","name":"Karlovy Vary"},{"rank":117,"score":"4.5","name":"Vrchlabí"},{"rank":118,"score":"4.5","name":"Uherské Hradiště"},{"rank":119,"score":"4.5","name":"Trhové Sviny"},{"rank":120,"score":"4.5","name":"Železný Brod"},{"rank":121,"score":"4.5","name":"Roudnice nad Labem"},{"rank":122,"score":"4.5","name":"Otrokovice"},{"rank":123,"score":"4.4","name":"Sedlčany"},{"rank":124,"score":"4.4","name":"Sušice"},{"rank":125,"score":"4.4","name":"Mikulov"},{"rank":126,"score":"4.4","name":"Frýdek-Místek"},{"rank":127,"score":"4.4","name":"Přerov"},{"rank":128,"score":"4.4","name":"Uherský Brod"},{"rank":129,"score":"4.4","name":"Nové Město na Moravě"},{"rank":130,"score":"4.4","name":"Bystřice nad Pernštejnem"},{"rank":131,"score":"4.4","name":"Horšovský Týn"},{"rank":132,"score":"4.4","name":"Opava"},{"rank":133,"score":"4.3","name":"Uničov"},{"rank":134,"score":"4.3","name":"Vodňany"},{"rank":135,"score":"4.3","name":"Odry"},{"rank":136,"score":"4.3","name":"Třebíč"},{"rank":137,"score":"4.3","name":"Bystřice pod Hostýnem"},{"rank":138,"score":"4.2","name":"Kroměříž"},{"rank":139,"score":"4.2","name":"Svitavy"},{"rank":140,"score":"4.2","name":"Kutná Hora"},{"rank":141,"score":"4.2","name":"Strakonice"},{"rank":142,"score":"4.2","name":"Světlá nad Sázavou"},{"rank":143,"score":"4.2","name":"Telč"},{"rank":144,"score":"4.2","name":"Valašské Klobouky"},{"rank":145,"score":"4.1","name":"Šumperk"},{"rank":146,"score":"4.1","name":"Stříbro"},{"rank":147,"score":"4.1","name":"Dvůr Králové nad Labem"},{"rank":148,"score":"4.1","name":"Příbram"},{"rank":149,"score":"4.1","name":"Kravaře"},{"rank":150,"score":"4.1","name":"Valašské Meziříčí"},{"rank":151,"score":"4.0","name":"Náměšť nad Oslavou"},{"rank":152,"score":"4.0","name":"Kralovice"},{"rank":153,"score":"4.0","name":"Jablunkov"},{"rank":154,"score":"3.9","name":"Zábřeh"},{"rank":155,"score":"3.9","name":"Litoměřice"},{"rank":156,"score":"3.8","name":"Nový Jičín"},{"rank":157,"score":"3.8","name":"Jablonec nad Nisou"},{"rank":158,"score":"3.8","name":"Nový Bor"},{"rank":159,"score":"3.7","name":"Vizovice"},{"rank":160,"score":"3.7","name":"Hodonín"},{"rank":161,"score":"3.6","name":"Veselí nad Moravou"},{"rank":162,"score":"3.6","name":"Trutnov"},{"rank":163,"score":"3.6","name":"Rožnov pod Radhoštěm"},{"rank":164,"score":"3.5","name":"Frenštát pod Radhoštěm"},{"rank":165,"score":"3.5","name":"Český Těšín"},{"rank":166,"score":"3.3","name":"Sokolov"},{"rank":167,"score":"3.3","name":"Vsetín"},{"rank":168,"score":"3.3","name":"Varnsdorf"},{"rank":169,"score":"3.2","name":"Kopřivnice"},{"rank":170,"score":"3.2","name":"Moravská Třebová"},{"rank":171,"score":"3.2","name":"Mariánské Lázně"},{"rank":172,"score":"3.1","name":"Jeseník"},{"rank":173,"score":"3.0","name":"Jaroměř"},{"rank":174,"score":"3.0","name":"Ostrava"},{"rank":175,"score":"3.0","name":"Králíky"},{"rank":176,"score":"3.0","name":"Znojmo"},{"rank":177,"score":"3.0","name":"Bruntál"},{"rank":178,"score":"3.0","name":"Hlučín"},{"rank":179,"score":"2.9","name":"Louny"},{"rank":180,"score":"2.9","name":"Broumov"},{"rank":181,"score":"2.8","name":"Třinec"},{"rank":182,"score":"2.8","name":"Teplice"},{"rank":183,"score":"2.6","name":"Rýmařov"},{"rank":184,"score":"2.6","name":"Chomutov"},{"rank":185,"score":"2.5","name":"Ústí nad Labem"},{"rank":186,"score":"2.5","name":"Ostrov"},{"rank":187,"score":"2.4","name":"Tanvald"},{"rank":188,"score":"2.4","name":"Tachov"},{"rank":189,"score":"2.3","name":"Podbořany"},{"rank":190,"score":"2.2","name":"Bílina"},{"rank":191,"score":"2.2","name":"Děčín"},{"rank":192,"score":"2.2","name":"Krnov"},{"rank":193,"score":"2.2","name":"Aš"},{"rank":194,"score":"2.2","name":"Kraslice"},{"rank":195,"score":"2.2","name":"Česká Lípa"},{"rank":196,"score":"2.2","name":"Kadaň"},{"rank":197,"score":"1.9","name":"Rumburk"},{"rank":198,"score":"1.8","name":"Frýdlant"},{"rank":199,"score":"1.8","name":"Bohumín"},{"rank":200,"score":"1.3","name":"Havířov"},{"rank":201,"score":"1.2","name":"Vítkov"},{"rank":202,"score":"1.1","name":"Žatec"},{"rank":203,"score":"0.7","name":"Most"},{"rank":204,"score":"0.7","name":"Litvínov"},{"rank":205,"score":"0.1","name":"Karviná"},{"rank":206,"score":"0.0","name":"Orlová"}];
+
+  // Mapování obcí, které mají vlastní fotku v _files
+  const CITY_PHOTOS = {
+    'Říčany': './Výsledky IKŽ za 2025 _ Obce v datech_files/42-150_Ricany.webp',
+    'Praha': './Výsledky IKŽ za 2025 _ Obce v datech_files/2-hrad_praha_dark_v2.2-612x387.webp',
+    'Kuřim': './Výsledky IKŽ za 2025 _ Obce v datech_files/143-Kuřim.webp',
+  };
+
+  // Generuje gradient podle pořadí (TOP zelené, prostřední žluté, spodek červené)
+  function gradientFor(rank, total) {
+    const ratio = rank / total;
+    if (ratio <= 0.33) return 'linear-gradient(135deg, #059669 0%, #10b981 100%)';
+    if (ratio <= 0.66) return 'linear-gradient(135deg, #d97706 0%, #f59e0b 100%)';
+    return 'linear-gradient(135deg, #dc2626 0%, #ef4444 100%)';
+  }
+
+  // Vykreslí seznam obcí
+  function renderCities(filter = '') {
+    const list = document.getElementById('city-list');
+    const norm = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+    const f = norm(filter.trim());
+
+    const filtered = CITIES.filter(c => !f || norm(c.name).includes(f));
+
+    document.getElementById('city-count').textContent =
+      `${filtered.length} ${filtered.length === 1 ? 'obec' : (filtered.length < 5 ? 'obce' : 'obcí')}`;
+
+    list.innerHTML = filtered.map(c => {
+      const photo = CITY_PHOTOS[c.name];
+      const bg = photo
+        ? `background-image: url('${photo}');`
+        : `background: ${gradientFor(c.rank, CITIES.length)};`;
+      return `
+        <a class="city-card" href="#" data-city="${c.name}">
+          <div class="photo" style="${bg}"></div>
+          ${photo ? '<div class="overlay"></div>' : ''}
+          <div class="rank">${c.rank}.</div>
+          <div class="name">${c.name}</div>
+          <div class="score">
+            <span class="label">IKŽ</span>
+            <span class="value">${c.score}</span>
+          </div>
+        </a>`;
+    }).join('');
+  }
+
+  // Inicializace
+  document.addEventListener('DOMContentLoaded', () => {
+    renderCities();
+    document.getElementById('search').addEventListener('input', e => renderCities(e.target.value));
+
+    // Záložky — pouze vizuální přepínání pro mockup
+    document.querySelectorAll('.tab-trigger').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-trigger').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+  });
+</script>
+
+</body>
+</html>

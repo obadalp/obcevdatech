@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Obce v datech — návrh domovské stránky</title>
+
+<!-- Tailwind CDN (rychlá iterace bez build kroku) -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Fonty -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- ========================================================
+     KONFIGURACE TAILWINDU + DESIGN TOKENY
+     ======================================================== -->
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          sans:    ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
+          display: ['Plus Jakarta Sans', 'sans-serif'],
+        },
+        colors: {
+          primary: {
+            50:  '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd',
+            400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9', 800: '#5b21b6',
+          },
+          accent: {
+            50:  '#ecfdf5', 100: '#d1fae5', 500: '#10b981', 600: '#059669', 700: '#047857',
+          },
+          ink: {
+            900: '#0f172a', 700: '#334155', 500: '#64748b',
+            400: '#94a3b8', 200: '#e2e8f0', 100: '#f1f5f9',
+          },
+          surface: { DEFAULT: '#ffffff', alt: '#fafbfc' },
+        },
+        boxShadow: {
+          card: '0 1px 3px rgba(15,23,42,0.04), 0 4px 12px rgba(15,23,42,0.04)',
+          pop:  '0 12px 40px rgba(15,23,42,0.10), 0 4px 12px rgba(15,23,42,0.04)',
+          pill: '0 8px 30px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)',
+        },
+        borderRadius: { '4xl': '2rem' },
+      }
+    }
+  }
+</script>
+
+<style type="text/tailwindcss">
+  @layer base {
+    html { font-family: 'Plus Jakarta Sans','Inter',system-ui,sans-serif; }
+    body { @apply bg-white text-ink-900 antialiased; }
+    h1, h2, h3, h4 { @apply font-display tracking-tight; }
+  }
+  @layer components {
+    .container-x { @apply max-w-[1280px] mx-auto px-4 lg:px-8; }
+
+    /* navigace */
+    .nav-link    { @apply px-4 py-2 text-[15px] font-medium text-ink-700 hover:text-primary-700 transition-colors; }
+    .nav-utility { @apply text-[12px] font-medium text-ink-500 hover:text-primary-700 transition-colors; }
+
+    /* tlačítka */
+    .btn-primary   { @apply inline-flex items-center justify-center gap-2 h-12 px-6 rounded-xl bg-primary-600 text-white font-semibold hover:bg-primary-700 transition-all shadow-sm hover:shadow-md; }
+    .btn-secondary { @apply inline-flex items-center justify-center gap-2 h-12 px-6 rounded-xl bg-primary-50 text-primary-700 font-semibold hover:bg-primary-100 transition-all; }
+    .btn-ghost     { @apply inline-flex items-center justify-center gap-2 h-10 px-4 rounded-lg text-ink-700 hover:text-primary-700 hover:bg-primary-50 transition-all text-sm font-medium; }
+    .btn-cta       { @apply inline-flex items-center justify-center gap-2 h-12 px-6 rounded-xl bg-accent-500 text-white font-bold hover:bg-accent-600 transition-all shadow-[0_4px_14px_rgba(16,185,129,0.35)]; }
+
+    /* karty + sekce */
+    .card-soft   { @apply bg-surface-alt rounded-2xl shadow-card; }
+    .section     { @apply mx-4 my-2 lg:my-4; }
+    .hero-grad   { background: linear-gradient(180deg, #fcfaff 0%, #ddd6fe 100%); }
+    .footer-grad { background: linear-gradient(180deg, #fcfaff 0%, #ddd6fe 100%); }
+  }
+</style>
+</head>
+
+<body class="font-sans">
+
+<!-- =================================================================
+     HEADER — sticky pill: logo, navigace, login utility, Koupit CTA
+     Změny dle Wordu:
+       • Přihlásit/Registrovat zmenšené nahoru jako utility řádek
+       • Hlavní akce vpravo = výrazné Koupit / E-shop
+       • Ceník složeno do Koupit (odstraněno z nav)
+     ================================================================= -->
+<header class="sticky top-3 z-40 container-x">
+  <div class="bg-white border border-ink-200/60 shadow-pill rounded-3xl xl:rounded-full">
+    <div class="flex items-center justify-between px-4 lg:px-6 py-2 gap-4">
+
+      <!-- LOGO -->
+      <a href="#" class="flex items-center shrink-0 hover:opacity-90 transition-opacity">
+        <img src="./Výsledky IKŽ za 2025 _ Obce v datech_files/logo-D9ygtVhA.svg"
+             alt="Obce v datech" class="h-9 w-auto">
+      </a>
+
+      <!-- NAVIGACE — produkty rovnou v menu, zbytek pod ⋯ -->
+      <nav class="hidden xl:flex items-center gap-1">
+        <a href="#" class="nav-link">Kvalita života</a>
+        <a href="#" class="nav-link">Ekonomika obce</a>
+        <a href="#" class="nav-link">O projektu</a>
+        <a href="#" class="nav-link">Blog</a>
+
+        <!-- More menu (Kontakt, FAQ, …) -->
+        <details class="relative" id="more-menu">
+          <summary class="nav-link inline-flex items-center gap-1 cursor-pointer list-none [&::-webkit-details-marker]:hidden"
+                   aria-label="Další odkazy">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <circle cx="5"  cy="12" r="2"/>
+              <circle cx="12" cy="12" r="2"/>
+              <circle cx="19" cy="12" r="2"/>
+            </svg>
+          </summary>
+          <div class="absolute right-0 top-full mt-3 w-56 bg-white rounded-2xl shadow-pop border border-ink-200/60 py-2 z-50">
+            <a href="#" class="block px-4 py-2.5 text-[15px] font-medium text-ink-700 hover:bg-primary-50 hover:text-primary-700 transition-colors">Tematické studie</a>
+            <a href="#" class="block px-4 py-2.5 text-[15px] font-medium text-ink-700 hover:bg-primary-50 hover:text-primary-700 transition-colors">FAQ</a>
+            <a href="#" class="block px-4 py-2.5 text-[15px] font-medium text-ink-700 hover:bg-primary-50 hover:text-primary-700 transition-colors">Kontakt</a>
+            <hr class="my-2 border-ink-200">
+            <a href="#" class="block px-4 py-2.5 text-[13px] text-ink-500 hover:bg-ink-100 transition-colors">Obchodní podmínky</a>
+          </div>
+        </details>
+      </nav>
+
+      <!-- AKCE: utility (login) + hlavní CTA Koupit -->
+      <div class="hidden xl:flex items-center gap-5">
+        <div class="flex flex-col items-end gap-0.5 leading-tight">
+          <div class="flex items-center gap-2 text-[12px]">
+            <a href="#" class="nav-utility">Přihlásit se</a>
+            <span class="text-ink-200">|</span>
+            <a href="#" class="nav-utility">Registrovat se</a>
+          </div>
+          <span class="text-[10px] text-ink-400">Pro stávající zákazníky</span>
+        </div>
+        <a href="#" class="btn-cta">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          Koupit report
+        </a>
+      </div>
+
+      <!-- MOBILNÍ MENU -->
+      <button class="xl:hidden p-2 rounded-lg hover:bg-primary-50">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16M4 12h16M4 19h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- =================================================================
+     1) HERO — fialový gradient, levá část s textem a hledáním,
+                pravá část s žebříčkem TOP obcí (místo videogridů).
+     Změny dle Wordu:
+       • Velmi výrazné „Vyberte obec" (50px input s tlačítkem Hledat)
+       • Místo 3×3 video gridu → TOP 6 obcí jako náhled žebříčku
+       • Odstraněn duplicitní badge „Pomáháme českým obcím od roku 2018"
+         (přesunutý do footeru)
+     ================================================================= -->
+<section class="section hero-grad rounded-b-3xl lg:rounded-3xl lg:-mt-20 lg:pt-32 mt-4">
+  <div class="container-x py-8 lg:py-16 grid lg:grid-cols-2 gap-12 items-center">
+
+    <!-- LEVÁ ČÁST: text + hledání obce -->
+    <div class="flex flex-col gap-6">
+
+      <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-[1.05] text-ink-900">
+        Jsme datovým partnerem<br>
+        <span class="text-primary-700">českých obcí</span>
+      </h1>
+
+      <p class="text-lg text-ink-700 max-w-lg leading-relaxed">
+        Pomáháme obcím i občanům lépe porozumět místu, kde žijí.
+      </p>
+
+      <!-- VÝRAZNÝ VYHLEDÁVAČ OBCE -->
+      <div class="mt-2 bg-white rounded-2xl shadow-pop p-2 flex flex-col md:flex-row gap-2 max-w-xl border-2 border-primary-100">
+        <div class="relative flex-1">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+               class="absolute left-4 top-1/2 -translate-y-1/2 text-primary-500 pointer-events-none">
+            <path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/>
+          </svg>
+          <input type="text" placeholder="Vyberte obec — např. Říčany, Praha, Slavkov…"
+                 class="w-full h-14 pl-12 pr-4 rounded-xl text-[17px] font-medium text-ink-900 placeholder:text-ink-400 outline-none focus:ring-4 focus:ring-primary-100">
+        </div>
+        <button class="btn-primary shrink-0 h-14 px-7 text-base">
+          Hledat
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+
+      <!-- Rychlé chipy + mapa -->
+      <div class="flex flex-wrap items-center gap-2 text-sm">
+        <span class="text-ink-500">Vyzkoušejte:</span>
+        <a href="#" class="px-3 py-1.5 bg-white/80 hover:bg-white border border-ink-200 rounded-full font-medium text-ink-700 transition">Říčany</a>
+        <a href="#" class="px-3 py-1.5 bg-white/80 hover:bg-white border border-ink-200 rounded-full font-medium text-ink-700 transition">Praha</a>
+        <a href="#" class="px-3 py-1.5 bg-white/80 hover:bg-white border border-ink-200 rounded-full font-medium text-ink-700 transition">Brno</a>
+
+        <span class="text-ink-300 mx-1">|</span>
+
+        <a href="#" class="inline-flex items-center gap-2 px-4 py-1.5 bg-primary-600 hover:bg-primary-700 text-white rounded-full font-bold transition shadow-[0_4px_14px_rgba(124,58,237,0.3)]">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+          Mapa všech 206 měst
+        </a>
+      </div>
+
+      <!-- KONTEXTOVÉ CTA: světlá karta — žádné rámy ani ikony -->
+      <div class="mt-6 max-w-xl rounded-3xl bg-white p-6 lg:p-7 shadow-card">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5">
+          <div>
+            <p class="font-display text-2xl lg:text-[26px] font-extrabold leading-[1.15] text-ink-900">
+              Celý report obce.<br>
+              <span class="text-accent-600">Vše v jednom PDF.</span>
+            </p>
+            <p class="mt-2 text-sm text-ink-500">
+              Pořadí · 29 indexů · Silné a slabé stránky · Manažerské shrnutí
+            </p>
+          </div>
+
+          <a href="#" class="shrink-0 inline-flex items-center justify-center gap-2 h-14 px-7 rounded-xl bg-accent-500 hover:bg-accent-600 text-white font-extrabold text-base transition-colors whitespace-nowrap">
+            Koupit report →
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRAVÁ ČÁST: TOP 6 obcí (místo videí) -->
+    <div class="bg-white/60 backdrop-blur rounded-3xl p-5 lg:p-6 shadow-pop">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-sm font-semibold text-ink-700 uppercase tracking-wider">
+          Žebříček 2025 — TOP 6
+        </h2>
+        <a href="#" class="text-xs text-primary-700 font-semibold hover:underline">Celý žebříček →</a>
+      </div>
+
+      <div class="grid gap-2.5">
+        <!-- 1. Říčany — fotka -->
+        <a href="#" class="relative flex items-center gap-4 p-3 rounded-2xl bg-gradient-to-r from-accent-50 to-white hover:shadow-card transition group">
+          <div class="shrink-0 w-12 h-12 rounded-xl bg-accent-500 text-white font-extrabold text-xl flex items-center justify-center">1</div>
+          <img src="./Výsledky IKŽ za 2025 _ Obce v datech_files/42-150_Ricany.webp" alt="Říčany"
+               class="w-14 h-14 rounded-xl object-cover">
+          <div class="flex-1 min-w-0">
+            <p class="font-bold text-ink-900 truncate">Říčany</p>
+            <p class="text-xs text-ink-500">Středočeský kraj</p>
+          </div>
+          <div class="shrink-0 text-right">
+            <p class="text-2xl font-extrabold text-accent-600 leading-none">10,0</p>
+            <p class="text-[10px] text-ink-500 uppercase tracking-wider mt-0.5">Skóre</p>
+          </div>
+        </a>
+
+        <!-- 2. Praha -->
+        <a href="#" class="relative flex items-center gap-4 p-3 rounded-2xl bg-white hover:bg-ink-100/40 hover:shadow-card transition">
+          <div class="shrink-0 w-12 h-12 rounded-xl bg-accent-500/90 text-white font-extrabold text-xl flex items-center justify-center">2</div>
+          <img src="./Výsledky IKŽ za 2025 _ Obce v datech_files/2-hrad_praha_dark_v2.2-612x387.webp" alt="Praha"
+               class="w-14 h-14 rounded-xl object-cover">
+          <div class="flex-1 min-w-0">
+            <p class="font-bold text-ink-900 truncate">Praha</p>
+            <p class="text-xs text-ink-500">Hlavní město</p>
+          </div>
+          <div class="shrink-0 text-right">
+            <p class="text-2xl font-extrabold text-accent-600 leading-none">9,2</p>
+            <p class="text-[10px] text-ink-500 uppercase tracking-wider mt-0.5">Skóre</p>
+          </div>
+        </a>
+
+        <!-- 3. Kuřim -->
+        <a href="#" class="relative flex items-center gap-4 p-3 rounded-2xl bg-white hover:bg-ink-100/40 hover:shadow-card transition">
+          <div class="shrink-0 w-12 h-12 rounded-xl bg-accent-500/80 text-white font-extrabold text-xl flex items-center justify-center">3</div>
+          <img src="./Výsledky IKŽ za 2025 _ Obce v datech_files/143-Kuřim.webp" alt="Kuřim"
+               class="w-14 h-14 rounded-xl object-cover">
+          <div class="flex-1 min-w-0">
+            <p class="font-bold text-ink-900 truncate">Kuřim</p>
+            <p class="text-xs text-ink-500">Jihomoravský kraj</p>
+          </div>
+          <div class="shrink-0 text-right">
+            <p class="text-2xl font-extrabold text-accent-600 leading-none">9,0</p>
+            <p class="text-[10px] text-ink-500 uppercase tracking-wider mt-0.5">Skóre</p>
+          </div>
+        </a>
+
+        <!-- 4. Hustopeče (bez fotky → iniciála) -->
+        <a href="#" class="relative flex items-center gap-4 p-3 rounded-2xl bg-white hover:bg-ink-100/40 hover:shadow-card transition">
+          <div class="shrink-0 w-12 h-12 rounded-xl bg-primary-500 text-white font-extrabold text-xl flex items-center justify-center">4</div>
+          <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-primary-200 to-primary-300 flex items-center justify-center shrink-0">
+            <span class="text-primary-800 font-bold text-lg">H</span>
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="font-bold text-ink-900 truncate">Hustopeče</p>
+            <p class="text-xs text-ink-500">Jihomoravský kraj</p>
+          </div>
+          <div class="shrink-0 text-right">
+            <p class="text-2xl font-extrabold text-primary-700 leading-none">8,9</p>
+            <p class="text-[10px] text-ink-500 uppercase tracking-wider mt-0.5">Skóre</p>
+          </div>
+        </a>
+
+        <!-- 5. Brandýs nad Labem -->
+        <a href="#" class="relative flex items-center gap-4 p-3 rounded-2xl bg-white hover:bg-ink-100/40 hover:shadow-card transition">
+          <div class="shrink-0 w-12 h-12 rounded-xl bg-primary-500 text-white font-extrabold text-xl flex items-center justify-center">5</div>
+          <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-primary-200 to-primary-300 flex items-center justify-center shrink-0">
+            <span class="text-primary-800 font-bold text-lg">B</span>
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="font-bold text-ink-900 truncate">Brandýs nad Labem</p>
+            <p class="text-xs text-ink-500">Středočeský kraj</p>
+          </div>
+          <div class="shrink-0 text-right">
+            <p class="text-2xl font-extrabold text-primary-700 leading-none">8,7</p>
+            <p class="text-[10px] text-ink-500 uppercase tracking-wider mt-0.5">Skóre</p>
+          </div>
+        </a>
+
+        <!-- 6. Slavkov u Brna -->
+        <a href="#" class="relative flex items-center gap-4 p-3 rounded-2xl bg-white hover:bg-ink-100/40 hover:shadow-card transition">
+          <div class="shrink-0 w-12 h-12 rounded-xl bg-primary-500 text-white font-extrabold text-xl flex items-center justify-center">6</div>
+          <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-primary-200 to-primary-300 flex items-center justify-center shrink-0">
+            <span class="text-primary-800 font-bold text-lg">S</span>
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="font-bold text-ink-900 truncate">Slavkov u Brna</p>
+            <p class="text-xs text-ink-500">Jihomoravský kraj</p>
+          </div>
+          <div class="shrink-0 text-right">
+            <p class="text-2xl font-extrabold text-primary-700 leading-none">8,6</p>
+            <p class="text-[10px] text-ink-500 uppercase tracking-wider mt-0.5">Skóre</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =================================================================
+     V1) DATOVÉ PŘÍBĚHY — top of funnel, otevřený obsah pro veřejnost
+         Cíl: reputace, návštěvnost, citace v médiích.
+     ================================================================= -->
+<section class="section my-12 lg:my-20">
+  <div class="container-x">
+
+    <div class="flex items-end justify-between gap-6 mb-8 lg:mb-12">
+      <div>
+        <p class="text-xs font-bold uppercase tracking-[0.15em] text-primary-600 mb-3">— Datové příběhy</p>
+        <h2 class="text-3xl lg:text-5xl font-extrabold text-ink-900 leading-tight max-w-2xl">
+          Co data ukazují o&nbsp;Česku
+        </h2>
+      </div>
+      <a href="#" class="hidden md:inline-flex items-center gap-1.5 text-primary-700 font-semibold text-sm hover:gap-2.5 transition-all whitespace-nowrap">
+        Všechny příběhy →
+      </a>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
+
+      <!-- Story 1 -->
+      <a href="#" class="group bg-white rounded-3xl shadow-card overflow-hidden hover:shadow-pop transition-all">
+        <div class="aspect-[16/10] bg-gradient-to-br from-accent-100 via-accent-50 to-white flex items-end p-5">
+          <span class="text-sm font-semibold text-accent-700">Žebříček 2025</span>
+        </div>
+        <div class="p-6">
+          <h3 class="text-lg font-bold text-ink-900 leading-snug">Kde se v Česku žije nejlépe</h3>
+          <p class="text-sm text-ink-700 mt-2 leading-relaxed">Top 10 obcí, kde se kvalita života drží na špici už několik let v řadě.</p>
+          <span class="inline-flex items-center gap-1.5 mt-4 text-primary-700 font-semibold text-sm group-hover:gap-2.5 transition-all">Číst příběh →</span>
+        </div>
+      </a>
+
+      <!-- Story 2 -->
+      <a href="#" class="group bg-white rounded-3xl shadow-card overflow-hidden hover:shadow-pop transition-all">
+        <div class="aspect-[16/10] bg-gradient-to-br from-amber-100 via-amber-50 to-white flex items-end p-5">
+          <span class="text-sm font-semibold text-amber-700">Trend 2018–2025</span>
+        </div>
+        <div class="p-6">
+          <h3 class="text-lg font-bold text-ink-900 leading-snug">Skokani a propadlíci</h3>
+          <p class="text-sm text-ink-700 mt-2 leading-relaxed">Která města se za sedm let posunula nejvíc nahoru — a která tlačí dolů?</p>
+          <span class="inline-flex items-center gap-1.5 mt-4 text-primary-700 font-semibold text-sm group-hover:gap-2.5 transition-all">Číst příběh →</span>
+        </div>
+      </a>
+
+      <!-- Story 3 -->
+      <a href="#" class="group bg-white rounded-3xl shadow-card overflow-hidden hover:shadow-pop transition-all">
+        <div class="aspect-[16/10] bg-gradient-to-br from-primary-100 via-primary-50 to-white flex items-end p-5">
+          <span class="text-sm font-semibold text-primary-700">Profilová analýza</span>
+        </div>
+        <div class="p-6">
+          <h3 class="text-lg font-bold text-ink-900 leading-snug">Města práce vs. města pro život</h3>
+          <p class="text-sm text-ink-700 mt-2 leading-relaxed">Kde se dobře vydělává a kde se dobře žije? Někdy je to ta samá obec, jindy ne.</p>
+          <span class="inline-flex items-center gap-1.5 mt-4 text-primary-700 font-semibold text-sm group-hover:gap-2.5 transition-all">Číst příběh →</span>
+        </div>
+      </a>
+
+      <!-- Story 4 -->
+      <a href="#" class="group bg-white rounded-3xl shadow-card overflow-hidden hover:shadow-pop transition-all">
+        <div class="aspect-[16/10] bg-gradient-to-br from-rose-100 via-rose-50 to-white flex items-end p-5">
+          <span class="text-sm font-semibold text-rose-700">Demografie</span>
+        </div>
+        <div class="p-6">
+          <h3 class="text-lg font-bold text-ink-900 leading-snug">Města pro mladé</h3>
+          <p class="text-sm text-ink-700 mt-2 leading-relaxed">Kde mladí zůstávají, kam se stěhují a co určuje jejich rozhodnutí.</p>
+          <span class="inline-flex items-center gap-1.5 mt-4 text-primary-700 font-semibold text-sm group-hover:gap-2.5 transition-all">Číst příběh →</span>
+        </div>
+      </a>
+
+      <!-- Story 5 -->
+      <a href="#" class="group bg-white rounded-3xl shadow-card overflow-hidden hover:shadow-pop transition-all">
+        <div class="aspect-[16/10] bg-gradient-to-br from-ink-200 via-ink-100 to-white flex items-end p-5">
+          <span class="text-sm font-semibold text-ink-700">Bydlení</span>
+        </div>
+        <div class="p-6">
+          <h3 class="text-lg font-bold text-ink-900 leading-snug">Bydlení jako brzda rozvoje</h3>
+          <p class="text-sm text-ink-700 mt-2 leading-relaxed">Které obce tahá dolů cena a dostupnost bydlení — a jak to mění demografii.</p>
+          <span class="inline-flex items-center gap-1.5 mt-4 text-primary-700 font-semibold text-sm group-hover:gap-2.5 transition-all">Číst příběh →</span>
+        </div>
+      </a>
+
+      <!-- Story 6 -->
+      <a href="#" class="group bg-white rounded-3xl shadow-card overflow-hidden hover:shadow-pop transition-all">
+        <div class="aspect-[16/10] bg-gradient-to-br from-sky-100 via-sky-50 to-white flex items-end p-5">
+          <span class="text-sm font-semibold text-sky-700">Zdravotnictví</span>
+        </div>
+        <div class="p-6">
+          <h3 class="text-lg font-bold text-ink-900 leading-snug">Dostupnost zdravotní péče</h3>
+          <p class="text-sm text-ink-700 mt-2 leading-relaxed">Kde chybí pediatr, zubař i praktik — mapa bílých míst v Česku.</p>
+          <span class="inline-flex items-center gap-1.5 mt-4 text-primary-700 font-semibold text-sm group-hover:gap-2.5 transition-all">Číst příběh →</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- Most do funnelu — z příběhu do vyhledávače -->
+    <div class="mt-10 lg:mt-12 flex flex-col sm:flex-row items-center justify-center gap-3 text-center">
+      <p class="text-ink-700">A kde stojí ta vaše obec?</p>
+      <a href="#hledat" class="inline-flex items-center gap-1.5 text-primary-700 font-bold hover:gap-2.5 transition-all">
+        Najděte ji ve vyhledávači →
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- =================================================================
+     DALŠÍ PRODUKTY — pod Datové příběhy, výrazně viditelné
+     Cíl: jasně sdělit, že nabízíme 3 produkty, ne jen Index kvality života.
+     ================================================================= -->
+<section class="section my-12 lg:my-20">
+  <div class="container-x">
+
+    <div class="text-center mb-12 lg:mb-16">
+      <p class="text-xs font-bold uppercase tracking-[0.15em] text-primary-600 mb-3">— Naše produkty</p>
+      <h2 class="text-3xl lg:text-5xl font-extrabold text-ink-900 leading-tight max-w-3xl mx-auto">
+        Tři produkty,<br class="sm:hidden">
+        tři pohledy na vaše město
+      </h2>
+      <p class="mt-5 text-lg text-ink-700 max-w-2xl mx-auto">
+        Vyberte podle toho, co právě řešíte — strategický rozvoj, finanční plánování, nebo konkrétní téma.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-5 lg:gap-6">
+
+      <!-- Produkt 1: Index kvality života (hlavní) -->
+      <a href="#" class="group bg-white rounded-3xl shadow-card hover:shadow-pop transition-all overflow-hidden flex flex-col ring-2 ring-accent-100">
+        <div class="bg-gradient-to-br from-accent-500 to-accent-600 p-6 text-white relative">
+          <span class="absolute top-3 right-3 text-[10px] font-bold uppercase tracking-wider bg-white/20 backdrop-blur px-2 py-1 rounded-md">Hlavní produkt</span>
+          <p class="text-xs font-bold uppercase tracking-wider opacity-80">Pro strategický rozvoj</p>
+          <h3 class="text-2xl font-extrabold mt-2">Index kvality života</h3>
+        </div>
+        <div class="p-6 flex-1 flex flex-col">
+          <p class="text-sm text-ink-700 leading-relaxed flex-1">
+            Roční report o&nbsp;kvalitě života ve vašem městě. 29 indexů ve&nbsp;třech pilířích —
+            zdraví, materiální zabezpečení, vztahy a&nbsp;služby. 8letá historie, srovnání s&nbsp;ČR.
+          </p>
+          <div class="mt-5 pt-4 border-t border-ink-100">
+            <p class="text-[11px] text-ink-500 uppercase tracking-wider">Cena</p>
+            <p class="text-2xl font-extrabold text-ink-900">19 990 Kč</p>
+          </div>
+          <span class="inline-flex items-center gap-1.5 mt-4 text-accent-700 font-bold text-sm group-hover:gap-2.5 transition-all">
+            Prohlédnout produkt →
+          </span>
+        </div>
+      </a>
+
+      <!-- Produkt 2: Ekonomika obce -->
+      <a href="#" class="group bg-white rounded-3xl shadow-card hover:shadow-pop transition-all overflow-hidden flex flex-col">
+        <div class="bg-gradient-to-br from-primary-600 to-primary-700 p-6 text-white">
+          <p class="text-xs font-bold uppercase tracking-wider opacity-80">Pro finanční plánování</p>
+          <h3 class="text-2xl font-extrabold mt-2">Ekonomika obce</h3>
+        </div>
+        <div class="p-6 flex-1 flex flex-col">
+          <p class="text-sm text-ink-700 leading-relaxed flex-1">
+            Rating obce, analýza hospodaření, střednědobý výhled rozpočtu a&nbsp;manažerské shrnutí
+            — pro správné nastavení rozpočtu a&nbsp;plánování investic.
+          </p>
+          <div class="mt-5 pt-4 border-t border-ink-100">
+            <p class="text-[11px] text-ink-500 uppercase tracking-wider">Cena</p>
+            <p class="text-base font-bold text-ink-900">Na vyžádání</p>
+          </div>
+          <span class="inline-flex items-center gap-1.5 mt-4 text-primary-700 font-bold text-sm group-hover:gap-2.5 transition-all">
+            Prohlédnout produkt →
+          </span>
+        </div>
+      </a>
+
+      <!-- Produkt 3: Tematická studie -->
+      <a href="#" class="group bg-white rounded-3xl shadow-card hover:shadow-pop transition-all overflow-hidden flex flex-col">
+        <div class="bg-gradient-to-br from-amber-500 to-amber-600 p-6 text-white">
+          <p class="text-xs font-bold uppercase tracking-wider opacity-80">Pro hloubkové analýzy</p>
+          <h3 class="text-2xl font-extrabold mt-2">Tematická studie</h3>
+        </div>
+        <div class="p-6 flex-1 flex flex-col">
+          <p class="text-sm text-ink-700 leading-relaxed flex-1">
+            Pokročilé přehledy a&nbsp;analýzy konkrétních témat napříč městy i&nbsp;celou ČR
+            — bydlení, doprava, vzdělání, demografie. Custom dle zadání.
+          </p>
+          <div class="mt-5 pt-4 border-t border-ink-100">
+            <p class="text-[11px] text-ink-500 uppercase tracking-wider">Cena</p>
+            <p class="text-base font-bold text-ink-900">Custom dle rozsahu</p>
+          </div>
+          <span class="inline-flex items-center gap-1.5 mt-4 text-amber-700 font-bold text-sm group-hover:gap-2.5 transition-all">
+            Prohlédnout produkt →
+          </span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- =================================================================
+     V3) BEZPLATNÁ UKÁZKA — lead magnet (e-mail gate)
+         Cíl: získat lead — jméno, město, e-mail výměnou za 2-stránkové PDF.
+     ================================================================= -->
+<section id="ukazka" class="section my-12 lg:my-20">
+  <div class="container-x">
+    <div class="grid lg:grid-cols-[1.1fr_1fr] gap-10 lg:gap-16 items-center">
+
+      <!-- Levá: popis ukázky + co obsahuje -->
+      <div>
+        <p class="text-xs font-bold uppercase tracking-[0.15em] text-accent-700 mb-3">— Bezplatná ukázka</p>
+        <h2 class="text-3xl lg:text-5xl font-extrabold text-ink-900 leading-tight">
+          Strategická ukázka<br>
+          <span class="text-accent-600">vašeho města — zdarma</span>
+        </h2>
+        <p class="mt-6 text-lg text-ink-700 max-w-lg leading-relaxed">
+          Dvoustránkové PDF, které ukáže, kde si vaše město stojí, kde má silné stránky
+          a&nbsp;na jaká rizika si dát pozor. Pošleme vám ho do hodiny e-mailem.
+        </p>
+
+        <!-- Co dostanete -->
+        <div class="mt-8 bg-white rounded-2xl shadow-card p-5 lg:p-6">
+          <p class="text-xs font-bold uppercase tracking-wider text-ink-500 mb-3">Co dostanete</p>
+          <div class="grid sm:grid-cols-2 gap-x-4 gap-y-2.5 text-[15px] text-ink-700">
+            <p class="flex gap-2"><span class="text-accent-600 font-bold">·</span> Celkové pořadí v ČR</p>
+            <p class="flex gap-2"><span class="text-accent-600 font-bold">·</span> Skóre v 3 pilířích</p>
+            <p class="flex gap-2"><span class="text-accent-600 font-bold">·</span> Trend od roku 2018</p>
+            <p class="flex gap-2"><span class="text-accent-600 font-bold">·</span> Krajské srovnání</p>
+            <p class="flex gap-2"><span class="text-accent-600 font-bold">·</span> 1 silná stránka města</p>
+            <p class="flex gap-2"><span class="text-accent-600 font-bold">·</span> 1 riziková oblast</p>
+          </div>
+        </div>
+
+        <p class="mt-5 text-sm text-ink-500">
+          200+ měst už si ukázku stáhlo · Žádný spam · GDPR
+        </p>
+      </div>
+
+      <!-- Pravá: formulář -->
+      <form class="bg-white rounded-3xl shadow-pop p-6 lg:p-8">
+        <p class="text-xs font-bold uppercase tracking-wider text-primary-700 mb-1">Stáhnout zdarma</p>
+        <p class="text-xl font-extrabold text-ink-900 mb-5">Vyplňte 4 pole</p>
+
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-semibold text-ink-700 mb-1.5">Vaše město</label>
+            <input type="text" placeholder="např. Říčany"
+                   class="w-full h-12 px-4 rounded-xl border border-ink-200 bg-white text-ink-900 placeholder:text-ink-400 outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-100 transition">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-ink-700 mb-1.5">Vaše jméno</label>
+            <input type="text" placeholder="Jan Novák"
+                   class="w-full h-12 px-4 rounded-xl border border-ink-200 bg-white text-ink-900 placeholder:text-ink-400 outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-100 transition">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-ink-700 mb-1.5">Funkce</label>
+            <select class="w-full h-12 px-4 rounded-xl border border-ink-200 bg-white text-ink-700 outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-100 transition">
+              <option>Starosta / Starostka</option>
+              <option>Tajemník / Tajemnice</option>
+              <option>Zastupitel / Zastupitelka</option>
+              <option>Úředník</option>
+              <option>Občan</option>
+              <option>Jiná</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-ink-700 mb-1.5">E-mail</label>
+            <input type="email" placeholder="jan.novak@mestoricany.cz"
+                   class="w-full h-12 px-4 rounded-xl border border-ink-200 bg-white text-ink-900 placeholder:text-ink-400 outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-100 transition">
+          </div>
+        </div>
+
+        <button type="submit" class="w-full mt-6 h-14 rounded-xl bg-accent-500 hover:bg-accent-600 text-white font-extrabold text-base transition-colors">
+          Stáhnout ukázku →
+        </button>
+
+        <p class="mt-4 text-xs text-ink-500 leading-relaxed">
+          Odesláním souhlasíte se zpracováním osobních údajů dle GDPR.
+          Pošleme vám PDF a občas tipy z dat. Odhlásit můžete kdykoliv.
+        </p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- =================================================================
+     V4) PLACENÝ MĚSTSKÝ REPORT — datový podklad pro strategické řízení
+         Cíl: konverze na placený produkt.
+     ================================================================= -->
+<section id="report" class="section my-12 lg:my-20">
+  <div class="container-x bg-ink-900 rounded-3xl px-6 py-14 lg:px-16 lg:py-24 text-white relative overflow-hidden">
+
+    <!-- Header sekce -->
+    <div class="max-w-3xl">
+      <p class="text-xs font-bold uppercase tracking-[0.15em] text-accent-400 mb-3">— Placený report</p>
+      <h2 class="text-3xl lg:text-6xl font-extrabold leading-[1.05]">
+        Datový podklad pro<br>
+        <span class="text-accent-400">strategické řízení města</span>
+      </h2>
+      <p class="mt-6 text-lg text-white/70 leading-relaxed">
+        Komplexní report, který slouží jako podklad pro koncepce, zastupitelstvo
+        a&nbsp;rozvojové projekty. Připravený tak, aby z&nbsp;něj šlo rovnou pracovat.
+      </p>
+    </div>
+
+    <!-- Co je v reportu — 7 položek bez ikon -->
+    <div class="mt-12 lg:mt-16 grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-8 lg:gap-y-10">
+      <div>
+        <p class="text-xs font-bold uppercase tracking-wider text-accent-400 mb-2">01</p>
+        <h3 class="text-lg font-bold text-white">Detailní PDF report</h3>
+        <p class="text-sm text-white/60 mt-1.5 leading-relaxed">50+ stránek dat, kontextu a doporučení v editovatelném formátu.</p>
+      </div>
+      <div>
+        <p class="text-xs font-bold uppercase tracking-wider text-accent-400 mb-2">02</p>
+        <h3 class="text-lg font-bold text-white">Interaktivní dashboard</h3>
+        <p class="text-sm text-white/60 mt-1.5 leading-relaxed">Online prostředí s filtrováním, srovnáváním a exportem grafů.</p>
+      </div>
+      <div>
+        <p class="text-xs font-bold uppercase tracking-wider text-accent-400 mb-2">03</p>
+        <h3 class="text-lg font-bold text-white">Srovnání s podobnými městy</h3>
+        <p class="text-sm text-white/60 mt-1.5 leading-relaxed">Peer benchmark obcí stejné velikosti, geografie a struktury.</p>
+      </div>
+      <div>
+        <p class="text-xs font-bold uppercase tracking-wider text-accent-400 mb-2">04</p>
+        <h3 class="text-lg font-bold text-white">Prioritizace problémů</h3>
+        <p class="text-sm text-white/60 mt-1.5 leading-relaxed">Řazení rozvojových výzev podle dopadu a urgence.</p>
+      </div>
+      <div>
+        <p class="text-xs font-bold uppercase tracking-wider text-accent-400 mb-2">05</p>
+        <h3 class="text-lg font-bold text-white">Grafy pro zastupitelstvo</h3>
+        <p class="text-sm text-white/60 mt-1.5 leading-relaxed">Připravené vizuály do prezentací a strategických dokumentů.</p>
+      </div>
+      <div>
+        <p class="text-xs font-bold uppercase tracking-wider text-accent-400 mb-2">06</p>
+        <h3 class="text-lg font-bold text-white">Datový appendix</h3>
+        <p class="text-sm text-white/60 mt-1.5 leading-relaxed">Surová data v Excelu — pro vlastní analýzy a navazující práci.</p>
+      </div>
+      <div class="sm:col-span-2 lg:col-span-3 mt-2 pt-8 border-t border-white/10">
+        <p class="text-xs font-bold uppercase tracking-wider text-accent-400 mb-2">+ Volitelně</p>
+        <h3 class="text-lg font-bold text-white">Prezentace vedení města</h3>
+        <p class="text-sm text-white/60 mt-1.5 leading-relaxed max-w-2xl">
+          90minutová prezentace nálezů přímo u&nbsp;vás v&nbsp;úřadě nebo online — pro starostu, vedení a&nbsp;klíčové úředníky.
+        </p>
+      </div>
+    </div>
+
+    <!-- CTA blok -->
+    <div class="mt-12 lg:mt-16 pt-10 border-t border-white/10 flex flex-col lg:flex-row gap-6 lg:items-center lg:justify-between">
+      <div>
+        <p class="text-2xl font-extrabold text-white">Připraveno k použití do 5 pracovních dnů.</p>
+        <p class="text-white/60 mt-1">Cena na vyžádání podle velikosti obce a rozsahu.</p>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <a href="#" class="inline-flex items-center justify-center gap-2 h-14 px-7 rounded-xl bg-accent-500 hover:bg-accent-400 text-white font-extrabold text-base transition-colors">
+          Koupit report →
+        </a>
+        <a href="#" class="inline-flex items-center justify-center gap-2 h-14 px-7 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-base transition-colors backdrop-blur">
+          Domluvit konzultaci
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- (Další produkty přesunuty pod Datové příběhy) -->
+
+<!-- =================================================================
+     4) PROČ NÁM DŮVĚŘUJÍ — 4 benefit karty
+     ================================================================= -->
+<section class="section card-soft rounded-3xl my-8 lg:my-16">
+  <div class="container-x py-12 lg:py-20">
+    <h2 class="text-3xl lg:text-5xl font-extrabold text-ink-900 text-center max-w-3xl mx-auto">
+      Proč nám důvěřují obce po celé ČR
+    </h2>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-10 lg:mt-16">
+      <!-- 1 -->
+      <div class="bg-white rounded-2xl shadow-card p-6 lg:p-8 text-center">
+        <div class="w-14 h-14 rounded-2xl bg-accent-50 flex items-center justify-center mx-auto mb-4">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><path d="M9 12l2 2 4-4M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+        </div>
+        <h3 class="font-bold text-ink-900 mb-2">Ověřená data</h3>
+        <p class="text-sm text-ink-700 leading-relaxed">Reporty stavíme na ověřených veřejných zdrojích a jasné metodice</p>
+      </div>
+      <!-- 2 -->
+      <div class="bg-white rounded-2xl shadow-card p-6 lg:p-8 text-center">
+        <div class="w-14 h-14 rounded-2xl bg-primary-100 flex items-center justify-center mx-auto mb-4">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2"><path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5L12 2zM5 18l1 3 3 1-3 1-1 3-1-3-3-1 3-1 1-3z"/></svg>
+        </div>
+        <h3 class="font-bold text-ink-900 mb-2">Odborná analytika</h3>
+        <p class="text-sm text-ink-700 leading-relaxed">Propojujeme lidskou expertízu a AI pro rychlý přehled</p>
+      </div>
+      <!-- 3 -->
+      <div class="bg-white rounded-2xl shadow-card p-6 lg:p-8 text-center">
+        <div class="w-14 h-14 rounded-2xl bg-amber-50 flex items-center justify-center mx-auto mb-4">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        <h3 class="font-bold text-ink-900 mb-2">Vše na jednom místě</h3>
+        <p class="text-sm text-ink-700 leading-relaxed">Klíčové ukazatele přehledně, s možností porovnání</p>
+      </div>
+      <!-- 4 -->
+      <div class="bg-white rounded-2xl shadow-card p-6 lg:p-8 text-center">
+        <div class="w-14 h-14 rounded-2xl bg-rose-50 flex items-center justify-center mx-auto mb-4">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#e11d48" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </div>
+        <h3 class="font-bold text-ink-900 mb-2">Okamžitý přístup</h3>
+        <p class="text-sm text-ink-700 leading-relaxed">Ihned po zaplacení máte data k dispozici</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =================================================================
+     5) JAK POMÁHÁME V PRAXI — testimonials carousel (zjednodušený)
+     ================================================================= -->
+<section class="section card-soft rounded-3xl my-8 lg:my-16">
+  <div class="container-x py-12 lg:py-20">
+
+    <h2 class="text-3xl lg:text-5xl font-extrabold text-ink-900 text-center max-w-3xl mx-auto">
+      Jak Obce v datech pomáhají v praxi
+    </h2>
+
+    <!-- Velký uvozovkový symbol -->
+    <div class="flex justify-center my-8">
+      <svg width="48" height="42" viewBox="0 0 53 46" fill="currentColor" class="text-primary-600">
+        <path d="M0 45.7V27.7c0-7.8 1.7-14.3 5-19.4C8.5 3.1 13.3 0 19.4 0v9.1c-3.2.5-5.7 2.1-7.4 5-1.7 2.7-2.6 6.4-2.6 11h13.7v20.6H0zm29.8 0V27.7c0-7.8 1.7-14.3 5-19.4C38.3 3.1 43.1 0 49.2 0v9.1c-3.2.5-5.7 2.1-7.4 5-1.7 2.7-2.6 6.4-2.6 11H53v20.6H29.8z"/>
+      </svg>
+    </div>
+
+    <!-- Aktivní testimonial -->
+    <div class="grid lg:grid-cols-[200px_1fr_auto] gap-8 lg:gap-12 items-center max-w-5xl mx-auto">
+
+      <div class="flex flex-col items-center gap-3">
+        <div class="w-20 h-20 rounded-full bg-gradient-to-br from-primary-300 to-primary-500 flex items-center justify-center text-white text-2xl font-extrabold">MB</div>
+        <div class="text-center">
+          <p class="font-bold text-ink-900">Bc. Michal Boudný</p>
+          <p class="text-sm text-ink-500">starosta, Slavkov u Brna</p>
+        </div>
+      </div>
+
+      <p class="text-ink-700 leading-relaxed">
+        Usilujeme o to, aby naše město poskytovalo občanům co nejlepší podmínky pro život.
+        K tomu je zapotřebí pracovat s daty. Projekt Obce v datech perfektně zapadá do naší vize
+        a indexy v rámci pilotního testování pomáhají definovat novou strategii města.
+        Oceňuji zejména srovnání s ostatními městy na základě validních dat.
+      </p>
+
+      <button class="btn-primary self-center lg:self-auto">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+
+    <!-- Carousel dots -->
+    <div class="flex justify-center gap-2 mt-10">
+      <span class="w-2.5 h-2.5 rounded-full bg-primary-600"></span>
+      <span class="w-2.5 h-2.5 rounded-full bg-ink-200"></span>
+      <span class="w-2.5 h-2.5 rounded-full bg-ink-200"></span>
+    </div>
+  </div>
+</section>
+
+<!-- =================================================================
+     6) FAQ — všechny otázky (collapsible accordion)
+     ================================================================= -->
+<section class="section my-8 lg:my-16">
+  <div class="container-x grid lg:grid-cols-2 gap-12 items-start">
+
+    <h2 class="text-3xl lg:text-5xl font-extrabold text-ink-900">
+      Vše, co potřebujete vědět
+    </h2>
+
+    <div class="flex flex-col gap-3">
+      <details class="group bg-surface-alt rounded-xl shadow-card">
+        <summary class="flex items-center justify-between gap-4 p-5 cursor-pointer list-none">
+          <span class="text-lg font-semibold text-ink-900">Co přesně si mohu na e-shopu Obce v datech koupit?</span>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-primary-700 transition-transform group-open:rotate-45"><path d="M5 12h14M12 5v14"/></svg>
+        </summary>
+        <div class="px-5 pb-5 text-ink-700 leading-relaxed">
+          Reporty Indexu kvality života pro vaše město, ekonomické analýzy a tematické studie. Vše v PDF s přehlednými vizualizacemi.
+        </div>
+      </details>
+
+      <details class="group bg-surface-alt rounded-xl shadow-card">
+        <summary class="flex items-center justify-between gap-4 p-5 cursor-pointer list-none">
+          <span class="text-lg font-semibold text-ink-900">Jaká data najdu v reportu obce?</span>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-primary-700 transition-transform group-open:rotate-45"><path d="M5 12h14M12 5v14"/></svg>
+        </summary>
+        <div class="px-5 pb-5 text-ink-700 leading-relaxed">
+          Demografie, ekonomika, infrastruktura, zdraví a životní prostředí, vztahy a služby — celkem 29 dílčích indexů.
+        </div>
+      </details>
+
+      <details class="group bg-surface-alt rounded-xl shadow-card">
+        <summary class="flex items-center justify-between gap-4 p-5 cursor-pointer list-none">
+          <span class="text-lg font-semibold text-ink-900">Jak často aktualizujete data?</span>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-primary-700 transition-transform group-open:rotate-45"><path d="M5 12h14M12 5v14"/></svg>
+        </summary>
+        <div class="px-5 pb-5 text-ink-700 leading-relaxed">
+          Index kvality života aktualizujeme každoročně. Ekonomické ukazatele kvartálně podle dat MF ČR.
+        </div>
+      </details>
+
+      <details class="group bg-surface-alt rounded-xl shadow-card">
+        <summary class="flex items-center justify-between gap-4 p-5 cursor-pointer list-none">
+          <span class="text-lg font-semibold text-ink-900">Nabízíte také data na míru pro obce, které nejsou v seznamu?</span>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-primary-700 transition-transform group-open:rotate-45"><path d="M5 12h14M12 5v14"/></svg>
+        </summary>
+        <div class="px-5 pb-5 text-ink-700 leading-relaxed">
+          Ano, nabízíme custom analýzy pro menší obce a regiony — kontaktujte nás.
+        </div>
+      </details>
+
+      <details class="group bg-surface-alt rounded-xl shadow-card">
+        <summary class="flex items-center justify-between gap-4 p-5 cursor-pointer list-none">
+          <span class="text-lg font-semibold text-ink-900">Jaké platební metody podporujete?</span>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-primary-700 transition-transform group-open:rotate-45"><path d="M5 12h14M12 5v14"/></svg>
+        </summary>
+        <div class="px-5 pb-5 text-ink-700 leading-relaxed">
+          Platba kartou online a bankovním převodem. Faktura automaticky.
+        </div>
+      </details>
+
+      <details class="group bg-surface-alt rounded-xl shadow-card">
+        <summary class="flex items-center justify-between gap-4 p-5 cursor-pointer list-none">
+          <span class="text-lg font-semibold text-ink-900">Jakým způsobem obdržím zakoupená data?</span>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-primary-700 transition-transform group-open:rotate-45"><path d="M5 12h14M12 5v14"/></svg>
+        </summary>
+        <div class="px-5 pb-5 text-ink-700 leading-relaxed">
+          Ihned po platbě dostanete report e-mailem ve formátu PDF.
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- =================================================================
+     7) BLOG — 3 nejnovější články
+     ================================================================= -->
+<section class="section my-8 lg:my-16">
+  <div class="container-x">
+    <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4 mb-8 lg:mb-12">
+      <h2 class="text-3xl lg:text-5xl font-extrabold text-ink-900">Přečtěte si více z našeho blogu</h2>
+      <a href="#" class="btn-primary">Blog →</a>
+    </div>
+
+    <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8">
+
+      <!-- Článek 1 -->
+      <article class="bg-white rounded-3xl shadow-card overflow-hidden hover:shadow-pop transition-shadow">
+        <div class="h-48 lg:h-56 bg-gradient-to-br from-accent-100 via-accent-50 to-white flex items-center justify-center">
+          <span class="text-6xl">🏆</span>
+        </div>
+        <div class="p-6">
+          <p class="text-sm text-ink-500 mb-2">27. 11. 2025</p>
+          <h3 class="text-lg font-bold text-ink-900 leading-snug mb-4">
+            Říčany poosmé kralují Česku, na stupně vítězů se dostal Slavkov u Brna
+          </h3>
+          <a href="#" class="btn-secondary text-sm h-10 px-4">
+            Číst více
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </article>
+
+      <!-- Článek 2 -->
+      <article class="bg-white rounded-3xl shadow-card overflow-hidden hover:shadow-pop transition-shadow">
+        <div class="h-48 lg:h-56 bg-gradient-to-br from-primary-100 via-primary-50 to-white flex items-center justify-center">
+          <span class="text-6xl">📊</span>
+        </div>
+        <div class="p-6">
+          <p class="text-sm text-ink-500 mb-2">24. 11. 2025</p>
+          <h3 class="text-lg font-bold text-ink-900 leading-snug mb-4">
+            Jak moc spolu ladí Index kvality života a Index sociálního vyloučení?
+          </h3>
+          <a href="#" class="btn-secondary text-sm h-10 px-4">
+            Číst více
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </article>
+
+      <!-- Článek 3 -->
+      <article class="bg-white rounded-3xl shadow-card overflow-hidden hover:shadow-pop transition-shadow">
+        <div class="h-48 lg:h-56 bg-gradient-to-br from-amber-100 via-amber-50 to-white flex items-center justify-center">
+          <span class="text-6xl">🏘️</span>
+        </div>
+        <div class="p-6">
+          <p class="text-sm text-ink-500 mb-2">1. 9. 2025</p>
+          <h3 class="text-lg font-bold text-ink-900 leading-snug mb-4">
+            Bytová politika aneb jak efektivně hospodařit s bytovým fondem měst
+          </h3>
+          <a href="#" class="btn-secondary text-sm h-10 px-4">
+            Číst více
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- =================================================================
+     8) NAPSALI O NÁS — media mention
+     ================================================================= -->
+<section class="section card-soft rounded-3xl my-8 lg:my-16">
+  <div class="container-x py-12 lg:py-20 grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+
+    <div>
+      <h2 class="text-3xl lg:text-5xl font-extrabold text-ink-900 mb-6">Napsali o nás</h2>
+      <p class="text-lg text-ink-700 leading-relaxed mb-6">
+        <a href="#" class="text-primary-700 hover:underline font-medium">
+          Nejlepší a nejhorší města v Česku 2025: Podívejte se, jak je na tom to vaše
+        </a>
+      </p>
+      <a href="#" class="btn-primary">
+        Zobrazit více
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+
+    <article class="bg-white rounded-3xl shadow-card overflow-hidden">
+      <div class="h-56 bg-gradient-to-br from-primary-200 via-primary-100 to-white flex items-center justify-center">
+        <span class="text-7xl">📰</span>
+      </div>
+      <div class="p-6">
+        <h3 class="text-lg font-bold text-ink-900 leading-snug">
+          Říčany poosmé kralují Česku, na stupně vítězů se dostal Slavkov u Brna.
+          Projekt Obce v datech odhalil, kde se v Česku žije nejlépe
+        </h3>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- =================================================================
+     FOOTER — kontakt + odkazy + tagline „Pomáháme od roku 2018"
+     Změny dle Wordu:
+       • „Pomáháme českým obcím od roku 2018" pouze 1× — zde dole
+     ================================================================= -->
+<footer class="footer-grad mx-4 mt-12 rounded-t-3xl">
+  <div class="container-x py-12 lg:py-16">
+
+    <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-12 lg:gap-16">
+
+      <div>
+        <h2 class="text-2xl font-semibold text-ink-900 mb-1">Kontaktujte nás</h2>
+        <a href="mailto:info@obcevdatech.cz" class="text-2xl font-semibold text-primary-700 hover:opacity-80 transition-opacity">
+          info@obcevdatech.cz
+        </a>
+
+        <!-- Pomáháme tagline (pouze tady, jednou) -->
+        <div class="inline-flex items-center gap-2 mt-6 px-3 py-1.5 bg-white rounded-full shadow-card text-[13px] text-ink-700">
+          <span class="w-2 h-2 rounded-full bg-accent-500"></span>
+          Pomáháme českým obcím od roku 2018
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-8 lg:flex-row lg:gap-24">
+        <ul class="flex flex-col gap-3 text-[15px] font-medium text-primary-700">
+          <li><a href="#" class="hover:opacity-80">Index kvality života</a></li>
+          <li><a href="#" class="hover:opacity-80">Ekonomika obce</a></li>
+          <li><a href="#" class="hover:opacity-80">Tematické studie</a></li>
+        </ul>
+        <ul class="flex flex-col gap-3 text-[15px] font-medium text-primary-700">
+          <li><a href="#" class="hover:opacity-80">O projektu</a></li>
+          <li><a href="#" class="hover:opacity-80">Koupit report</a></li>
+          <li><a href="#" class="hover:opacity-80">Blog</a></li>
+          <li><a href="#" class="hover:opacity-80">FAQ</a></li>
+          <li><a href="#" class="hover:opacity-80">Kontakt</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <hr class="my-10 border-ink-200">
+
+    <div class="flex flex-col-reverse gap-4 lg:flex-row lg:items-center lg:justify-between text-sm text-ink-500">
+      <p>© Copyright Obce v datech 2026</p>
+      <a href="#" class="hover:text-ink-700 transition-colors">Obchodní podmínky</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

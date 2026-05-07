@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Koupit datový report obce — 19 990 Kč · Obce v datech</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<script>
+  tailwind.config = {
+    theme: { extend: {
+      fontFamily: {
+        sans:    ['Plus Jakarta Sans','Inter','system-ui','sans-serif'],
+        display: ['Plus Jakarta Sans','sans-serif'],
+      },
+      colors: {
+        primary: { 50:'#f5f3ff',100:'#ede9fe',200:'#ddd6fe',300:'#c4b5fd',400:'#a78bfa',500:'#8b5cf6',600:'#7c3aed',700:'#6d28d9',800:'#5b21b6' },
+        accent:  { 50:'#ecfdf5',100:'#d1fae5',300:'#6ee7b7',400:'#34d399',500:'#10b981',600:'#059669',700:'#047857' },
+        ink:     { 900:'#0f172a',700:'#334155',500:'#64748b',400:'#94a3b8',200:'#e2e8f0',100:'#f1f5f9' },
+        surface: { DEFAULT:'#ffffff', alt:'#fafbfc' },
+      },
+      boxShadow: {
+        card: '0 1px 3px rgba(15,23,42,.04), 0 4px 12px rgba(15,23,42,.04)',
+        pop:  '0 12px 40px rgba(15,23,42,.10), 0 4px 12px rgba(15,23,42,.04)',
+        pill: '0 8px 30px rgba(0,0,0,.08), inset 0 1px 0 rgba(255,255,255,.9)',
+        page: '0 30px 80px -20px rgba(15,23,42,0.25), 0 8px 24px -8px rgba(15,23,42,0.15)',
+      },
+      borderRadius: { '4xl':'2rem' },
+    }}
+  }
+</script>
+
+<style type="text/tailwindcss">
+  @layer base { html{font-family:'Plus Jakarta Sans','Inter',system-ui,sans-serif} body{@apply bg-white text-ink-900 antialiased} h1,h2,h3,h4{@apply font-display tracking-tight} }
+  @layer components {
+    .container-x { @apply max-w-[1240px] mx-auto px-4 lg:px-8; }
+    .nav-link    { @apply px-4 py-2 text-[15px] font-medium text-ink-700 hover:text-primary-700 transition-colors; }
+    .label-acc   { @apply text-xs font-bold uppercase tracking-[0.12em] text-accent-700; }
+    .label-pri   { @apply text-xs font-bold uppercase tracking-[0.12em] text-primary-700; }
+    .label-up    { @apply text-xs font-bold uppercase tracking-[0.12em] text-ink-500; }
+    .btn-buy     { @apply inline-flex items-center justify-center gap-2 h-14 px-7 rounded-xl bg-accent-500 hover:bg-accent-600 text-white font-extrabold text-base transition-colors shadow-[0_8px_24px_-8px_rgba(16,185,129,0.5)]; }
+    .btn-ghost-d { @apply inline-flex items-center justify-center gap-2 h-14 px-7 rounded-xl bg-white hover:bg-ink-100 text-ink-900 font-bold text-base border border-ink-200 transition-colors; }
+  }
+</style>
+</head>
+
+<body class="font-sans pb-24 lg:pb-0">
+
+<!-- ================================================================
+     STICKY BOTTOM BAR — vždy viditelná cena + buy
+     ================================================================ -->
+<div class="fixed bottom-0 inset-x-0 z-50 bg-ink-900 text-white border-t border-white/10 lg:hidden">
+  <div class="container-x py-3 flex items-center justify-between gap-3">
+    <div>
+      <p class="text-xs text-white/60">Plný report obce</p>
+      <p class="text-xl font-extrabold">19 990 Kč</p>
+    </div>
+    <a href="#kupni-blok" class="inline-flex items-center justify-center gap-2 h-12 px-5 rounded-xl bg-accent-500 hover:bg-accent-600 text-white font-bold transition-colors">
+      Koupit →
+    </a>
+  </div>
+</div>
+
+<!-- ================================================================
+     HEADER (kompaktnější než homepage — sales focus)
+     ================================================================ -->
+<header class="sticky top-3 z-40 container-x">
+  <div class="bg-white border border-ink-200/60 shadow-pill rounded-3xl xl:rounded-full">
+    <div class="flex items-center justify-between px-4 lg:px-6 py-2 gap-4">
+      <a href="navrh-home.html" class="flex items-center shrink-0 hover:opacity-90">
+        <img src="./Výsledky IKŽ za 2025 _ Obce v datech_files/logo-D9ygtVhA.svg" alt="Obce v datech" class="h-9 w-auto">
+      </a>
+      <nav class="hidden xl:flex items-center gap-1">
+        <a href="navrh-home.html" class="nav-link">Domů</a>
+        <a href="navrh-profil-obce.html" class="nav-link">Ukázka profilu</a>
+        <a href="#vzorovy-report" class="nav-link">Ukázka reportu</a>
+        <a href="#faq" class="nav-link">FAQ</a>
+      </nav>
+      <div class="hidden lg:flex items-center gap-3">
+        <span class="text-sm font-bold text-ink-900">19 990 Kč</span>
+        <a href="#kupni-blok" class="inline-flex items-center justify-center gap-2 h-10 px-5 rounded-xl bg-accent-500 hover:bg-accent-600 text-white font-bold text-sm transition-colors">
+          Koupit report →
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ================================================================
+     1) HERO — silné pozicování, cena prominentně, dvě CTA
+     ================================================================ -->
+<section class="container-x mt-8 lg:mt-16">
+  <div class="grid lg:grid-cols-[1.1fr_1fr] gap-10 lg:gap-16 items-center">
+
+    <!-- Levá: text + cena + CTA -->
+    <div>
+      <p class="label-acc mb-3">— Plný datový report obce</p>
+      <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-[1.05]">
+        Komplexní data o&nbsp;vaší obci.<br>
+        <span class="text-accent-600">V&nbsp;inboxu do 5 pracovních dnů.</span>
+      </h1>
+
+      <p class="mt-6 text-lg text-ink-700 max-w-lg leading-relaxed">
+        Připravený podklad pro zastupitelstvo, žádosti o&nbsp;dotace
+        a&nbsp;strategické plánování. Ne surová data — hotová práce.
+      </p>
+
+      <!-- Cena -->
+      <div class="mt-8 flex items-baseline gap-3">
+        <p class="text-5xl lg:text-6xl font-extrabold text-ink-900">19 990 Kč</p>
+        <span class="text-ink-500">/ jednorázově · bez DPH</span>
+      </div>
+
+      <!-- CTA -->
+      <div class="mt-6 flex flex-wrap gap-3">
+        <a href="#kupni-blok" class="btn-buy">Koupit za 19 990 Kč →</a>
+        <a href="#vzorovy-report" class="btn-ghost-d">Stáhnout vzorový report</a>
+      </div>
+
+      <!-- Microcopy s důvěrou -->
+      <ul class="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-ink-500">
+        <li class="flex items-center gap-2"><span class="text-accent-600 font-bold">✓</span> 5 pracovních dnů</li>
+        <li class="flex items-center gap-2"><span class="text-accent-600 font-bold">✓</span> Garance vrácení peněz 14 dní</li>
+        <li class="flex items-center gap-2"><span class="text-accent-600 font-bold">✓</span> Faktura na obec</li>
+      </ul>
+    </div>
+
+    <!-- Pravá: vizuální mockup reportu (PDF stack) -->
+    <div class="relative">
+      <!-- ozdobné pozadí -->
+      <div class="absolute -inset-8 bg-gradient-to-br from-primary-100 via-accent-50 to-white rounded-[3rem] blur-3xl opacity-70"></div>
+
+      <!-- Stack tří stránek -->
+      <div class="relative">
+        <!-- 3rd page (vzadu) -->
+        <div class="absolute -right-10 top-6 w-full aspect-[3/4] bg-white rounded-2xl shadow-page rotate-6 origin-bottom-left">
+          <div class="p-8">
+            <div class="h-2 w-1/3 bg-accent-500 rounded-full"></div>
+            <div class="mt-4 space-y-2">
+              <div class="h-2 w-full bg-ink-100 rounded"></div>
+              <div class="h-2 w-5/6 bg-ink-100 rounded"></div>
+            </div>
+            <div class="mt-6 grid grid-cols-2 gap-2">
+              <div class="aspect-square bg-primary-50 rounded"></div>
+              <div class="aspect-square bg-accent-50 rounded"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2nd page (uprostřed) -->
+        <div class="absolute -left-8 top-3 w-full aspect-[3/4] bg-white rounded-2xl shadow-page -rotate-3 origin-bottom-right">
+          <div class="p-8">
+            <p class="text-[10px] font-bold uppercase tracking-wider text-primary-700">Peer benchmarking</p>
+            <div class="h-3 w-2/3 bg-ink-200 rounded-full mt-3"></div>
+            <div class="mt-6 space-y-3">
+              <div class="flex items-center gap-2"><div class="h-2 w-1/3 bg-accent-500 rounded-full"></div><span class="text-[10px] text-ink-500">Říčany</span></div>
+              <div class="flex items-center gap-2"><div class="h-2 w-1/4 bg-primary-400 rounded-full"></div><span class="text-[10px] text-ink-500">Černošice</span></div>
+              <div class="flex items-center gap-2"><div class="h-2 w-1/5 bg-primary-300 rounded-full"></div><span class="text-[10px] text-ink-500">Brandýs</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 1st page (vpředu, hlavní) -->
+        <div class="relative w-full aspect-[3/4] bg-white rounded-2xl shadow-page">
+          <div class="p-8 lg:p-10 h-full flex flex-col">
+            <p class="text-[10px] font-bold uppercase tracking-[0.15em] text-accent-700">Datový report</p>
+            <h3 class="mt-1 text-2xl lg:text-3xl font-extrabold text-ink-900">Říčany 2025</h3>
+
+            <div class="mt-5 grid grid-cols-2 gap-3">
+              <div class="rounded-lg bg-surface-alt p-3">
+                <p class="text-[9px] font-bold uppercase tracking-wider text-ink-500">Pořadí ČR</p>
+                <p class="text-2xl font-extrabold text-ink-900">1.</p>
+              </div>
+              <div class="rounded-lg bg-accent-50 p-3">
+                <p class="text-[9px] font-bold uppercase tracking-wider text-accent-700">IKŽ skóre</p>
+                <p class="text-2xl font-extrabold text-accent-600">10,0</p>
+              </div>
+            </div>
+
+            <div class="mt-5 flex-1">
+              <p class="text-[10px] font-bold uppercase tracking-wider text-ink-500 mb-2">Trend 2018–2025</p>
+              <svg viewBox="0 0 200 60" class="w-full h-12">
+                <polyline fill="none" stroke="#10b981" stroke-width="2.5" points="10,12 35,10 60,14 85,10 110,12 135,10 160,10 190,8"/>
+                <g fill="#10b981"><circle cx="10" cy="12" r="2.5"/><circle cx="60" cy="14" r="2.5"/><circle cx="110" cy="12" r="2.5"/><circle cx="160" cy="10" r="2.5"/><circle cx="190" cy="8" r="3"/></g>
+              </svg>
+            </div>
+
+            <div class="border-t border-ink-100 pt-3">
+              <p class="text-[9px] text-ink-400">Strana 1 z 72 · Obce v datech 2026</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cenovka jako sticker -->
+        <div class="absolute -top-4 -right-4 lg:-right-6 z-10 rotate-12 bg-accent-500 text-white px-4 py-3 rounded-2xl shadow-pop">
+          <p class="text-[10px] font-bold uppercase tracking-wider opacity-80">Komplet</p>
+          <p class="text-xl font-extrabold">19 990 Kč</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     2) PROČ TO STOJÍ ZA 20 TIS — 3 quick value bloky
+     ================================================================ -->
+<section class="container-x mt-24 lg:mt-32">
+  <div class="grid sm:grid-cols-3 gap-5">
+    <div class="rounded-3xl bg-surface-alt p-6 lg:p-8">
+      <p class="text-4xl font-extrabold text-ink-900">5 dní</p>
+      <p class="mt-2 font-bold text-ink-900">Hotová práce v inboxu</p>
+      <p class="mt-2 text-sm text-ink-700">Ne 3 měsíce vlastní analýzy. Připravený PDF + dashboard + Excel.</p>
+    </div>
+    <div class="rounded-3xl bg-surface-alt p-6 lg:p-8">
+      <p class="text-4xl font-extrabold text-ink-900">70+ <span class="text-lg font-bold text-ink-500">ukazatelů</span></p>
+      <p class="mt-2 font-bold text-ink-900">Detailní rozklad obce</p>
+      <p class="mt-2 text-sm text-ink-700">Demografie, ekonomika, zdraví, vzdělání, doprava, bezpečnost, bydlení.</p>
+    </div>
+    <div class="rounded-3xl bg-surface-alt p-6 lg:p-8">
+      <p class="text-4xl font-extrabold text-ink-900">10× <span class="text-lg font-bold text-ink-500">levnější</span></p>
+      <p class="mt-2 font-bold text-ink-900">Než externí konzultant</p>
+      <p class="mt-2 text-sm text-ink-700">Stejný typ podkladu od konzultanta vyjde na 150–300 tisíc Kč.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     3) CO JE V REPORTU — ukázky stránek (4 mockupy)
+     ================================================================ -->
+<section id="vzorovy-report" class="container-x mt-24 lg:mt-32">
+  <div class="max-w-2xl mb-10 lg:mb-14">
+    <p class="label-pri mb-3">— Co dostanete</p>
+    <h2 class="text-3xl lg:text-5xl font-extrabold leading-tight">
+      72 stran připravených dat,<br>ne surový dump
+    </h2>
+    <p class="mt-4 text-ink-700">
+      Každá stránka je stylizovaná tak, aby šla rovnou vložit do prezentace pro zastupitelstvo
+      nebo přiložit k&nbsp;žádosti o&nbsp;dotaci.
+    </p>
+  </div>
+
+  <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6">
+
+    <!-- Page 1 -->
+    <div>
+      <div class="aspect-[3/4] bg-white rounded-2xl shadow-card p-5 hover:shadow-pop transition-shadow">
+        <p class="text-[9px] font-bold uppercase tracking-wider text-accent-700">01</p>
+        <h3 class="text-base font-extrabold mt-1">Executive summary</h3>
+        <div class="mt-4 space-y-2">
+          <div class="h-2 w-full bg-ink-100 rounded"></div>
+          <div class="h-2 w-5/6 bg-ink-100 rounded"></div>
+          <div class="h-2 w-4/6 bg-ink-100 rounded"></div>
+        </div>
+        <div class="mt-5 grid grid-cols-2 gap-2">
+          <div class="h-12 bg-surface-alt rounded-lg flex items-center justify-center"><span class="text-xs font-extrabold text-ink-900">1.</span></div>
+          <div class="h-12 bg-accent-50 rounded-lg flex items-center justify-center"><span class="text-xs font-extrabold text-accent-600">10,0</span></div>
+        </div>
+      </div>
+      <p class="mt-3 text-sm font-bold text-ink-900">Manažerské shrnutí</p>
+      <p class="text-xs text-ink-500">3 strany pro starostu</p>
+    </div>
+
+    <!-- Page 2 -->
+    <div>
+      <div class="aspect-[3/4] bg-white rounded-2xl shadow-card p-5 hover:shadow-pop transition-shadow">
+        <p class="text-[9px] font-bold uppercase tracking-wider text-primary-700">02</p>
+        <h3 class="text-base font-extrabold mt-1">Peer group</h3>
+        <div class="mt-5 space-y-2.5">
+          <div class="flex items-center gap-2"><div class="h-2 w-full bg-accent-500 rounded-full"></div></div>
+          <div class="flex items-center gap-2"><div class="h-2 w-3/4 bg-primary-400 rounded-full"></div></div>
+          <div class="flex items-center gap-2"><div class="h-2 w-2/3 bg-primary-300 rounded-full"></div></div>
+          <div class="flex items-center gap-2"><div class="h-2 w-1/2 bg-primary-200 rounded-full"></div></div>
+          <div class="flex items-center gap-2"><div class="h-2 w-2/5 bg-primary-200 rounded-full"></div></div>
+        </div>
+        <div class="mt-5 h-2 w-1/3 bg-ink-200 rounded-full"></div>
+      </div>
+      <p class="mt-3 text-sm font-bold text-ink-900">Srovnání s podobnými ORP</p>
+      <p class="text-xs text-ink-500">Peer benchmarking</p>
+    </div>
+
+    <!-- Page 3 -->
+    <div>
+      <div class="aspect-[3/4] bg-white rounded-2xl shadow-card p-5 hover:shadow-pop transition-shadow">
+        <p class="text-[9px] font-bold uppercase tracking-wider text-amber-700">03</p>
+        <h3 class="text-base font-extrabold mt-1">Detailní indikátory</h3>
+        <div class="mt-4 space-y-1.5">
+          <div class="flex items-center justify-between text-[10px]"><span class="text-ink-500">Pediatři</span><span class="font-bold text-accent-600">↑</span></div>
+          <div class="h-px bg-ink-100"></div>
+          <div class="flex items-center justify-between text-[10px]"><span class="text-ink-500">Praktici</span><span class="font-bold text-accent-600">↑</span></div>
+          <div class="h-px bg-ink-100"></div>
+          <div class="flex items-center justify-between text-[10px]"><span class="text-ink-500">Zubaři</span><span class="font-bold text-amber-600">→</span></div>
+          <div class="h-px bg-ink-100"></div>
+          <div class="flex items-center justify-between text-[10px]"><span class="text-ink-500">Ceny bydlení</span><span class="font-bold text-rose-600">↓</span></div>
+          <div class="h-px bg-ink-100"></div>
+          <div class="flex items-center justify-between text-[10px]"><span class="text-ink-500">Exekuce</span><span class="font-bold text-accent-600">↑</span></div>
+        </div>
+      </div>
+      <p class="mt-3 text-sm font-bold text-ink-900">Rozklad 70+ ukazatelů</p>
+      <p class="text-xs text-ink-500">S kontextem a trendem</p>
+    </div>
+
+    <!-- Page 4 -->
+    <div>
+      <div class="aspect-[3/4] bg-ink-900 text-white rounded-2xl shadow-card p-5 hover:shadow-pop transition-shadow">
+        <p class="text-[9px] font-bold uppercase tracking-wider text-accent-400">04</p>
+        <h3 class="text-base font-extrabold mt-1">Priority a doporučení</h3>
+        <div class="mt-4 space-y-3">
+          <div class="flex items-start gap-2"><span class="text-accent-400 font-bold text-xs">1.</span><div class="flex-1"><div class="h-1.5 w-full bg-white/30 rounded"></div><div class="h-1.5 w-3/4 bg-white/20 rounded mt-1"></div></div></div>
+          <div class="flex items-start gap-2"><span class="text-accent-400 font-bold text-xs">2.</span><div class="flex-1"><div class="h-1.5 w-full bg-white/30 rounded"></div><div class="h-1.5 w-2/3 bg-white/20 rounded mt-1"></div></div></div>
+          <div class="flex items-start gap-2"><span class="text-accent-400 font-bold text-xs">3.</span><div class="flex-1"><div class="h-1.5 w-full bg-white/30 rounded"></div><div class="h-1.5 w-4/5 bg-white/20 rounded mt-1"></div></div></div>
+        </div>
+      </div>
+      <p class="mt-3 text-sm font-bold text-ink-900">Datově podložené priority</p>
+      <p class="text-xs text-ink-500">Pro strategický plán</p>
+    </div>
+  </div>
+
+  <!-- CTA stáhnout vzor -->
+  <div class="mt-10 lg:mt-12 p-5 lg:p-6 rounded-2xl bg-primary-50 border border-primary-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div>
+      <p class="font-bold text-ink-900">Chcete vidět skutečný report celý?</p>
+      <p class="text-sm text-ink-700 mt-1">Stáhněte si kompletní vzorový report obce Říčany ke zhlédnutí (PDF, 72 stran).</p>
+    </div>
+    <a href="#" class="shrink-0 inline-flex items-center justify-center h-12 px-6 rounded-xl bg-white border border-ink-200 hover:bg-ink-100 text-ink-900 font-bold text-sm transition-colors whitespace-nowrap">
+      Stáhnout vzor zdarma →
+    </a>
+  </div>
+</section>
+
+<!-- ================================================================
+     4) PRO CO HO POUŽIJETE — konkrétní use cases
+     ================================================================ -->
+<section class="container-x mt-24 lg:mt-32">
+  <div class="max-w-2xl mb-10 lg:mb-14">
+    <p class="label-pri mb-3">— Praktické využití</p>
+    <h2 class="text-3xl lg:text-5xl font-extrabold leading-tight">
+      Co s reportem reálně uděláte
+    </h2>
+  </div>
+
+  <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+    <article class="bg-white rounded-3xl shadow-card p-6 lg:p-8">
+      <p class="text-3xl font-extrabold text-primary-700">A</p>
+      <h3 class="mt-3 font-bold text-ink-900 leading-snug">Slide do prezentace pro zastupitelstvo</h3>
+      <p class="mt-2 text-sm text-ink-700">Připravené grafy a&nbsp;čísla, které jdou rovnou do PowerPointu. Bez 2 dní práce úředníka.</p>
+    </article>
+    <article class="bg-white rounded-3xl shadow-card p-6 lg:p-8">
+      <p class="text-3xl font-extrabold text-primary-700">B</p>
+      <h3 class="mt-3 font-bold text-ink-900 leading-snug">Argument k&nbsp;žádosti o&nbsp;dotaci</h3>
+      <p class="mt-2 text-sm text-ink-700">Datový podklad k&nbsp;IROP, OPŽP nebo SFŽP. Jasná čísla, ověřitelné zdroje.</p>
+    </article>
+    <article class="bg-white rounded-3xl shadow-card p-6 lg:p-8">
+      <p class="text-3xl font-extrabold text-primary-700">C</p>
+      <h3 class="mt-3 font-bold text-ink-900 leading-snug">Vstup do koncepce rozvoje</h3>
+      <p class="mt-2 text-sm text-ink-700">Strategický plán 2025–2030 stojí na faktech, ne na dojmech. Datová příloha.</p>
+    </article>
+    <article class="bg-white rounded-3xl shadow-card p-6 lg:p-8">
+      <p class="text-3xl font-extrabold text-primary-700">D</p>
+      <h3 class="mt-3 font-bold text-ink-900 leading-snug">Komunikace s&nbsp;občany a&nbsp;médii</h3>
+      <p class="mt-2 text-sm text-ink-700">Citovatelné statistiky pro místní noviny, sociální sítě a&nbsp;veřejné prezentace.</p>
+    </article>
+  </div>
+</section>
+
+<!-- ================================================================
+     5) SROVNÁNÍ S ALTERNATIVAMI
+     ================================================================ -->
+<section class="container-x mt-24 lg:mt-32">
+  <div class="max-w-2xl mb-10 lg:mb-14">
+    <p class="label-pri mb-3">— Srovnání</p>
+    <h2 class="text-3xl lg:text-5xl font-extrabold leading-tight">
+      Nákup, najmutí, nebo dělat sami?
+    </h2>
+  </div>
+
+  <div class="grid lg:grid-cols-3 gap-5">
+
+    <!-- Konzultant -->
+    <div class="bg-surface-alt rounded-3xl p-6 lg:p-8">
+      <p class="label-up mb-3">Externí konzultant</p>
+      <p class="text-3xl lg:text-4xl font-extrabold text-ink-900">150–300 tis.</p>
+      <p class="text-sm text-ink-500 mt-1">2–3 měsíce, výběrové řízení</p>
+      <ul class="mt-5 space-y-2 text-sm text-ink-700">
+        <li class="flex gap-2"><span class="text-rose-500 font-bold">×</span> Cena přes hranici prahu pro VŘ</li>
+        <li class="flex gap-2"><span class="text-rose-500 font-bold">×</span> Doba dodání 2–3 měsíce</li>
+        <li class="flex gap-2"><span class="text-accent-600 font-bold">✓</span> Custom analýza</li>
+      </ul>
+    </div>
+
+    <!-- Vlastní práce -->
+    <div class="bg-surface-alt rounded-3xl p-6 lg:p-8">
+      <p class="label-up mb-3">Vlastní úředník</p>
+      <p class="text-3xl lg:text-4xl font-extrabold text-ink-900">2–3 měsíce</p>
+      <p class="text-sm text-ink-500 mt-1">Práce někoho z týmu</p>
+      <ul class="mt-5 space-y-2 text-sm text-ink-700">
+        <li class="flex gap-2"><span class="text-rose-500 font-bold">×</span> Odebírá kapacitu z jiných úkolů</li>
+        <li class="flex gap-2"><span class="text-rose-500 font-bold">×</span> Bez peer benchmarkingu</li>
+        <li class="flex gap-2"><span class="text-rose-500 font-bold">×</span> Nejen ČSÚ — chybí mnoho zdrojů</li>
+      </ul>
+    </div>
+
+    <!-- Náš report -->
+    <div class="bg-ink-900 text-white rounded-3xl p-6 lg:p-8 relative overflow-hidden">
+      <div class="absolute -top-2 -right-2 bg-accent-500 text-white text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-bl-xl">Nejlepší volba</div>
+      <p class="text-xs font-bold uppercase tracking-[0.12em] text-accent-400 mb-3">Datový report Obce v datech</p>
+      <p class="text-3xl lg:text-4xl font-extrabold">19 990 Kč</p>
+      <p class="text-sm text-white/60 mt-1">5 pracovních dnů</p>
+      <ul class="mt-5 space-y-2 text-sm">
+        <li class="flex gap-2"><span class="text-accent-400 font-bold">✓</span> Pod prahem pro VŘ — schválí starosta</li>
+        <li class="flex gap-2"><span class="text-accent-400 font-bold">✓</span> 5 dní v inboxu, ne měsíce</li>
+        <li class="flex gap-2"><span class="text-accent-400 font-bold">✓</span> 70+ ukazatelů, peer group, doporučení</li>
+        <li class="flex gap-2"><span class="text-accent-400 font-bold">✓</span> Garance vrácení do 14 dní</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     6) TESTIMONIÁLY + LOGA OBCÍ
+     ================================================================ -->
+<section class="container-x mt-24 lg:mt-32">
+  <div class="max-w-2xl mb-10 lg:mb-14">
+    <p class="label-pri mb-3">— Reference</p>
+    <h2 class="text-3xl lg:text-5xl font-extrabold leading-tight">
+      Co říkají starostové, kteří už report mají
+    </h2>
+  </div>
+
+  <div class="grid lg:grid-cols-3 gap-5 lg:gap-6">
+
+    <article class="bg-white rounded-3xl shadow-card p-6 lg:p-8">
+      <p class="text-ink-700 leading-relaxed">
+        „Použili jsme report jako datový základ pro novou koncepci rozvoje. Ušetřilo nám to měsíc práce
+        a&nbsp;dalo argumenty pro zastupitelstvo, která jinak nikdy nemáme po ruce."
+      </p>
+      <div class="mt-6 flex items-center gap-3">
+        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-primary-300 to-primary-500 flex items-center justify-center text-white font-extrabold">MB</div>
+        <div>
+          <p class="font-bold text-ink-900">Bc. Michal Boudný</p>
+          <p class="text-sm text-ink-500">starosta, Slavkov u Brna</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="bg-white rounded-3xl shadow-card p-6 lg:p-8">
+      <p class="text-ink-700 leading-relaxed">
+        „Nejvíc oceňuji peer benchmarking. Vidět, kde stojíme oproti podobně velkým městům,
+        nám otevřelo oči. Některé věci, co jsme považovali za samozřejmost, samozřejmost nejsou."
+      </p>
+      <div class="mt-6 flex items-center gap-3">
+        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-accent-400 to-accent-600 flex items-center justify-center text-white font-extrabold">HN</div>
+        <div>
+          <p class="font-bold text-ink-900">Bc. Hana Nedomová</p>
+          <p class="text-sm text-ink-500">starostka, Boskovice</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="bg-white rounded-3xl shadow-card p-6 lg:p-8">
+      <p class="text-ink-700 leading-relaxed">
+        „Použili jsme grafy z reportu k&nbsp;žádosti o&nbsp;dotaci IROP. Hodnotitelé ocenili,
+        že máme čísla podložená a&nbsp;kontextualizovaná, ne jen z ČSÚ vytrženou tabulku."
+      </p>
+      <div class="mt-6 flex items-center gap-3">
+        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-white font-extrabold">JP</div>
+        <div>
+          <p class="font-bold text-ink-900">Ing. Jan Procházka</p>
+          <p class="text-sm text-ink-500">tajemník, Mnichovo Hradiště</p>
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <!-- Logo strip -->
+  <div class="mt-12 lg:mt-16 pt-10 border-t border-ink-200">
+    <p class="text-center label-up mb-6">Důvěřuje nám 200+ obcí · vybíráme namátkou</p>
+    <div class="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 text-ink-500 font-semibold">
+      <span>Říčany</span>
+      <span class="text-ink-200">·</span>
+      <span>Slavkov u Brna</span>
+      <span class="text-ink-200">·</span>
+      <span>Boskovice</span>
+      <span class="text-ink-200">·</span>
+      <span>Mnichovo Hradiště</span>
+      <span class="text-ink-200">·</span>
+      <span>Kuřim</span>
+      <span class="text-ink-200">·</span>
+      <span>Hustopeče</span>
+      <span class="text-ink-200">·</span>
+      <span>Brandýs n. L.</span>
+      <span class="text-ink-200">·</span>
+      <span>Vyškov</span>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     7) RISK REVERSAL — garance, sample, demo
+     ================================================================ -->
+<section class="container-x mt-24 lg:mt-32">
+  <div class="bg-gradient-to-br from-accent-50 via-white to-primary-50 rounded-3xl px-6 py-12 lg:px-16 lg:py-16">
+    <div class="max-w-2xl mb-10">
+      <p class="label-acc mb-3">— Bez rizika</p>
+      <h2 class="text-3xl lg:text-4xl font-extrabold leading-tight">
+        Tři důvody, proč si můžete být jistí
+      </h2>
+    </div>
+    <div class="grid sm:grid-cols-3 gap-6">
+      <div>
+        <p class="text-2xl font-extrabold text-ink-900">Vzor zdarma</p>
+        <p class="mt-2 text-sm text-ink-700">Stáhněte si kompletní report obce Říčany před nákupem. 72 stran ke zhlédnutí.</p>
+      </div>
+      <div>
+        <p class="text-2xl font-extrabold text-ink-900">Garance 14 dní</p>
+        <p class="mt-2 text-sm text-ink-700">Pokud report nebude odpovídat tomu, co je popsané, vrátíme peníze. Bez otázek.</p>
+      </div>
+      <div>
+        <p class="text-2xl font-extrabold text-ink-900">15min demo</p>
+        <p class="mt-2 text-sm text-ink-700">Domluvte si online hovor s autorem. Projdeme s vámi reálný report jiné obce.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     8) FAQ — sales objections
+     ================================================================ -->
+<section id="faq" class="container-x mt-24 lg:mt-32">
+  <div class="grid lg:grid-cols-[1fr_1.5fr] gap-12 items-start">
+
+    <div>
+      <p class="label-pri mb-3">— FAQ</p>
+      <h2 class="text-3xl lg:text-5xl font-extrabold leading-tight">
+        Časté dotazy před nákupem
+      </h2>
+      <p class="mt-4 text-ink-700">
+        Nenašli jste odpověď? Napište přímo na <a href="mailto:info@obcevdatech.cz" class="text-primary-700 font-semibold hover:underline">info@obcevdatech.cz</a>
+      </p>
+    </div>
+
+    <div class="space-y-3">
+      <details class="group bg-surface-alt rounded-xl">
+        <summary class="flex items-center justify-between gap-4 p-5 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+          <span class="font-bold text-ink-900">Můžeme to zaplatit z fondu rozvoje obce?</span>
+          <span class="text-primary-700 text-xl group-open:rotate-45 transition-transform">+</span>
+        </summary>
+        <div class="px-5 pb-5 text-ink-700 leading-relaxed">
+          Ano. Vystavíme fakturu na obec s&nbsp;fakturačními údaji. Většina obcí to účtuje pod „strategické plánování"
+          nebo „analytické služby". Pod prahem 50 tisíc Kč nepotřebujete VŘ.
+        </div>
+      </details>
+
+      <details class="group bg-surface-alt rounded-xl">
+        <summary class="flex items-center justify-between gap-4 p-5 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+          <span class="font-bold text-ink-900">Co když máme data z ČSÚ a vlastního systému?</span>
+          <span class="text-primary-700 text-xl group-open:rotate-45 transition-transform">+</span>
+        </summary>
+        <div class="px-5 pb-5 text-ink-700 leading-relaxed">
+          ČSÚ je skvělý zdroj, ale nedělá kontextualizaci ani srovnání. Náš report kombinuje data z ČSÚ,
+          MF, ÚZIS, ČHMÚ a&nbsp;ÚP a&nbsp;dává jim společnou metodiku. Plus peer group, který sami nesložíte.
+        </div>
+      </details>
+
+      <details class="group bg-surface-alt rounded-xl">
+        <summary class="flex items-center justify-between gap-4 p-5 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+          <span class="font-bold text-ink-900">Funguje to i pro malé obce?</span>
+          <span class="text-primary-700 text-xl group-open:rotate-45 transition-transform">+</span>
+        </summary>
+        <div class="px-5 pb-5 text-ink-700 leading-relaxed">
+          Report pokrývá všech 206 ORP. Pro menší obce mimo ORP nabízíme kratší variantu za 9 990 Kč —
+          napište nám, doporučíme.
+        </div>
+      </details>
+
+      <details class="group bg-surface-alt rounded-xl">
+        <summary class="flex items-center justify-between gap-4 p-5 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+          <span class="font-bold text-ink-900">Co když nebudeme spokojení?</span>
+          <span class="text-primary-700 text-xl group-open:rotate-45 transition-transform">+</span>
+        </summary>
+        <div class="px-5 pb-5 text-ink-700 leading-relaxed">
+          14denní garance vrácení peněz. Stačí napsat, že to neodpovídá popisu, a&nbsp;peníze vrátíme do 5 dní.
+        </div>
+      </details>
+
+      <details class="group bg-surface-alt rounded-xl">
+        <summary class="flex items-center justify-between gap-4 p-5 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+          <span class="font-bold text-ink-900">Jak dlouho trvá příprava?</span>
+          <span class="text-primary-700 text-xl group-open:rotate-45 transition-transform">+</span>
+        </summary>
+        <div class="px-5 pb-5 text-ink-700 leading-relaxed">
+          5 pracovních dnů od objednávky. Náročnější přizpůsobení (např. vlastní KPI nebo srovnání s konkrétní obcí)
+          do 10 dnů.
+        </div>
+      </details>
+
+      <details class="group bg-surface-alt rounded-xl">
+        <summary class="flex items-center justify-between gap-4 p-5 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+          <span class="font-bold text-ink-900">Můžete přijet osobně prezentovat?</span>
+          <span class="text-primary-700 text-xl group-open:rotate-45 transition-transform">+</span>
+        </summary>
+        <div class="px-5 pb-5 text-ink-700 leading-relaxed">
+          Ano, jako prémiovou variantu. 90minutová prezentace u vás na úřadě nebo online + Q&amp;A. Příplatek 9 990 Kč.
+          Vyplatí se před zastupitelstvem nebo strategickým workshopem.
+        </div>
+      </details>
+
+      <details class="group bg-surface-alt rounded-xl">
+        <summary class="flex items-center justify-between gap-4 p-5 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+          <span class="font-bold text-ink-900">Jak často data aktualizujete?</span>
+          <span class="text-primary-700 text-xl group-open:rotate-45 transition-transform">+</span>
+        </summary>
+        <div class="px-5 pb-5 text-ink-700 leading-relaxed">
+          IKŽ ročně (listopad). Ekonomické ukazatele kvartálně. Pro stávající zákazníky update report za 50&nbsp;%
+          ceny dalším rokem.
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     9) FINÁLNÍ KUPNÍ BLOK
+     ================================================================ -->
+<section id="kupni-blok" class="container-x mt-24 lg:mt-32">
+  <div class="bg-ink-900 text-white rounded-3xl px-6 py-14 lg:px-16 lg:py-20 text-center">
+
+    <p class="text-xs font-bold uppercase tracking-[0.15em] text-accent-400 mb-4">— Připraveno k objednávce</p>
+    <h2 class="text-3xl lg:text-6xl font-extrabold leading-[1.05] max-w-3xl mx-auto">
+      Datový report obce<br>
+      <span class="text-accent-400">do 5 dnů v&nbsp;inboxu</span>
+    </h2>
+
+    <div class="mt-8 flex items-baseline justify-center gap-3">
+      <p class="text-6xl lg:text-7xl font-extrabold">19 990 Kč</p>
+      <span class="text-white/60">/ bez DPH</span>
+    </div>
+
+    <div class="mt-8 flex flex-wrap gap-3 justify-center">
+      <a href="#" class="btn-buy">Koupit za 19 990 Kč →</a>
+      <a href="#" class="inline-flex items-center justify-center gap-2 h-14 px-7 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-base backdrop-blur transition-colors">
+        Domluvit 15min demo
+      </a>
+    </div>
+
+    <p class="mt-6 text-sm text-white/60">
+      Garance vrácení 14 dní · Faktura na obec · Bez výběrového řízení
+    </p>
+  </div>
+</section>
+
+<!-- ================================================================
+     FOOTER (zkrácený)
+     ================================================================ -->
+<footer class="mx-4 mt-16 bg-gradient-to-b from-[#fcfaff] to-primary-200 rounded-t-3xl">
+  <div class="container-x py-12">
+    <div class="flex flex-col lg:flex-row lg:justify-between gap-8">
+      <div>
+        <h2 class="text-2xl font-semibold text-ink-900 mb-1">Otázky před nákupem?</h2>
+        <a href="mailto:info@obcevdatech.cz" class="text-2xl font-semibold text-primary-700 hover:opacity-80">info@obcevdatech.cz</a>
+        <p class="mt-2 text-sm text-ink-500">nebo telefon: <a href="tel:+420000000000" class="font-semibold">+420&nbsp;000&nbsp;000&nbsp;000</a></p>
+      </div>
+      <div class="flex gap-12 text-[15px] font-medium text-primary-700">
+        <ul class="space-y-3"><li><a href="navrh-home.html">Domů</a></li><li><a href="navrh-profil-obce.html">Ukázka profilu</a></li><li><a href="#vzorovy-report">Ukázka reportu</a></li></ul>
+        <ul class="space-y-3"><li><a href="#">Obchodní podmínky</a></li><li><a href="#">GDPR</a></li><li><a href="#">Kontakt</a></li></ul>
+      </div>
+    </div>
+    <div class="mt-10 pt-6 border-t border-ink-200 text-sm text-ink-500">
+      © Copyright Obce v datech 2026 · Pomáháme českým obcím od roku 2018
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

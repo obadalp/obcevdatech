@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Říčany — datový profil (reálná data 2025) · Obce v datech</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<script>
+  tailwind.config = {
+    theme: { extend: {
+      fontFamily: {
+        sans:    ['Plus Jakarta Sans','Inter','system-ui','sans-serif'],
+        display: ['Plus Jakarta Sans','sans-serif'],
+      },
+      colors: {
+        primary: { 50:'#f5f3ff',100:'#ede9fe',200:'#ddd6fe',300:'#c4b5fd',400:'#a78bfa',500:'#8b5cf6',600:'#7c3aed',700:'#6d28d9',800:'#5b21b6' },
+        accent:  { 50:'#ecfdf5',100:'#d1fae5',300:'#6ee7b7',400:'#34d399',500:'#10b981',600:'#059669',700:'#047857' },
+        ink:     { 900:'#0f172a',700:'#334155',500:'#64748b',400:'#94a3b8',200:'#e2e8f0',100:'#f1f5f9',50:'#f8fafc' },
+        surface: { DEFAULT:'#ffffff', alt:'#fafbfc' },
+      },
+      boxShadow: {
+        card: '0 1px 3px rgba(15,23,42,.04), 0 4px 12px rgba(15,23,42,.04)',
+        pop:  '0 12px 40px rgba(15,23,42,.10), 0 4px 12px rgba(15,23,42,.04)',
+        pill: '0 8px 30px rgba(0,0,0,.08), inset 0 1px 0 rgba(255,255,255,.9)',
+      },
+      borderRadius: { '4xl':'2rem' },
+    }}
+  }
+</script>
+
+<style type="text/tailwindcss">
+  @layer base { html{font-family:'Plus Jakarta Sans','Inter',system-ui,sans-serif} body{@apply bg-white text-ink-900 antialiased} h1,h2,h3,h4{@apply font-display tracking-tight} }
+  @layer components {
+    .container-x { @apply max-w-[1280px] mx-auto px-4 lg:px-8; }
+    .nav-link    { @apply px-4 py-2 text-[15px] font-medium text-ink-700 hover:text-primary-700 transition-colors; }
+    .nav-utility { @apply text-[12px] font-medium text-ink-500 hover:text-primary-700 transition-colors; }
+    .label-up    { @apply text-xs font-bold uppercase tracking-[0.12em] text-ink-500; }
+    .label-acc   { @apply text-xs font-bold uppercase tracking-[0.12em] text-accent-700; }
+    .label-pri   { @apply text-xs font-bold uppercase tracking-[0.12em] text-primary-700; }
+    .label-warn  { @apply text-xs font-bold uppercase tracking-[0.12em] text-rose-700; }
+    .btn-buy     { @apply inline-flex items-center justify-center gap-2 h-12 px-6 rounded-xl bg-accent-500 hover:bg-accent-600 text-white font-bold text-base transition-colors shadow-[0_8px_24px_-8px_rgba(16,185,129,0.5)]; }
+    .btn-ghost-d { @apply inline-flex items-center justify-center gap-2 h-12 px-6 rounded-xl bg-white hover:bg-ink-100 text-ink-900 font-bold text-base border border-ink-200 transition-colors; }
+    .hero-grad   { background: linear-gradient(180deg, #fcfaff 0%, #ddd6fe 100%); }
+    .badge-real  { @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-accent-50 text-accent-700 text-[11px] font-bold; }
+    .badge-lock  { @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-ink-900 text-white text-xs font-bold; }
+  }
+</style>
+</head>
+
+<body class="font-sans">
+
+<!-- HEADER -->
+<header class="sticky top-3 z-40 container-x">
+  <div class="bg-white border border-ink-200/60 shadow-pill rounded-3xl xl:rounded-full">
+    <div class="flex items-center justify-between px-4 lg:px-6 py-2 gap-4">
+      <a href="navrh-home.html" class="flex items-center shrink-0 hover:opacity-90">
+        <img src="./Výsledky IKŽ za 2025 _ Obce v datech_files/logo-D9ygtVhA.svg" alt="Obce v datech" class="h-9 w-auto">
+      </a>
+      <nav class="hidden xl:flex items-center gap-1">
+        <a href="#" class="nav-link">Kvalita života</a>
+        <a href="#" class="nav-link">Ekonomika obce</a>
+        <a href="#" class="nav-link">O projektu</a>
+        <a href="#" class="nav-link">Blog</a>
+      </nav>
+      <div class="hidden xl:flex items-center gap-5">
+        <div class="flex flex-col items-end gap-0.5 leading-tight">
+          <div class="flex items-center gap-2 text-[12px]">
+            <a href="#" class="nav-utility">Přihlásit se</a>
+            <span class="text-ink-200">|</span>
+            <a href="#" class="nav-utility">Registrovat se</a>
+          </div>
+        </div>
+        <a href="#kupni-blok" class="inline-flex items-center justify-center gap-2 h-10 px-5 rounded-xl bg-accent-500 hover:bg-accent-600 text-white font-bold text-sm transition-colors">
+          Koupit report → 19 990 Kč
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- 1) HERO — REÁLNÁ DATA Říčany 2025 -->
+<section class="hero-grad mx-4 mt-4 lg:-mt-20 lg:pt-32 rounded-b-3xl lg:rounded-3xl">
+  <div class="container-x py-8 lg:py-14">
+
+    <nav class="flex items-center gap-2 text-sm text-ink-500 mb-6">
+      <a href="navrh-home.html" class="hover:text-ink-700">Domů</a>
+      <span>›</span>
+      <a href="#" class="hover:text-ink-700">Obce</a>
+      <span>›</span>
+      <span class="text-ink-700">Říčany</span>
+    </nav>
+
+    <div class="grid lg:grid-cols-[1fr_auto] gap-10 lg:gap-16 items-center">
+      <div>
+        <div class="flex items-center gap-3 mb-3">
+          <p class="label-pri">— Datový profil obce</p>
+          <span class="badge-real">● Reálná data 2025</span>
+        </div>
+        <h1 class="text-5xl md:text-6xl lg:text-7xl font-extrabold text-ink-900 leading-[1.0]">
+          Říčany
+        </h1>
+        <p class="mt-3 text-lg text-ink-500">
+          Středočeský kraj · ORP
+        </p>
+
+        <p class="mt-7 max-w-2xl text-lg lg:text-xl text-ink-700 leading-relaxed">
+          <span class="font-bold text-ink-900">Říčany jsou jedinou obcí v Česku se skóre 10,0.</span>
+          Drží 1.&nbsp;místo z&nbsp;206 ORP osmým rokem v&nbsp;řadě a&nbsp;mají náskok 1,25&nbsp;bodu před druhou Prahou.
+          Pod povrchem je to ale složitější: <span class="font-semibold">pilíř Vztahy a&nbsp;služby</span>
+          letos prudce propadl z&nbsp;10,0 na 7,1 — a&nbsp;v&nbsp;dostupnosti bydlení jsou
+          <span class="font-semibold">na 202.&nbsp;místě</span> z&nbsp;206.
+        </p>
+
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="#kupni-blok" class="btn-buy">Odhalit, proč Vztahy propadly → 19 990 Kč</a>
+          <a href="#snapshot-cta" class="btn-ghost-d">Snapshot zdarma</a>
+        </div>
+      </div>
+
+      <!-- Velký score gauge — REAL 10.0 -->
+      <div class="flex flex-col items-center">
+        <div class="relative w-64 h-64 lg:w-72 lg:h-72">
+          <svg viewBox="0 0 200 200" class="w-full h-full -rotate-90">
+            <circle cx="100" cy="100" r="86" stroke="#e2e8f0" stroke-width="14" fill="none"/>
+            <!-- 100 % protože IKŽ = 10.0 / 10 -->
+            <circle cx="100" cy="100" r="86" stroke="#10b981" stroke-width="14" fill="none"
+                    stroke-dasharray="540" stroke-dashoffset="0" stroke-linecap="round"/>
+          </svg>
+          <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+            <p class="label-acc">IKŽ 2025</p>
+            <p class="text-7xl lg:text-8xl font-extrabold text-ink-900 leading-none mt-1">10,0</p>
+            <p class="text-sm text-ink-500 mt-2">z 10 možných</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3 mt-5 w-full">
+          <div class="bg-white rounded-xl p-3 text-center shadow-card">
+            <p class="text-[10px] font-bold uppercase tracking-wider text-ink-500">Pořadí ČR</p>
+            <p class="text-2xl font-extrabold text-ink-900 mt-0.5">1. <span class="text-xs font-medium text-ink-500">/ 206</span></p>
+          </div>
+          <div class="bg-white rounded-xl p-3 text-center shadow-card">
+            <p class="text-[10px] font-bold uppercase tracking-wider text-ink-500">V kraji</p>
+            <p class="text-2xl font-extrabold text-ink-900 mt-0.5">1. <span class="text-xs font-medium text-ink-500">/ 26</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2) POZICE V DISTRIBUCI — REÁLNÁ histogram dat 2025 -->
+<section class="container-x my-16 lg:my-24">
+  <p class="label-pri mb-3">— Pozice v Česku</p>
+  <h2 class="text-3xl lg:text-5xl font-extrabold leading-tight max-w-3xl">
+    Jediná obec se skóre 10,0
+  </h2>
+  <p class="mt-4 text-ink-700 max-w-2xl">
+    Reálná distribuce 206 ORP v ČR podle skóre IKŽ 2025.
+  </p>
+
+  <div class="mt-10 bg-white rounded-3xl shadow-card p-6 lg:p-10">
+    <div class="relative">
+      <p class="label-up mb-4">Distribuce IKŽ skóre · 206 ORP · 2025 · skutečná data</p>
+
+      <!-- Real distribution: [6, 5, 24, 32, 62, 37, 25, 7, 7, 0, 1] for buckets 0..10 -->
+      <svg viewBox="0 0 800 220" class="w-full h-auto" preserveAspectRatio="none">
+        <g fill="#e2e8f0">
+          <!-- 0-1: 6 obcí -->
+          <rect x="40"  y="170" width="60" height="20"/>
+          <!-- 1-2: 5 obcí -->
+          <rect x="105" y="173" width="60" height="17"/>
+          <!-- 2-3: 24 obcí -->
+          <rect x="170" y="110" width="60" height="80"/>
+          <!-- 3-4: 32 obcí -->
+          <rect x="235" y="83"  width="60" height="107"/>
+          <!-- 4-5: 62 obcí (NEJVÍC, peak) -->
+          <rect x="300" y="20"  width="60" height="170"/>
+          <!-- 5-6: 37 obcí -->
+          <rect x="365" y="68"  width="60" height="122"/>
+          <!-- 6-7: 25 obcí -->
+          <rect x="430" y="105" width="60" height="85"/>
+          <!-- 7-8: 7 obcí -->
+          <rect x="495" y="166" width="60" height="24"/>
+          <!-- 8-9: 7 obcí -->
+          <rect x="560" y="166" width="60" height="24"/>
+          <!-- 9-10: 0 obcí — prázdno -->
+          <rect x="625" y="190" width="60" height="0"/>
+          <!-- 10: 1 obec — Říčany! -->
+        </g>
+        <!-- Říčany jediný highlight -->
+        <rect x="690" y="187" width="60" height="3" fill="#10b981"/>
+        <circle cx="720" cy="183" r="8" fill="#10b981"/>
+        <!-- ČR medián marker (4,5) -->
+        <line x1="332" y1="0" x2="332" y2="195" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4,3"/>
+      </svg>
+
+      <div class="absolute" style="left:36%;top:0">
+        <div class="text-center">
+          <p class="text-[11px] font-bold text-ink-700">ČR medián</p>
+          <p class="text-[11px] text-ink-500">4,5</p>
+        </div>
+      </div>
+      <div class="absolute" style="right:4%;top:0">
+        <div class="text-center">
+          <p class="text-[11px] font-bold text-accent-700">Říčany</p>
+          <p class="text-[11px] text-accent-700 font-bold">10,0 ↑</p>
+        </div>
+      </div>
+
+      <div class="flex justify-between text-[11px] text-ink-500 mt-3 px-2">
+        <span>0</span><span>2</span><span>4</span><span>6</span><span>8</span><span>10</span>
+      </div>
+    </div>
+
+    <div class="mt-8 grid sm:grid-cols-3 gap-5">
+      <div class="border-l-2 border-accent-500 pl-4">
+        <p class="text-3xl font-extrabold text-ink-900">1 / 206</p>
+        <p class="text-sm text-ink-500 mt-1">Říčany jsou jedinou obcí se skóre 10,0</p>
+      </div>
+      <div class="border-l-2 border-primary-500 pl-4">
+        <p class="text-3xl font-extrabold text-ink-900">+5,5 b.</p>
+        <p class="text-sm text-ink-500 mt-1">Náskok proti ČR mediánu (4,5)</p>
+      </div>
+      <div class="border-l-2 border-ink-300 pl-4">
+        <p class="text-3xl font-extrabold text-ink-900">+1,25 b.</p>
+        <p class="text-sm text-ink-500 mt-1">Před druhou Prahou (8,75)</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3) TŘI PILÍŘE V DETAILU — REÁLNÁ DATA -->
+<section class="container-x my-16 lg:my-24">
+  <p class="label-pri mb-3">— Tři pilíře IKŽ</p>
+  <h2 class="text-3xl lg:text-5xl font-extrabold leading-tight max-w-3xl">
+    Z čeho se skóre 10,0 skládá
+  </h2>
+  <p class="mt-4 text-ink-700 max-w-2xl">
+    IKŽ je vážený průměr tří pilířů. Skutečná data Říčany 2025.
+  </p>
+
+  <div class="mt-10 grid lg:grid-cols-3 gap-5 lg:gap-6">
+
+    <!-- Pilíř 1: Zdraví — 10.0 -->
+    <div class="bg-white rounded-3xl shadow-card overflow-hidden">
+      <div class="bg-gradient-to-br from-accent-500 to-accent-600 text-white p-6">
+        <p class="text-xs font-bold uppercase tracking-wider opacity-80">Pilíř 1</p>
+        <h3 class="text-2xl font-extrabold mt-1">Zdraví</h3>
+        <div class="flex items-baseline gap-2 mt-3">
+          <span class="text-5xl font-extrabold">10,0</span>
+          <span class="opacity-80">/ 10</span>
+        </div>
+        <p class="text-xs opacity-80 mt-2">8 let stabilně</p>
+      </div>
+      <div class="p-6 space-y-4">
+        <div>
+          <div class="flex justify-between text-sm mb-1.5">
+            <span class="font-semibold text-ink-900">Index dojezdu do nemocnice</span>
+            <span class="font-bold text-accent-600">9,56</span>
+          </div>
+          <div class="h-2 bg-ink-100 rounded-full overflow-hidden"><div class="h-full bg-accent-500" style="width:95.6%"></div></div>
+        </div>
+        <div>
+          <div class="flex justify-between text-sm mb-1.5">
+            <span class="font-semibold text-ink-900">Dětští lékaři</span>
+            <span class="font-bold text-accent-600">9,12</span>
+          </div>
+          <div class="h-2 bg-ink-100 rounded-full overflow-hidden"><div class="h-full bg-accent-500" style="width:91.2%"></div></div>
+        </div>
+        <div>
+          <div class="flex justify-between text-sm mb-1.5">
+            <span class="font-semibold text-ink-900">Lékárny</span>
+            <span class="font-bold text-accent-600">8,38</span>
+          </div>
+          <div class="h-2 bg-ink-100 rounded-full overflow-hidden"><div class="h-full bg-accent-500" style="width:83.8%"></div></div>
+        </div>
+        <div>
+          <div class="flex justify-between text-sm mb-1.5">
+            <span class="font-semibold text-ink-900">Délka života</span>
+            <span class="font-bold text-accent-600">8,05</span>
+          </div>
+          <div class="h-2 bg-ink-100 rounded-full overflow-hidden"><div class="h-full bg-accent-500" style="width:80.5%"></div></div>
+        </div>
+        <div class="pt-3 border-t border-ink-100">
+          <div class="flex items-center justify-between text-sm">
+            <span class="text-ink-400">+ 5 podindexů (incl. životní prostředí)</span>
+            <span class="badge-lock">🔒 V reportu</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pilíř 2: Práce — 10.0 -->
+    <div class="bg-white rounded-3xl shadow-card overflow-hidden">
+      <div class="bg-gradient-to-br from-primary-600 to-primary-700 text-white p-6">
+        <p class="text-xs font-bold uppercase tracking-wider opacity-80">Pilíř 2</p>
+        <h3 class="text-2xl font-extrabold mt-1">Práce</h3>
+        <div class="flex items-baseline gap-2 mt-3">
+          <span class="text-5xl font-extrabold">10,0</span>
+          <span class="opacity-80">/ 10</span>
+        </div>
+        <p class="text-xs opacity-80 mt-2">7 let stabilně</p>
+      </div>
+      <div class="p-6 space-y-4">
+        <div>
+          <div class="flex justify-between text-sm mb-1.5">
+            <span class="font-semibold text-ink-900">Nezaměstnanost</span>
+            <span class="font-bold text-primary-700">10,0</span>
+          </div>
+          <div class="h-2 bg-ink-100 rounded-full overflow-hidden"><div class="h-full bg-primary-500" style="width:100%"></div></div>
+        </div>
+        <div>
+          <div class="flex justify-between text-sm mb-1.5">
+            <span class="font-semibold text-ink-900">Nabídky pracovních míst</span>
+            <span class="font-bold text-primary-700">10,0</span>
+          </div>
+          <div class="h-2 bg-ink-100 rounded-full overflow-hidden"><div class="h-full bg-primary-500" style="width:100%"></div></div>
+        </div>
+        <div>
+          <div class="flex justify-between text-sm mb-1.5">
+            <span class="font-semibold text-ink-900">Hmotná nouze (rev.)</span>
+            <span class="font-bold text-primary-700">10,0</span>
+          </div>
+          <div class="h-2 bg-ink-100 rounded-full overflow-hidden"><div class="h-full bg-primary-500" style="width:100%"></div></div>
+        </div>
+        <div>
+          <div class="flex justify-between text-sm mb-1.5">
+            <span class="font-semibold text-ink-900">Exekuce (rev.)</span>
+            <span class="font-bold text-primary-700">9,30</span>
+          </div>
+          <div class="h-2 bg-ink-100 rounded-full overflow-hidden"><div class="h-full bg-primary-500" style="width:93%"></div></div>
+        </div>
+        <div class="pt-3 border-t border-ink-100">
+          <div class="flex items-center justify-between text-sm">
+            <span class="text-ink-400">+ 5 podindexů (incl. dostupnost bydlení)</span>
+            <span class="badge-lock">🔒 V reportu</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pilíř 3: Vztahy — REAL 7,06 PROPAD -->
+    <div class="bg-white rounded-3xl shadow-card overflow-hidden ring-2 ring-amber-300">
+      <div class="bg-gradient-to-br from-amber-500 to-amber-600 text-white p-6 relative">
+        <div class="absolute top-3 right-3 text-[10px] font-bold uppercase tracking-wider bg-rose-500 px-2 py-1 rounded-md">⚠ propad −2,9</div>
+        <p class="text-xs font-bold uppercase tracking-wider opacity-80">Pilíř 3</p>
+        <h3 class="text-2xl font-extrabold mt-1">Vztahy a&nbsp;služby</h3>
+        <div class="flex items-baseline gap-2 mt-3">
+          <span class="text-5xl font-extrabold">7,06</span>
+          <span class="opacity-80">/ 10</span>
+        </div>
+        <p class="text-xs opacity-90 mt-2 font-semibold">Z 10,0 v 2024 → 7,06 v 2025</p>
+      </div>
+      <div class="p-6 space-y-4">
+        <div>
+          <div class="flex justify-between text-sm mb-1.5">
+            <span class="font-semibold text-ink-900">Zájem o volby</span>
+            <span class="font-bold text-amber-700">8,52</span>
+          </div>
+          <div class="h-2 bg-ink-100 rounded-full overflow-hidden"><div class="h-full bg-amber-500" style="width:85.2%"></div></div>
+        </div>
+        <div>
+          <div class="flex justify-between text-sm mb-1.5">
+            <span class="font-semibold text-ink-900">Restaurace a&nbsp;kavárny</span>
+            <span class="font-bold text-amber-700">7,44</span>
+          </div>
+          <div class="h-2 bg-ink-100 rounded-full overflow-hidden"><div class="h-full bg-amber-500" style="width:74.4%"></div></div>
+        </div>
+        <div>
+          <div class="flex justify-between text-sm mb-1.5">
+            <span class="font-semibold text-ink-900">Sounáležitost (spolky)</span>
+            <span class="font-bold text-amber-700">3,84</span>
+          </div>
+          <div class="h-2 bg-ink-100 rounded-full overflow-hidden"><div class="h-full bg-amber-500" style="width:38.4%"></div></div>
+        </div>
+        <div>
+          <div class="flex justify-between text-sm mb-1.5">
+            <span class="font-semibold text-rose-700">Bezpečnost</span>
+            <span class="font-bold text-rose-600">3,74</span>
+          </div>
+          <div class="h-2 bg-ink-100 rounded-full overflow-hidden"><div class="h-full bg-rose-500" style="width:37.4%"></div></div>
+        </div>
+        <div class="pt-3 border-t border-ink-100">
+          <div class="flex items-center justify-between text-sm">
+            <span class="text-ink-400">+ 4 podindexy</span>
+            <span class="badge-lock">🔒 V reportu</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="mt-6 text-sm text-ink-500 italic max-w-2xl">
+    Plný report ukazuje všech 30 indexů + 88 individuálních metrik s 8letou historií.
+  </p>
+</section>
+
+<!-- 4) HEATMAP REÁLNÝCH 30 INDEXŮ -->
+<section class="container-x my-16 lg:my-24">
+  <div class="flex items-end justify-between gap-6 mb-8">
+    <div>
+      <p class="label-pri mb-3">— 30 indexů reálně</p>
+      <h2 class="text-3xl lg:text-5xl font-extrabold leading-tight">
+        Kde jsou skutečné silné a&nbsp;slabé stránky
+      </h2>
+      <p class="mt-3 text-ink-700 max-w-2xl">
+        Všech 30 dílčích indexů Říčan 2025. Barva podle skóre · číslo dole je rank ČR.
+      </p>
+    </div>
+    <a href="#kupni-blok" class="hidden md:inline-flex btn-buy whitespace-nowrap">88 metrik v reportu →</a>
+  </div>
+
+  <div class="bg-white rounded-3xl shadow-card p-6 lg:p-10">
+
+    <!-- Heatmap mřížka 30 indexů -->
+    <div class="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-6 gap-2.5">
+      <!-- Top performers (10.0 — rank 1) -->
+      <div class="aspect-square rounded-lg bg-accent-600 text-white flex flex-col items-center justify-center p-1.5" title="IKŽ celkem">
+        <span class="text-base font-extrabold">10,0</span>
+        <span class="text-[9px] opacity-80 leading-tight text-center mt-0.5">IKŽ</span>
+        <span class="text-[8px] opacity-60 mt-0.5">#1</span>
+      </div>
+      <div class="aspect-square rounded-lg bg-accent-600 text-white flex flex-col items-center justify-center p-1.5" title="Nezaměstnanost — rank 1">
+        <span class="text-base font-extrabold">10,0</span>
+        <span class="text-[9px] opacity-80 leading-tight text-center mt-0.5">Nezam.</span>
+        <span class="text-[8px] opacity-60 mt-0.5">#1</span>
+      </div>
+      <div class="aspect-square rounded-lg bg-accent-600 text-white flex flex-col items-center justify-center p-1.5" title="Nabídky práce — rank 1">
+        <span class="text-base font-extrabold">10,0</span>
+        <span class="text-[9px] opacity-80 leading-tight text-center mt-0.5">Práce</span>
+        <span class="text-[8px] opacity-60 mt-0.5">#1</span>
+      </div>
+      <div class="aspect-square rounded-lg bg-accent-600 text-white flex flex-col items-center justify-center p-1.5" title="Bankomaty — rank 1">
+        <span class="text-base font-extrabold">10,0</span>
+        <span class="text-[9px] opacity-80 leading-tight text-center mt-0.5">Bankomaty</span>
+        <span class="text-[8px] opacity-60 mt-0.5">#1</span>
+      </div>
+      <div class="aspect-square rounded-lg bg-accent-600 text-white flex flex-col items-center justify-center p-1.5" title="Hmotná nouze — rank 1">
+        <span class="text-base font-extrabold">10,0</span>
+        <span class="text-[9px] opacity-80 leading-tight text-center mt-0.5">Hm. nouze</span>
+        <span class="text-[8px] opacity-60 mt-0.5">#1</span>
+      </div>
+      <div class="aspect-square rounded-lg bg-accent-600 text-white flex flex-col items-center justify-center p-1.5" title="Hazard — 10.0 / rank 48">
+        <span class="text-base font-extrabold">10,0</span>
+        <span class="text-[9px] opacity-80 leading-tight text-center mt-0.5">Hazard</span>
+        <span class="text-[8px] opacity-60 mt-0.5">#48</span>
+      </div>
+
+      <!-- High (8-10) -->
+      <div class="aspect-square rounded-lg bg-accent-500 text-white flex flex-col items-center justify-center p-1.5" title="Nemocnice 9.56 / rank 28">
+        <span class="text-base font-extrabold">9,56</span>
+        <span class="text-[9px] opacity-80 leading-tight text-center mt-0.5">Nemocn.</span>
+        <span class="text-[8px] opacity-60 mt-0.5">#28</span>
+      </div>
+      <div class="aspect-square rounded-lg bg-accent-500 text-white flex flex-col items-center justify-center p-1.5" title="Exekuce 9.30 / rank 5">
+        <span class="text-base font-extrabold">9,30</span>
+        <span class="text-[9px] opacity-80 leading-tight text-center mt-0.5">Exekuce</span>
+        <span class="text-[8px] opacity-60 mt-0.5">#5</span>
+      </div>
+      <div class="aspect-square rounded-lg bg-accent-500 text-white flex flex-col items-center justify-center p-1.5" title="Dětští lékaři 9.12 / rank 9">
+        <span class="text-base font-extrabold">9,12</span>
+        <span class="text-[9px] opacity-80 leading-tight text-center mt-0.5">Pediatři</span>
+        <span class="text-[8px] opacity-60 mt-0.5">#9</span>
+      </div>
+      <div class="aspect-square rounded-lg bg-accent-500 text-white flex flex-col items-center justify-center p-1.5" title="Volby 8.52 / rank 3">
+        <span class="text-base font-extrabold">8,52</span>
+        <span class="text-[9px] opacity-80 leading-tight text-center mt-0.5">Volby</span>
+        <span class="text-[8px] opacity-60 mt-0.5">#3</span>
+      </div>
+      <div class="aspect-square rounded-lg bg-accent-500 text-white flex flex-col items-center justify-center p-1.5" title="SŠ 8.40 / rank 9">
+        <span class="text-base font-extrabold">8,40</span>
+        <span class="text-[9px] opacity-80 leading-tight text-center mt-0.5">Stř. školy</span>
+        <span class="text-[8px] opacity-60 mt-0.5">#9</span>
+      </div>
+      <div class="aspect-square rounded-lg bg-accent-500 text-white flex flex-col items-center justify-center p-1.5" title="Lékárny 8.38 / rank 10">
+        <span class="text-base font-extrabold">8,38</span>
+        <span class="text-[9px] opacity-80 leading-tight text-center mt-0.5">Lékárny</span>
+        <span class="text-[8px] opacity-60 mt-0.5">#10</span>
+      </div>
+
+      <!-- Medium-high (6-8) -->
+      <div class="aspect-square rounded-lg bg-accent-400 text-white flex flex-col items-center justify-center p-1.5" title="Doziti 8.05 / rank 11">
+        <span class="text-base font-extrabold">8,05</span>
+        <span class="text-[9px] opacity-80 leading-tight text-center mt-0.5">Délka živ.</span>
+        <span class="text-[8px] opacity-60 mt-0.5">#11</span>
+      </div>
+      <div class="aspect-square rounded-lg bg-accent-400 text-white flex flex-col items-center justify-center p-1.5" title="Migrace 7.91 / rank 17">
+        <span class="text-base font-extrabold">7,91</span>
+        <span class="text-[9px] opacity-80 leading-tight text-center mt-0.5">Migrace</span>
+        <span class="text-[8px] opacity-60 mt-0.5">#17</span>
+      </div>
+      <div class="aspect-square rounded-lg bg-accent-400 text-white flex flex-col items-center justify-center p-1.5" title="Restaurace 7.44 / rank 20">
+        <span class="text-base font-extrabold">7,44</span>
+        <span class="text-[9px] opacity-80 leading-tight text-center mt-0.5">Restaur.</span>
+        <span class="text-[8px] opacity-60 mt-0.5">#20</span>
+      </div>
+      <div class="aspect-square rounded-lg bg-accent-400 text-white flex flex-col items-center justify-center p-1.5" title="Mladí 7.39 / rank 23">
+        <span class="text-base font-extrabold">7,39</span>
+        <span class="text-[9px] opacity-80 leading-tight text-center mt-0.5">Mladí</span>
+        <span class="text-[8px] opacity-60 mt-0.5">#23</span>
+      </div>
+      <div class="aspect-square rounded-lg bg-accent-300 text-white flex flex-col items-center justify-center p-1.5" title="Praktici 6.23 / rank 23">
+        <span class="text-base font-extrabold">6,23</span>
+        <span class="text-[9px] opacity-80 leading-tight text-center mt-0.5">Praktici</span>
+        <span class="text-[8px] opacity-60 mt-0.5">#23</span>
+      </div>
+      <div class="aspect-square rounded-lg bg-accent-300 text-white flex flex-col items-center justify-center p-1.5" title="Ovzduší 6.04 / rank 72">
+        <span class="text-base font-extrabold">6,04</span>
+        <span class="text-[9px] opacity-80 leading-tight text-center mt-0.5">Ovzduší</span>
+        <span class="text-[8px] opacity-60 mt-0.5">#72</span>
+      </div>
+
+      <!-- Medium (4-6) -->
+      <div class="aspect-square rounded-lg bg-amber-400 text-white flex flex-col items-center justify-center p-1.5" title="Kina 5.44 / rank 20">
+        <span class="text-base font-extrabold">5,44</span>
+        <span class="text-[9px] opacity-80 leading-tight text-center mt-0.5">Kina</span>
+        <span class="text-[8px] opacity-60 mt-0.5">#20</span>
+      </div>
+      <div class="aspect-square rounded-lg bg-amber-400 text-white flex flex-col items-center justify-center p-1.5" title="Markety 4.65 / rank 44">
+        <span class="text-base font-extrabold">4,65</span>
+        <span class="text-[9px] opacity-80 leading-tight text-center mt-0.5">Markety</span>
+        <span class="text-[8px] opacity-60 mt-0.5">#44</span>
+      </div>
+      <div class="aspect-square rounded-lg bg-amber-400 text-white flex flex-col items-center justify-center p-1.5" title="Znečišťovatelé 4.27 / rank 135">
+        <span class="text-base font-extrabold">4,27</span>
+        <span class="text-[9px] opacity-80 leading-tight text-center mt-0.5">Znečišť.</span>
+        <span class="text-[8px] opacity-60 mt-0.5">#135</span>
+      </div>
+      <div class="aspect-square rounded-lg bg-amber-400 text-white flex flex-col items-center justify-center p-1.5" title="Spolky 3.84 / rank 108">
+        <span class="text-base font-extrabold">3,84</span>
+        <span class="text-[9px] opacity-80 leading-tight text-center mt-0.5">Spolky</span>
+        <span class="text-[8px] opacity-60 mt-0.5">#108</span>
+      </div>
+      <div class="aspect-square rounded-lg bg-amber-500 text-white flex flex-col items-center justify-center p-1.5" title="Digitalizace 3.86 / rank 91">
+        <span class="text-base font-extrabold">3,86</span>
+        <span class="text-[9px] opacity-80 leading-tight text-center mt-0.5">Digi.</span>
+        <span class="text-[8px] opacity-60 mt-0.5">#91</span>
+      </div>
+      <div class="aspect-square rounded-lg bg-amber-500 text-white flex flex-col items-center justify-center p-1.5" title="Bezpečnost 3.74 / rank 171">
+        <span class="text-base font-extrabold">3,74</span>
+        <span class="text-[9px] opacity-80 leading-tight text-center mt-0.5">Bezpečn.</span>
+        <span class="text-[8px] opacity-60 mt-0.5">#171</span>
+      </div>
+
+      <!-- Low (0-4) — rizika -->
+      <div class="aspect-square rounded-lg bg-rose-400 text-white flex flex-col items-center justify-center p-1.5" title="MŠ kapacita 3.05 / rank 172">
+        <span class="text-base font-extrabold">3,05</span>
+        <span class="text-[9px] opacity-80 leading-tight text-center mt-0.5">MŠ kap.</span>
+        <span class="text-[8px] opacity-60 mt-0.5">#172</span>
+      </div>
+      <div class="aspect-square rounded-lg bg-rose-500 text-white flex flex-col items-center justify-center p-1.5" title="Silnice 1.95 / rank 193">
+        <span class="text-base font-extrabold">1,95</span>
+        <span class="text-[9px] opacity-80 leading-tight text-center mt-0.5">Silnice</span>
+        <span class="text-[8px] opacity-60 mt-0.5">#193</span>
+      </div>
+      <div class="aspect-square rounded-lg bg-rose-500 text-white flex flex-col items-center justify-center p-1.5" title="Vlaky 1.48 / rank 94">
+        <span class="text-base font-extrabold">1,48</span>
+        <span class="text-[9px] opacity-80 leading-tight text-center mt-0.5">Vlaky</span>
+        <span class="text-[8px] opacity-60 mt-0.5">#94</span>
+      </div>
+      <div class="aspect-square rounded-lg bg-rose-500 text-white flex flex-col items-center justify-center p-1.5" title="ZŠ kapacita 1.38 / rank 191">
+        <span class="text-base font-extrabold">1,38</span>
+        <span class="text-[9px] opacity-80 leading-tight text-center mt-0.5">ZŠ kap.</span>
+        <span class="text-[8px] opacity-60 mt-0.5">#191</span>
+      </div>
+      <div class="aspect-square rounded-lg bg-rose-600 text-white flex flex-col items-center justify-center p-1.5 ring-2 ring-rose-300" title="Bydlení 0.76 / rank 202 — CRITICAL">
+        <span class="text-base font-extrabold">0,76</span>
+        <span class="text-[9px] opacity-80 leading-tight text-center mt-0.5">Bydlení</span>
+        <span class="text-[8px] opacity-80 mt-0.5">#202 ⚠</span>
+      </div>
+      <div class="aspect-square rounded-lg bg-rose-600 text-white flex flex-col items-center justify-center p-1.5" title="Chráněná území 0.48 / rank 184">
+        <span class="text-base font-extrabold">0,48</span>
+        <span class="text-[9px] opacity-80 leading-tight text-center mt-0.5">Chr. úz.</span>
+        <span class="text-[8px] opacity-60 mt-0.5">#184</span>
+      </div>
+    </div>
+
+    <!-- Legenda + insight -->
+    <div class="mt-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div class="flex items-center gap-3 text-xs text-ink-500 flex-wrap">
+        <span class="flex items-center gap-1.5"><span class="w-3 h-3 bg-accent-600 rounded"></span> 10,0 (Top)</span>
+        <span class="flex items-center gap-1.5"><span class="w-3 h-3 bg-accent-400 rounded"></span> 7–9</span>
+        <span class="flex items-center gap-1.5"><span class="w-3 h-3 bg-amber-400 rounded"></span> 4–7</span>
+        <span class="flex items-center gap-1.5"><span class="w-3 h-3 bg-rose-500 rounded"></span> Pod 4</span>
+      </div>
+      <p class="text-sm font-bold text-rose-700">
+        ⚠ Říčany jsou v top 10 nejhorších v dostupnosti bydlení (rank 202/206).
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- 5) TREND 2018–2025 — REÁLNÁ DATA Vztahy oscillace -->
+<section class="container-x my-16 lg:my-24">
+  <div class="bg-white rounded-3xl shadow-card p-6 lg:p-10">
+
+    <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4 mb-8">
+      <div>
+        <p class="label-pri mb-3">— Vývoj 8 let · reálná data</p>
+        <h2 class="text-3xl lg:text-4xl font-extrabold leading-tight">
+          Stabilní lídr — ale Vztahy se houpají
+        </h2>
+        <p class="mt-3 text-ink-700 max-w-xl">
+          Celkové IKŽ drží 10,0 osmým rokem. Vztahy a&nbsp;služby ale za 8 let osciloval
+          mezi 7,06 a&nbsp;10,0. Letos prudký propad.
+        </p>
+      </div>
+      <div class="flex items-center gap-4 text-sm flex-wrap">
+        <span class="flex items-center gap-2"><i class="w-3 h-3 rounded-full bg-accent-500"></i> IKŽ celkem</span>
+        <span class="flex items-center gap-2"><i class="w-3 h-3 rounded-full bg-primary-500"></i> Práce</span>
+        <span class="flex items-center gap-2"><i class="w-3 h-3 rounded-full bg-amber-500"></i> Vztahy</span>
+      </div>
+    </div>
+
+    <!-- REAL data values -->
+    <!-- IKŽ:    10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0  → all y=42 -->
+    <!-- Práce:  7.68, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0  → first lower, then 42 -->
+    <!-- Vztahy: 7.56, 8.03, 8.47, 8.80, 8.15, 7.71, 10.0, 7.06 -->
+    <!-- Mapping y: 10.0=42, 8.0=98, 6.0=154, 4.0=210, 2.0=266 (28px per unit) -->
+    <svg viewBox="0 0 800 320" class="w-full h-auto">
+      <g stroke="#f1f5f9" stroke-width="1">
+        <line x1="40" y1="42"  x2="780" y2="42"/>
+        <line x1="40" y1="98"  x2="780" y2="98"/>
+        <line x1="40" y1="154" x2="780" y2="154"/>
+        <line x1="40" y1="210" x2="780" y2="210"/>
+        <line x1="40" y1="266" x2="780" y2="266"/>
+      </g>
+      <g fill="#94a3b8" font-size="11" font-family="Plus Jakarta Sans">
+        <text x="32" y="46"  text-anchor="end">10</text>
+        <text x="32" y="102" text-anchor="end">8</text>
+        <text x="32" y="158" text-anchor="end">6</text>
+        <text x="32" y="214" text-anchor="end">4</text>
+        <text x="32" y="270" text-anchor="end">2</text>
+      </g>
+
+      <!-- Vztahy (amber) — REAL data with oscillation -->
+      <!-- 7.56 → y=110, 8.03 → 97, 8.47 → 84, 8.80 → 76, 8.15 → 94, 7.71 → 106, 10.0 → 42, 7.06 → 124 -->
+      <polyline fill="none" stroke="#f59e0b" stroke-width="3"
+                points="80,110 180,97 280,84 380,76 480,94 580,106 680,42 770,124"/>
+      <g fill="#f59e0b">
+        <circle cx="80" cy="110" r="4"/><circle cx="180" cy="97" r="4"/>
+        <circle cx="280" cy="84" r="4"/><circle cx="380" cy="76" r="4"/>
+        <circle cx="480" cy="94" r="4"/><circle cx="580" cy="106" r="4"/>
+        <circle cx="680" cy="42" r="5" stroke="#fff" stroke-width="2"/>
+        <circle cx="770" cy="124" r="6" stroke="#fff" stroke-width="2"/>
+      </g>
+
+      <!-- Práce (purple) — REAL: 7.68, then 10.0 -->
+      <!-- 7.68 → y=107, then all 42 -->
+      <polyline fill="none" stroke="#8b5cf6" stroke-width="2.5"
+                points="80,107 180,42 280,42 380,42 480,42 580,42 680,42 770,42"/>
+
+      <!-- IKŽ celkem (accent) — REAL: 10.0 every year -->
+      <polyline fill="none" stroke="#10b981" stroke-width="3.5"
+                points="80,42 180,42 280,42 380,42 480,42 580,42 680,42 770,42"/>
+      <g fill="#10b981">
+        <circle cx="80" cy="42" r="4"/><circle cx="180" cy="42" r="4"/>
+        <circle cx="280" cy="42" r="4"/><circle cx="380" cy="42" r="4"/>
+        <circle cx="480" cy="42" r="4"/><circle cx="580" cy="42" r="4"/>
+        <circle cx="680" cy="42" r="4"/><circle cx="770" cy="42" r="6" stroke="#fff" stroke-width="2"/>
+      </g>
+
+      <g fill="#94a3b8" font-size="11" font-family="Plus Jakarta Sans" text-anchor="middle">
+        <text x="80"  y="295">2018</text>
+        <text x="180" y="295">2019</text>
+        <text x="280" y="295">2020</text>
+        <text x="380" y="295">2021</text>
+        <text x="480" y="295">2022</text>
+        <text x="580" y="295">2023</text>
+        <text x="680" y="295">2024</text>
+        <text x="770" y="295">2025</text>
+      </g>
+
+      <!-- Anotace propadu -->
+      <g>
+        <line x1="710" y1="42" x2="760" y2="124" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,2"/>
+        <rect x="595" y="155" width="170" height="48" rx="8" fill="#fef2f2" stroke="#fecaca"/>
+        <text x="605" y="175" font-size="11" font-weight="800" fill="#b91c1c" font-family="Plus Jakarta Sans">PROPAD −2,94 b.</text>
+        <text x="605" y="190" font-size="10" fill="#991b1b" font-family="Plus Jakarta Sans">Vztahy 10,0 → 7,06 za rok</text>
+      </g>
+    </svg>
+
+    <div class="mt-6 p-5 rounded-2xl bg-rose-50 border border-rose-200">
+      <p class="text-sm text-rose-900 leading-relaxed">
+        <strong>Datový signál:</strong> Pilíř Vztahy a&nbsp;služby v&nbsp;roce 2025 propadl o&nbsp;2,94 bodu.
+        Trend není stabilní — během 8 let oscilace mezi 7,06 a&nbsp;10,0.
+        <span class="font-bold">Plný report ukáže, které z&nbsp;9 podindexů (volby, spolky, bezpečnost, restaurace…)
+        propad způsobily a&nbsp;zda jde o&nbsp;strukturální změnu nebo metodickou anomálii.</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- 6) 3 NEJSILNĚJŠÍ STRÁNKY — REÁLNÁ -->
+<section class="container-x my-16 lg:my-24">
+  <p class="label-acc mb-3">— Tři silné stránky · reálná data</p>
+  <h2 class="text-3xl lg:text-5xl font-extrabold leading-tight max-w-3xl">
+    Kde Říčany dominují
+  </h2>
+
+  <div class="mt-10 grid lg:grid-cols-3 gap-5">
+
+    <article class="bg-white rounded-3xl shadow-card p-6 lg:p-8">
+      <div class="flex items-start justify-between mb-4">
+        <span class="w-9 h-9 rounded-full bg-accent-500 text-white font-extrabold flex items-center justify-center">1</span>
+        <span class="text-xs font-bold text-accent-700 uppercase tracking-wider">Rank 1 / 206</span>
+      </div>
+      <h3 class="text-xl font-extrabold text-ink-900">Nezaměstnanost</h3>
+      <p class="text-sm text-ink-700 mt-2 leading-relaxed">
+        Skóre 10,0 / 10. Říčany mají nejnižší nezaměstnanost ze všech 206 ORP v ČR.
+      </p>
+      <div class="mt-5 flex items-end justify-between">
+        <div class="text-3xl font-extrabold text-accent-600">10,0</div>
+        <span class="text-xs text-ink-500">8 let stabilně</span>
+      </div>
+    </article>
+
+    <article class="bg-white rounded-3xl shadow-card p-6 lg:p-8">
+      <div class="flex items-start justify-between mb-4">
+        <span class="w-9 h-9 rounded-full bg-accent-500 text-white font-extrabold flex items-center justify-center">2</span>
+        <span class="text-xs font-bold text-accent-700 uppercase tracking-wider">Rank 1 / 206</span>
+      </div>
+      <h3 class="text-xl font-extrabold text-ink-900">Nabídka pracovních míst</h3>
+      <p class="text-sm text-ink-700 mt-2 leading-relaxed">
+        Skóre 10,0 / 10. Lídr ČR v dostupnosti pracovních příležitostí (díky Praze).
+      </p>
+      <div class="mt-5 flex items-end justify-between">
+        <div class="text-3xl font-extrabold text-accent-600">10,0</div>
+        <span class="text-xs text-ink-500">7 let v top 1</span>
+      </div>
+    </article>
+
+    <article class="bg-white rounded-3xl shadow-card p-6 lg:p-8">
+      <div class="flex items-start justify-between mb-4">
+        <span class="w-9 h-9 rounded-full bg-accent-500 text-white font-extrabold flex items-center justify-center">3</span>
+        <span class="text-xs font-bold text-accent-700 uppercase tracking-wider">Rank 1 / 206</span>
+      </div>
+      <h3 class="text-xl font-extrabold text-ink-900">Hmotná nouze</h3>
+      <p class="text-sm text-ink-700 mt-2 leading-relaxed">
+        Skóre 10,0 / 10. Nejnižší podíl občanů v hmotné nouzi v celé ČR.
+      </p>
+      <div class="mt-5 flex items-end justify-between">
+        <div class="text-3xl font-extrabold text-accent-600">10,0</div>
+        <span class="text-xs text-ink-500">stabilně rank 1</span>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- 7) RIZIKOVÉ SIGNÁLY — REÁLNÁ -->
+<section class="container-x my-16 lg:my-24">
+  <p class="label-warn mb-3">— Tři rizikové signály · reálná data</p>
+  <h2 class="text-3xl lg:text-5xl font-extrabold leading-tight max-w-3xl">
+    Kde Říčany mají problém
+  </h2>
+
+  <div class="mt-10 grid lg:grid-cols-3 gap-5">
+
+    <article class="bg-white rounded-3xl shadow-card p-6 lg:p-8 ring-2 ring-rose-200">
+      <div class="flex items-start justify-between mb-4">
+        <span class="w-9 h-9 rounded-full bg-rose-500 text-white font-extrabold flex items-center justify-center">1</span>
+        <span class="text-xs font-bold text-rose-700 uppercase tracking-wider">Rank 202 / 206 ⚠</span>
+      </div>
+      <h3 class="text-xl font-extrabold text-ink-900">Dostupnost bydlení</h3>
+      <p class="text-sm text-ink-700 mt-2 leading-relaxed">
+        Skóre 0,76 / 10. Index <strong>cena bytu vs. mzda</strong> — Říčany jsou v&nbsp;TOP 5 nejhorších v ČR.
+        Vysoké příjmy nestačí kompenzovat ceny.
+      </p>
+      <div class="mt-5 flex items-end justify-between">
+        <div class="text-3xl font-extrabold text-rose-600">0,76</div>
+        <span class="text-xs text-rose-700 font-bold">Akutní</span>
+      </div>
+    </article>
+
+    <article class="bg-white rounded-3xl shadow-card p-6 lg:p-8 ring-1 ring-rose-100">
+      <div class="flex items-start justify-between mb-4">
+        <span class="w-9 h-9 rounded-full bg-rose-500 text-white font-extrabold flex items-center justify-center">2</span>
+        <span class="text-xs font-bold text-rose-700 uppercase tracking-wider">Rank 191 / 206</span>
+      </div>
+      <h3 class="text-xl font-extrabold text-ink-900">Kapacita ZŠ</h3>
+      <p class="text-sm text-ink-700 mt-2 leading-relaxed">
+        Skóre 1,38 / 10. Přetížené základní školy. Růst populace
+        rychlejší než kapacita.
+      </p>
+      <div class="mt-5 flex items-end justify-between">
+        <div class="text-3xl font-extrabold text-rose-600">1,38</div>
+        <span class="text-xs text-rose-700 font-bold">Strukturální</span>
+      </div>
+    </article>
+
+    <article class="bg-white rounded-3xl shadow-card p-6 lg:p-8 ring-1 ring-rose-100">
+      <div class="flex items-start justify-between mb-4">
+        <span class="w-9 h-9 rounded-full bg-rose-500 text-white font-extrabold flex items-center justify-center">3</span>
+        <span class="text-xs font-bold text-rose-700 uppercase tracking-wider">Rank 171 / 206</span>
+      </div>
+      <h3 class="text-xl font-extrabold text-ink-900">Bezpečnost</h3>
+      <p class="text-sm text-ink-700 mt-2 leading-relaxed">
+        Skóre 3,74 / 10. Vyšší kriminalita a&nbsp;přestupky než typická ORP — vliv blízkosti Prahy.
+      </p>
+      <div class="mt-5 flex items-end justify-between">
+        <div class="text-3xl font-extrabold text-rose-600">3,74</div>
+        <span class="text-xs text-rose-700 font-bold">Trvalé</span>
+      </div>
+    </article>
+  </div>
+
+  <p class="mt-6 text-sm text-ink-500 italic max-w-3xl">
+    Plný report rozkládá každé riziko do podindexů, ukazuje 8letou historii a&nbsp;srovnává
+    s&nbsp;podobně velkými ORP v&nbsp;okolí Prahy (Brandýs, Černošice, Mnichovo Hradiště…).
+  </p>
+</section>
+
+<!-- 8) PEER GROUP — REÁLNÉ obce ze Středočeského kraje -->
+<section class="container-x my-16 lg:my-24">
+  <div class="bg-white rounded-3xl shadow-card p-6 lg:p-10">
+    <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4 mb-8">
+      <div>
+        <p class="label-pri mb-3">— Středočeský kraj · reálná data</p>
+        <h2 class="text-3xl lg:text-4xl font-extrabold leading-tight">
+          Říčany dominují i&nbsp;svému kraji
+        </h2>
+        <p class="mt-3 text-ink-700 max-w-xl">
+          Reálné pořadí Středočeského kraje 2025. Plný report obsahuje peer benchmarking
+          proti 12 podobným ORP <strong>napříč ČR</strong> — ne jen v kraji.
+        </p>
+      </div>
+      <a href="#kupni-blok" class="hidden md:inline-flex btn-buy whitespace-nowrap">Peer benchmark v reportu →</a>
+    </div>
+
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="text-ink-500 border-b border-ink-200">
+          <th class="text-left font-medium py-3">ORP · Středočeský kraj</th>
+          <th class="text-right font-medium py-3">IKŽ 2025</th>
+          <th class="text-right font-medium py-3">Rozdíl od Říčan</th>
+          <th class="text-right font-medium py-3">Rank ČR</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-ink-100">
+        <tr class="bg-accent-50">
+          <td class="py-3 font-extrabold text-ink-900">Říčany <span class="text-xs text-accent-700 font-bold ml-1">(vy)</span></td>
+          <td class="py-3 text-right text-2xl font-extrabold text-accent-600">10,00</td>
+          <td class="py-3 text-right text-ink-500">—</td>
+          <td class="py-3 text-right font-bold">1.</td>
+        </tr>
+        <tr>
+          <td class="py-3 font-medium">Brandýs nad Labem-Stará Boleslav</td>
+          <td class="py-3 text-right font-bold">8,31</td>
+          <td class="py-3 text-right text-rose-600 font-semibold">−1,69</td>
+          <td class="py-3 text-right">6.</td>
+        </tr>
+        <tr>
+          <td class="py-3 font-medium">Hořovice</td>
+          <td class="py-3 text-right font-bold">8,17</td>
+          <td class="py-3 text-right text-rose-600 font-semibold">−1,83</td>
+          <td class="py-3 text-right">8.</td>
+        </tr>
+        <tr>
+          <td class="py-3 font-medium">Mnichovo Hradiště</td>
+          <td class="py-3 text-right font-bold">7,10</td>
+          <td class="py-3 text-right text-rose-600 font-semibold">−2,90</td>
+          <td class="py-3 text-right">12.</td>
+        </tr>
+        <tr>
+          <td class="py-3 font-medium">Kralupy nad Vltavou</td>
+          <td class="py-3 text-right font-bold">6,96</td>
+          <td class="py-3 text-right text-rose-600 font-semibold">−3,04</td>
+          <td class="py-3 text-right">14.</td>
+        </tr>
+        <tr>
+          <td class="py-3 font-medium">Benešov</td>
+          <td class="py-3 text-right font-bold">6,87</td>
+          <td class="py-3 text-right text-rose-600 font-semibold">−3,13</td>
+          <td class="py-3 text-right">17.</td>
+        </tr>
+        <tr>
+          <td class="py-3 font-medium">Černošice</td>
+          <td class="py-3 text-right font-bold">6,80</td>
+          <td class="py-3 text-right text-rose-600 font-semibold">−3,20</td>
+          <td class="py-3 text-right">19.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="mt-4 text-center">
+      <p class="text-sm text-ink-500">+ 19 dalších obcí v&nbsp;kraji ve veřejném žebříčku</p>
+    </div>
+  </div>
+</section>
+
+<!-- 9) CURIOSITY GAPS — postavené na REAL signálech -->
+<section class="container-x my-16 lg:my-24">
+  <div class="rounded-3xl bg-ink-900 text-white p-8 lg:p-16">
+    <p class="text-xs font-bold uppercase tracking-[0.15em] text-accent-400 mb-3">— Otázky z reálných dat</p>
+    <h2 class="text-3xl lg:text-5xl font-extrabold leading-tight max-w-3xl">
+      Co data ukázala — a co zatím neumíme vysvětlit
+    </h2>
+    <p class="mt-4 text-white/70 max-w-2xl">
+      6 reálných nálezů z&nbsp;dat Říčan 2025. Veřejný profil je vidět, ale neumí na ně odpovědět.
+    </p>
+
+    <div class="mt-10 grid md:grid-cols-2 gap-4">
+      <div class="bg-white/5 backdrop-blur rounded-2xl p-5 border border-white/10">
+        <p class="text-accent-400 font-bold text-sm">1.</p>
+        <p class="mt-2 text-white">
+          <span class="font-bold">Pilíř Vztahy propadl z&nbsp;10,0 na 7,06 za rok.</span>
+          Který z&nbsp;9 podindexů (volby, spolky, bezpečnost, restaurace…) tažil pilíř dolů?
+        </p>
+      </div>
+      <div class="bg-white/5 backdrop-blur rounded-2xl p-5 border border-white/10">
+        <p class="text-accent-400 font-bold text-sm">2.</p>
+        <p class="mt-2 text-white">
+          <span class="font-bold">Bydlení rank 202/206.</span>
+          Reálná cena bytu vs. mzda. Jak velká je propast a&nbsp;jak ohrožuje migraci mladých?
+        </p>
+      </div>
+      <div class="bg-white/5 backdrop-blur rounded-2xl p-5 border border-white/10">
+        <p class="text-accent-400 font-bold text-sm">3.</p>
+        <p class="mt-2 text-white">
+          <span class="font-bold">Sounáležitost (spolky) skóre 3,84.</span>
+          Pod krajským mediánem. Proč má město s tak vysokou kvalitou života slabou občanskou společnost?
+        </p>
+      </div>
+      <div class="bg-white/5 backdrop-blur rounded-2xl p-5 border border-white/10">
+        <p class="text-accent-400 font-bold text-sm">4.</p>
+        <p class="mt-2 text-white">
+          <span class="font-bold">Bezpečnost rank 171/206.</span>
+          Detailní rozklad: jaké přestupky a&nbsp;trestné činy táhnou skóre dolů?
+        </p>
+      </div>
+      <div class="bg-white/5 backdrop-blur rounded-2xl p-5 border border-white/10">
+        <p class="text-accent-400 font-bold text-sm">5.</p>
+        <p class="mt-2 text-white">
+          <span class="font-bold">Kapacita ZŠ skóre 1,38.</span>
+          Jaký podíl dětí 6–14 let nemá místo? A&nbsp;kolik dětí dojíždí do okolních škol?
+        </p>
+      </div>
+      <div class="bg-white/5 backdrop-blur rounded-2xl p-5 border border-white/10">
+        <p class="text-accent-400 font-bold text-sm">6.</p>
+        <p class="mt-2 text-white">
+          <span class="font-bold">Index praktických lékařů spadl z&nbsp;rank 5 na rank 23 za rok.</span>
+          Co se v&nbsp;roce 2025 stalo s&nbsp;dostupností praktiků?
+        </p>
+      </div>
+    </div>
+
+    <div class="mt-10 text-center">
+      <a href="#kupni-blok" class="btn-buy">Získat odpovědi v reportu → 19 990 Kč</a>
+    </div>
+  </div>
+</section>
+
+<!-- 10) SNAPSHOT CTA -->
+<section id="snapshot-cta" class="container-x my-16 lg:my-24">
+  <div class="rounded-3xl bg-gradient-to-br from-primary-50 via-white to-accent-50 px-6 py-10 lg:px-12 lg:py-14 grid lg:grid-cols-[1.2fr_1fr] gap-8 items-center">
+    <div>
+      <p class="label-acc mb-3">— Bezplatná varianta</p>
+      <h2 class="text-2xl lg:text-4xl font-extrabold leading-tight">
+        Stáhněte si 2-stránkový snapshot Říčan
+      </h2>
+      <p class="mt-4 text-ink-700">
+        Pořadí · 3 pilíře · trend od 2018 · krajské srovnání · 1 silná stránka · 1 riziková oblast.
+        PDF v&nbsp;inboxu do hodiny.
+      </p>
+    </div>
+    <form class="bg-white rounded-2xl shadow-card p-5 lg:p-6 space-y-3">
+      <input type="text" placeholder="Vaše jméno" class="w-full h-12 px-4 rounded-xl border border-ink-200 outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-100">
+      <input type="email" placeholder="E-mail" class="w-full h-12 px-4 rounded-xl border border-ink-200 outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-100">
+      <button type="submit" class="w-full h-12 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-bold transition-colors">
+        Stáhnout snapshot zdarma →
+      </button>
+      <p class="text-[11px] text-ink-500 leading-tight">GDPR · žádný spam</p>
+    </form>
+  </div>
+</section>
+
+<!-- 11) HLAVNÍ KUPNÍ BLOK -->
+<section id="kupni-blok" class="container-x my-16 lg:my-24">
+  <div class="rounded-3xl bg-ink-900 text-white px-6 py-14 lg:px-16 lg:py-20">
+
+    <div class="grid lg:grid-cols-[1.3fr_1fr] gap-10 lg:gap-16 items-center">
+      <div>
+        <p class="text-xs font-bold uppercase tracking-[0.15em] text-accent-400 mb-3">— Plný report Říčany 2025</p>
+        <h2 class="text-3xl lg:text-5xl font-extrabold leading-[1.05]">
+          88 metrik. <br>
+          <span class="text-accent-400">8 let historie.</span><br>
+          Datový podklad k&nbsp;rozhodování.
+        </h2>
+
+        <ul class="mt-8 space-y-2.5 text-white/80">
+          <li class="flex gap-3"><span class="text-accent-400 font-bold">+</span> Detailní rozklad všech 30 indexů → 88 metrik</li>
+          <li class="flex gap-3"><span class="text-accent-400 font-bold">+</span> Peer benchmarking proti 12 podobným ORP</li>
+          <li class="flex gap-3"><span class="text-accent-400 font-bold">+</span> Kompletní 8letá historie po pilířích a&nbsp;indexech</li>
+          <li class="flex gap-3"><span class="text-accent-400 font-bold">+</span> Diagnóza propadu pilíře Vztahy 2025</li>
+          <li class="flex gap-3"><span class="text-accent-400 font-bold">+</span> Strategické priority k&nbsp;bydlení a&nbsp;ZŠ</li>
+          <li class="flex gap-3"><span class="text-accent-400 font-bold">+</span> PDF (72 stran) + dashboard + Excel appendix</li>
+        </ul>
+      </div>
+
+      <div class="bg-white/10 backdrop-blur rounded-2xl p-6 lg:p-8 border border-white/10">
+        <p class="text-xs font-bold uppercase tracking-wider text-accent-400">Jednorázová cena</p>
+        <p class="text-5xl lg:text-6xl font-extrabold mt-2">19 990 Kč</p>
+        <p class="text-sm text-white/60 mt-1">bez DPH · faktura na obec</p>
+
+        <div class="mt-6 space-y-2.5 text-sm text-white/80">
+          <p class="flex gap-2"><span class="text-accent-400">✓</span> 5 pracovních dnů</p>
+          <p class="flex gap-2"><span class="text-accent-400">✓</span> Garance vrácení 14 dní</p>
+          <p class="flex gap-2"><span class="text-accent-400">✓</span> Pod prahem pro VŘ</p>
+        </div>
+
+        <a href="#" class="btn-buy mt-7 w-full">Koupit report Říčany →</a>
+        <a href="#" class="block text-center mt-3 text-white/70 hover:text-white text-sm font-semibold transition-colors">
+          Domluvit 15min demo
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 12) METODIKA -->
+<section class="container-x my-12">
+  <details class="bg-surface-alt rounded-2xl p-6">
+    <summary class="cursor-pointer list-none flex items-center justify-between [&::-webkit-details-marker]:hidden">
+      <span class="font-bold text-ink-900">Metodická poznámka · zdroj dat</span>
+      <span class="text-primary-700 text-sm font-semibold">Rozbalit</span>
+    </summary>
+    <div class="mt-4 text-sm text-ink-700 leading-relaxed space-y-2">
+      <p><strong>Data:</strong> Říčany 2025, zdroj <code>data.json</code> (15&nbsp;MB · 206 ORP · 30 indexů · 88 metrik · 8 let historie 2018–2025).</p>
+      <p><strong>Pilíře:</strong> Zdraví · Práce · Vztahy a&nbsp;služby. IKŽ je vážený průměr.</p>
+      <p><strong>Škála:</strong> 0–10, kde 10 je nejlepší výsledek v žebříčku.</p>
+      <p><strong>Zdroje:</strong> ČSÚ, MF&nbsp;ČR, ÚZIS, ČHMÚ, ÚP a další veřejné registry.</p>
+      <p><strong>Limitace:</strong> Skóre 10,0 v&nbsp;Říčanech udává pozici v&nbsp;žebříčku — neznamená "perfektní" obec. Detailní rozklad ukazuje, kde má i&nbsp;lídr rezervy.</p>
+    </div>
+  </details>
+</section>
+
+<!-- FOOTER -->
+<footer class="hero-grad mx-4 mt-12 rounded-t-3xl">
+  <div class="container-x py-12">
+    <div class="flex flex-col lg:flex-row lg:justify-between gap-8">
+      <div>
+        <h2 class="text-2xl font-semibold text-ink-900 mb-1">Kontaktujte nás</h2>
+        <a href="mailto:info@obcevdatech.cz" class="text-2xl font-semibold text-primary-700 hover:opacity-80">info@obcevdatech.cz</a>
+        <div class="inline-flex items-center gap-2 mt-6 px-3 py-1.5 bg-white rounded-full shadow-card text-[13px] text-ink-700">
+          <span class="w-2 h-2 rounded-full bg-accent-500"></span>
+          Pomáháme českým obcím od roku 2018
+        </div>
+      </div>
+      <div class="flex gap-12 text-[15px] font-medium text-primary-700">
+        <ul class="space-y-3"><li><a href="navrh-home.html">Domů</a></li><li><a href="navrh-koupit-report.html">Koupit report</a></li></ul>
+        <ul class="space-y-3"><li><a href="#">FAQ</a></li><li><a href="#">Kontakt</a></li></ul>
+      </div>
+    </div>
+    <hr class="my-8 border-ink-200">
+    <p class="text-sm text-ink-500">© Copyright Obce v datech 2026</p>
+  </div>
+</footer>
+
+</body>
+</html>
