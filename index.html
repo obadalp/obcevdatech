@@ -93,15 +93,15 @@
       <!-- LOGO -->
       <a href="index.html" class="flex items-center shrink-0 hover:opacity-90 transition-opacity">
         <img src="./Výsledky IKŽ za 2025 _ Obce v datech_files/logo-D9ygtVhA.svg"
-             alt="Obce v datech" class="h-9 w-auto">
+             alt="Obce v datech" class="h-7 w-auto">
       </a>
 
-      <!-- NAVIGACE -->
+      <!-- NAVIGACE: Kvalita života · Pro obce · Pro média · Datové příběhy · O projektu · Kontakt -->
       <nav class="hidden xl:flex items-center gap-1">
-        <a href="#" class="nav-link font-semibold">Index kvality života</a>
+        <a href="#" class="nav-link font-semibold">Kvalita života</a>
         <details class="relative group">
           <summary class="nav-link inline-flex items-center gap-1.5 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
-            Naše služby
+            Pro obce
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-open:rotate-180"><path d="m6 9 6 6 6-6"/></svg>
           </summary>
           <div class="absolute left-0 top-full mt-3 w-64 bg-white rounded-2xl shadow-pop border border-ink-200/60 py-2 z-50">
@@ -111,6 +111,7 @@
             <a href="#" class="block px-4 py-2.5 text-[14px] font-medium text-ink-700 hover:bg-primary-50 hover:text-primary-700 transition-colors">Datová zakázka na&nbsp;míru</a>
           </div>
         </details>
+        <a href="#" class="nav-link">Pro média</a>
         <a href="#" class="nav-link">Datové příběhy</a>
         <details class="relative group">
           <summary class="nav-link inline-flex items-center gap-1.5 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
@@ -121,12 +122,12 @@
             <a href="#" class="block px-4 py-2.5 text-[14px] font-medium text-ink-700 hover:bg-primary-50 hover:text-primary-700 transition-colors">Metodika</a>
             <a href="#" class="block px-4 py-2.5 text-[14px] font-medium text-ink-700 hover:bg-primary-50 hover:text-primary-700 transition-colors">Reference</a>
             <a href="#" class="block px-4 py-2.5 text-[14px] font-medium text-ink-700 hover:bg-primary-50 hover:text-primary-700 transition-colors">O&nbsp;týmu</a>
-            <a href="#" class="block px-4 py-2.5 text-[14px] font-medium text-ink-700 hover:bg-primary-50 hover:text-primary-700 transition-colors">Kontakt</a>
             <hr class="my-2 border-ink-200">
             <a href="#" class="block px-4 py-2 text-[12px] text-ink-500 hover:bg-ink-100 transition-colors">FAQ</a>
             <a href="#" class="block px-4 py-2 text-[12px] text-ink-500 hover:bg-ink-100 transition-colors">Obchodní podmínky</a>
           </div>
         </details>
+        <a href="#" class="nav-link">Kontakt</a>
       </nav>
 
       <!-- AKCE: přihlásit + Vyhledat obec → mapa.html -->
@@ -1252,7 +1253,7 @@
       const o = OBCE[name];
       const typeLabel = o.type === 'orp' ? 'Město' : 'Obec';
       const orpInfo = o.type === 'orp' ? '' : ' · spadá pod ' + o.orp;
-      const obyv = o.obyv ? new Intl.NumberFormat('cs-CZ').format(o.obyv) + ' obyv.' : '';
+      // počet obyvatel záměrně neuvádíme — vyžadovalo by pravidelnou aktualizaci
       const badges = o.products.length > 0
         ? o.products.map(p => productBadge(p, name)).join(' ')
         : '<span class="text-[11px] text-ink-400 italic">žádné produkty — viz město ' + o.orp + '</span>';
@@ -1263,7 +1264,7 @@
           <div class="flex items-start justify-between gap-3">
             <div class="flex-1 min-w-0">
               <p class="font-extrabold text-ink-900 truncate">${name}</p>
-              <p class="text-xs text-ink-500 truncate">${typeLabel} · ${o.kraj}${orpInfo}${obyv ? ' · ' + obyv : ''}</p>
+              <p class="text-xs text-ink-500 truncate">${typeLabel} · ${o.kraj}${orpInfo}</p>
               <div class="flex flex-wrap gap-1.5 mt-2">${badges}</div>
             </div>
             <div class="flex items-center gap-1 text-[11px] text-primary-700 font-bold whitespace-nowrap shrink-0">

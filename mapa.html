@@ -57,24 +57,44 @@
     .hero-grad   { background: linear-gradient(180deg, #fcfaff 0%, #ddd6fe 100%); }
     .label-pri   { @apply text-xs font-bold uppercase tracking-[0.12em] text-primary-700; }
 
-    /* Mapa */
-    .kraj-tile {
-      @apply rounded-xl border-2 transition-all cursor-pointer flex flex-col items-center justify-center text-center px-2 py-3;
-      border-color: #e2e8f0;
-      background: #ffffff;
+    /* Mapa — SVG polygony krajů */
+    .kraj-poly {
+      fill: #f1f5f9;
+      stroke: #94a3b8;
+      stroke-width: 1.2;
+      stroke-linejoin: round;
+      cursor: pointer;
+      transition: fill 0.15s ease;
     }
-    .kraj-tile:hover {
-      @apply shadow-pop;
-      border-color: #7c3aed;
-      background: #f5f3ff;
-      transform: translateY(-2px);
+    .kraj-poly:hover {
+      fill: #c4b5fd;
     }
-    .kraj-tile.active {
-      border-color: #7c3aed;
-      background: #ede9fe;
+    .kraj-poly.active {
+      fill: #7c3aed;
     }
-    .kraj-name { @apply text-[12px] lg:text-[13px] font-bold text-ink-900 leading-tight; }
-    .kraj-count { @apply text-[10px] text-ink-500 mt-1; }
+    .kraj-poly.active + .kraj-label,
+    .kraj-poly.active ~ text {
+      fill: #ffffff;
+    }
+    .kraj-label {
+      pointer-events: none;
+      font-size: 11px;
+      font-weight: 700;
+      fill: #334155;
+      text-anchor: middle;
+      letter-spacing: -0.2px;
+    }
+    .kraj-praha {
+      fill: #ede9fe;
+      stroke: #7c3aed;
+      stroke-width: 1.5;
+    }
+    .kraj-praha:hover {
+      fill: #c4b5fd;
+    }
+    .kraj-praha.active {
+      fill: #7c3aed;
+    }
 
     /* Search results */
     .obec-row {
@@ -148,83 +168,104 @@
         </button>
       </div>
 
-      <!-- Stylizovaná mapa: kraje uspořádané do gridu, který přibližně odpovídá geografii ČR.
-           14 dlaždic = 14 krajů. Klik = filtr obcí napravo. -->
-      <div class="relative mx-auto" style="max-width:580px">
-        <!-- Pozadí — siluet ČR (jen jako jemné dekorativní pozadí) -->
-        <svg viewBox="0 0 580 380" class="absolute inset-0 w-full h-full pointer-events-none opacity-[0.06]">
-          <path d="M40,180 C60,80 180,40 320,60 C440,75 510,130 540,200 C545,260 510,310 410,335 C290,355 150,345 80,290 C40,250 30,220 40,180 Z"
-                fill="#7c3aed"/>
+      <!-- Interaktivní SVG mapa ČR — 14 krajů jako klikatelné polygony.
+           Souřadnice odpovídají přibližné geografii (lat/lon → x/y projekce).
+           viewBox 800×420, polygony schematicky zjednodušené. -->
+      <div class="relative">
+        <svg id="cr-map" viewBox="0 0 800 420" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+
+          <!-- KARLOVARSKÝ KRAJ (NW) -->
+          <g data-kraj="Karlovarský">
+            <polygon class="kraj-poly" points="20,150 90,110 150,118 165,170 145,210 80,215 25,195"/>
+            <text class="kraj-label" x="90" y="170">Karlovarský</text>
+          </g>
+
+          <!-- ÚSTECKÝ KRAJ (N central-W) -->
+          <g data-kraj="Ústecký">
+            <polygon class="kraj-poly" points="150,118 230,80 295,75 305,140 240,170 165,170"/>
+            <text class="kraj-label" x="225" y="125">Ústecký</text>
+          </g>
+
+          <!-- LIBERECKÝ KRAJ (N) -->
+          <g data-kraj="Liberecký">
+            <polygon class="kraj-poly" points="295,75 360,55 405,75 420,130 350,140 305,140"/>
+            <text class="kraj-label" x="360" y="105">Liberecký</text>
+          </g>
+
+          <!-- KRÁLOVÉHRADECKÝ KRAJ (NE-N) -->
+          <g data-kraj="Královéhradecký">
+            <polygon class="kraj-poly" points="405,75 470,82 515,130 510,180 445,195 420,130"/>
+            <text class="kraj-label" x="465" y="135">Královéhradecký</text>
+          </g>
+
+          <!-- PARDUBICKÝ KRAJ (E-center N) -->
+          <g data-kraj="Pardubický">
+            <polygon class="kraj-poly" points="445,195 510,180 535,225 510,260 450,255 425,225"/>
+            <text class="kraj-label" x="480" y="225">Pardubický</text>
+          </g>
+
+          <!-- PLZEŇSKÝ KRAJ (W) -->
+          <g data-kraj="Plzeňský">
+            <polygon class="kraj-poly" points="25,195 145,210 165,250 175,295 110,320 50,300 20,250"/>
+            <text class="kraj-label" x="100" y="265">Plzeňský</text>
+          </g>
+
+          <!-- STŘEDOČESKÝ KRAJ (center, surrounds Praha) -->
+          <g data-kraj="Středočeský">
+            <polygon class="kraj-poly" points="165,170 240,170 305,140 350,140 420,130 425,225 380,265 290,290 215,275 165,250 145,210"/>
+            <text class="kraj-label" x="290" y="180">Středočeský</text>
+          </g>
+
+          <!-- PRAHA (uvnitř Středočeského) -->
+          <g data-kraj="Praha">
+            <polygon class="kraj-praha" points="270,212 290,205 305,212 305,228 290,238 270,232 263,222"/>
+            <text class="kraj-label" x="287" y="224" style="fill:#5b21b6;font-size:10px">Praha</text>
+          </g>
+
+          <!-- VYSOČINA (center-S) -->
+          <g data-kraj="Vysočina">
+            <polygon class="kraj-poly" points="380,265 450,255 470,290 460,335 400,355 340,335 320,290"/>
+            <text class="kraj-label" x="395" y="305">Vysočina</text>
+          </g>
+
+          <!-- JIHOČESKÝ KRAJ (S — large) -->
+          <g data-kraj="Jihočeský">
+            <polygon class="kraj-poly" points="50,300 110,320 175,295 215,275 290,290 320,290 340,335 320,385 240,400 145,395 80,375 35,335"/>
+            <text class="kraj-label" x="195" y="350">Jihočeský</text>
+          </g>
+
+          <!-- JIHOMORAVSKÝ KRAJ (SE) -->
+          <g data-kraj="Jihomoravský">
+            <polygon class="kraj-poly" points="460,335 540,330 600,355 615,395 540,405 460,395 400,355"/>
+            <text class="kraj-label" x="510" y="370">Jihomoravský</text>
+          </g>
+
+          <!-- OLOMOUCKÝ KRAJ (E-N) -->
+          <g data-kraj="Olomoucký">
+            <polygon class="kraj-poly" points="510,180 580,180 640,200 660,240 610,275 540,275 510,260 535,225"/>
+            <text class="kraj-label" x="575" y="225">Olomoucký</text>
+          </g>
+
+          <!-- ZLÍNSKÝ KRAJ (E) -->
+          <g data-kraj="Zlínský">
+            <polygon class="kraj-poly" points="540,275 610,275 645,310 640,355 600,355 540,330 510,300"/>
+            <text class="kraj-label" x="585" y="315">Zlínský</text>
+          </g>
+
+          <!-- MORAVSKOSLEZSKÝ KRAJ (NE) -->
+          <g data-kraj="Moravskoslezský">
+            <polygon class="kraj-poly" points="640,200 720,180 760,210 770,260 745,295 700,300 660,275 660,240"/>
+            <text class="kraj-label" x="710" y="240">Moravskoslezský</text>
+          </g>
+
         </svg>
 
-        <!-- Grid 5×4 dlaždic — geografické uspořádání -->
-        <div class="relative grid grid-cols-5 gap-2 lg:gap-3" style="grid-template-rows: repeat(4, minmax(70px, 1fr))">
-          <!-- ŘÁDEK 1: západ → sever -->
-          <button class="kraj-tile col-start-1 row-start-1" data-kraj="Karlovarský">
-            <span class="kraj-name">Karlovarský</span>
-            <span class="kraj-count" data-count="Karlovarský">— obcí</span>
-          </button>
-          <button class="kraj-tile col-start-2 row-start-1" data-kraj="Ústecký">
-            <span class="kraj-name">Ústecký</span>
-            <span class="kraj-count" data-count="Ústecký">— obcí</span>
-          </button>
-          <button class="kraj-tile col-start-3 row-start-1" data-kraj="Liberecký">
-            <span class="kraj-name">Liberecký</span>
-            <span class="kraj-count" data-count="Liberecký">— obcí</span>
-          </button>
-          <button class="kraj-tile col-start-4 row-start-1" data-kraj="Královéhradecký">
-            <span class="kraj-name">Královéhradecký</span>
-            <span class="kraj-count" data-count="Královéhradecký">— obcí</span>
-          </button>
-
-          <!-- ŘÁDEK 2: středy -->
-          <button class="kraj-tile col-start-1 row-start-2" data-kraj="Plzeňský">
-            <span class="kraj-name">Plzeňský</span>
-            <span class="kraj-count" data-count="Plzeňský">— obcí</span>
-          </button>
-          <button class="kraj-tile col-start-2 row-start-2" data-kraj="Středočeský">
-            <span class="kraj-name">Středočeský</span>
-            <span class="kraj-count" data-count="Středočeský">— obcí</span>
-          </button>
-          <button class="kraj-tile col-start-3 row-start-2 bg-primary-50 border-primary-300" data-kraj="Praha">
-            <span class="kraj-name text-primary-800">Praha</span>
-            <span class="kraj-count" data-count="Praha">— obcí</span>
-          </button>
-          <button class="kraj-tile col-start-4 row-start-2" data-kraj="Pardubický">
-            <span class="kraj-name">Pardubický</span>
-            <span class="kraj-count" data-count="Pardubický">— obcí</span>
-          </button>
-          <button class="kraj-tile col-start-5 row-start-2" data-kraj="Olomoucký">
-            <span class="kraj-name">Olomoucký</span>
-            <span class="kraj-count" data-count="Olomoucký">— obcí</span>
-          </button>
-
-          <!-- ŘÁDEK 3: jih → východ -->
-          <button class="kraj-tile col-start-1 row-start-3" data-kraj="Jihočeský">
-            <span class="kraj-name">Jihočeský</span>
-            <span class="kraj-count" data-count="Jihočeský">— obcí</span>
-          </button>
-          <button class="kraj-tile col-start-2 row-start-3" data-kraj="Vysočina">
-            <span class="kraj-name">Vysočina</span>
-            <span class="kraj-count" data-count="Vysočina">— obcí</span>
-          </button>
-          <button class="kraj-tile col-start-3 row-start-3" data-kraj="Jihomoravský">
-            <span class="kraj-name">Jihomoravský</span>
-            <span class="kraj-count" data-count="Jihomoravský">— obcí</span>
-          </button>
-          <button class="kraj-tile col-start-4 row-start-3" data-kraj="Zlínský">
-            <span class="kraj-name">Zlínský</span>
-            <span class="kraj-count" data-count="Zlínský">— obcí</span>
-          </button>
-          <button class="kraj-tile col-start-5 row-start-3" data-kraj="Moravskoslezský">
-            <span class="kraj-name">Moravskoslezský</span>
-            <span class="kraj-count" data-count="Moravskoslezský">— obcí</span>
-          </button>
-        </div>
+        <!-- Tooltip pro hover -->
+        <div id="kraj-tooltip" class="absolute hidden bg-ink-900 text-white text-xs rounded-lg px-3 py-2 pointer-events-none shadow-pop z-10 whitespace-nowrap"></div>
 
         <!-- Legenda dole -->
-        <div class="mt-5 flex items-center justify-between text-xs text-ink-500">
-          <span>Schematické rozložení podle světových stran</span>
+        <div class="mt-4 flex items-center justify-between text-xs text-ink-500 px-2">
+          <span>Klikněte na kraj pro filtr</span>
           <span>14 krajů · 6&nbsp;258 obcí · 206 měst</span>
         </div>
       </div>
@@ -392,11 +433,7 @@
     'Ústecký': 354, 'Liberecký': 215, 'Královéhradecký': 448, 'Pardubický': 451, 'Vysočina': 704,
     'Jihomoravský': 673, 'Olomoucký': 402, 'Zlínský': 307, 'Moravskoslezský': 300
   };
-  document.querySelectorAll('[data-count]').forEach(el => {
-    const k = el.dataset.count;
-    el.textContent = (KRAJE_TOTAL[k] || 0).toLocaleString('cs-CZ') + (k === 'Praha' ? '' : ' obcí');
-    if (k === 'Praha') el.textContent = 'hlavní město';
-  });
+  // (data-count tiles odstraněny — počty obcí teď v tooltipu mapy)
 
   // Normalize pro CZ vyhledávání
   const norm = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
@@ -436,7 +473,7 @@
       <a href="navrh-rozcestnik.html?obec=${encodeURIComponent(name)}" class="obec-row">
         <div class="min-w-0 flex-1">
           <p class="font-semibold text-ink-900 truncate">${name}</p>
-          <p class="text-xs text-ink-500 truncate">${o.kraj} · ${o.obyv.toLocaleString('cs-CZ')} obyv.</p>
+          <p class="text-xs text-ink-500 truncate">${o.kraj}</p>
         </div>
         <div class="text-right shrink-0">
           <p class="text-sm font-bold text-primary-700">${o.rank}.</p>
@@ -450,31 +487,53 @@
   const input = document.getElementById('search-input');
   input.addEventListener('input', e => renderResults(e.target.value, activeKraj));
 
-  // Kraj tile clicks
-  document.querySelectorAll('.kraj-tile').forEach(t => {
-    t.addEventListener('click', () => {
-      const kraj = t.dataset.kraj;
-      if (activeKraj === kraj) {
-        // re-click → unselect
-        activeKraj = null;
-        document.querySelectorAll('.kraj-tile').forEach(x => x.classList.remove('active'));
-        document.getElementById('kraj-filter').classList.add('hidden');
-        document.getElementById('reset-map').classList.add('hidden');
-      } else {
-        activeKraj = kraj;
-        document.querySelectorAll('.kraj-tile').forEach(x => x.classList.remove('active'));
-        t.classList.add('active');
-        document.getElementById('kraj-filter').classList.remove('hidden');
-        document.getElementById('kraj-filter-name').textContent = kraj;
-        document.getElementById('reset-map').classList.remove('hidden');
-      }
-      renderResults(input.value, activeKraj);
+  // SVG mapa — click + hover na kraj polygony
+  const tooltip = document.getElementById('kraj-tooltip');
+  const mapSvg = document.getElementById('cr-map');
+
+  function clearActive() {
+    document.querySelectorAll('.kraj-poly, .kraj-praha').forEach(p => p.classList.remove('active'));
+  }
+
+  function selectKraj(kraj) {
+    if (activeKraj === kraj) {
+      activeKraj = null;
+      clearActive();
+      document.getElementById('kraj-filter').classList.add('hidden');
+      document.getElementById('reset-map').classList.add('hidden');
+    } else {
+      activeKraj = kraj;
+      clearActive();
+      const g = document.querySelector(`#cr-map g[data-kraj="${kraj}"] polygon`);
+      if (g) g.classList.add('active');
+      document.getElementById('kraj-filter').classList.remove('hidden');
+      document.getElementById('kraj-filter-name').textContent = kraj;
+      document.getElementById('reset-map').classList.remove('hidden');
+    }
+    renderResults(input.value, activeKraj);
+  }
+
+  // Click handlers
+  document.querySelectorAll('#cr-map g[data-kraj]').forEach(g => {
+    g.addEventListener('click', () => selectKraj(g.dataset.kraj));
+
+    // Hover tooltip
+    g.addEventListener('mousemove', e => {
+      const kraj = g.dataset.kraj;
+      const total = KRAJE_TOTAL[kraj] || 0;
+      const detail = kraj === 'Praha' ? 'hlavní město' : `${total.toLocaleString('cs-CZ')} obcí`;
+      tooltip.innerHTML = `<strong>${kraj}</strong> · ${detail}`;
+      tooltip.classList.remove('hidden');
+      const rect = mapSvg.getBoundingClientRect();
+      tooltip.style.left = (e.clientX - rect.left + 12) + 'px';
+      tooltip.style.top  = (e.clientY - rect.top - 38) + 'px';
     });
+    g.addEventListener('mouseleave', () => tooltip.classList.add('hidden'));
   });
 
   document.getElementById('kraj-filter-clear').addEventListener('click', () => {
     activeKraj = null;
-    document.querySelectorAll('.kraj-tile').forEach(x => x.classList.remove('active'));
+    clearActive();
     document.getElementById('kraj-filter').classList.add('hidden');
     document.getElementById('reset-map').classList.add('hidden');
     renderResults(input.value, null);
