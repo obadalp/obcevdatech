@@ -69,18 +69,36 @@
   }
   /* Leaflet container */
   #leaflet-map {
-    height: 580px;
+    height: 600px;
     border-radius: 1rem;
     overflow: hidden;
     z-index: 0;
+    background: #ffffff;
   }
-  /* Kraje styling override (Leaflet path renders <path> in SVG) */
-  .leaflet-interactive { transition: fill-opacity 0.15s; }
-  /* Popup */
-  .leaflet-popup-content-wrapper { border-radius: 12px; }
-  .leaflet-popup-content { margin: 12px 14px; font-family: 'Plus Jakarta Sans', sans-serif; }
-  .obec-popup b { color: #0f172a; }
-  .obec-popup a { color: #7c3aed; font-weight: 700; }
+  .leaflet-container { background: #ffffff !important; }
+  /* Tooltip styling */
+  .leaflet-tooltip {
+    background: #0f172a;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  .leaflet-tooltip-top:before { border-top-color: #0f172a; }
+  .leaflet-tooltip-bottom:before { border-bottom-color: #0f172a; }
+  .leaflet-tooltip-left:before { border-left-color: #0f172a; }
+  .leaflet-tooltip-right:before { border-right-color: #0f172a; }
+  /* Loading spinner */
+  .map-loading {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(255,255,255,0.85); z-index: 1000;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: #64748b; font-size: 14px;
+  }
 </style>
 </head>
 
@@ -163,10 +181,13 @@
       </div>
 
       <!-- Leaflet container -->
-      <div id="leaflet-map"></div>
+      <div class="relative">
+        <div id="leaflet-map"></div>
+        <div id="map-loading" class="map-loading">Načítám hranice 6 258 obcí…</div>
+      </div>
 
       <p class="mt-3 px-2 text-xs text-ink-500">
-        Mapa: © <a href="https://www.openstreetmap.org/copyright" class="underline" rel="noopener">OpenStreetMap</a> přispěvatelé · hranice krajů a&nbsp;obcí: <a href="https://github.com/siwekm/czech-geojson" class="underline" rel="noopener">czech-geojson</a>
+        Hranice krajů a&nbsp;obcí: <a href="https://github.com/siwekm/czech-geojson" class="underline" rel="noopener">czech-geojson</a> (CC BY-SA, ČÚZK)
       </p>
     </div>
 
@@ -186,13 +207,18 @@
                class="w-full h-14 pl-12 pr-4 text-[15px] bg-surface-alt border border-ink-200 rounded-xl outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100 transition-all">
       </div>
 
-      <!-- Filtr badge — když je vybraný kraj -->
-      <div id="kraj-filter" class="mt-3 hidden">
-        <span class="inline-flex items-center gap-2 px-3 py-1.5 bg-primary-100 text-primary-800 text-sm font-semibold rounded-full">
-          Filtr: <span id="kraj-filter-name"></span>
-          <button id="kraj-filter-clear" class="hover:bg-primary-200 rounded-full w-5 h-5 flex items-center justify-center">×</button>
-        </span>
+      <!-- Kraj filtr -->
+      <div class="mt-3 flex items-center gap-2">
+        <label class="text-xs text-ink-500 font-semibold">Kraj:</label>
+        <select id="kraj-select"
+                class="flex-1 h-9 px-3 text-sm bg-surface-alt border border-ink-200 rounded-lg outline-none focus:border-primary-500">
+          <option value="">— Všechny kraje —</option>
+        </select>
+        <button id="reset-view" class="text-xs text-primary-700 font-semibold hover:underline hidden">Reset</button>
       </div>
+
+      <!-- Skryté původní elementy pro zachování JS API -->
+      <div id="kraj-filter" class="hidden"><span id="kraj-filter-name"></span><button id="kraj-filter-clear"></button></div>
 
       <!-- Výsledky -->
       <div class="mt-5 flex-1 min-h-[300px]">
@@ -231,30 +257,29 @@
   let activeKraj = null;
   const KRAJE_TOTAL = {};
 
-  // === Leaflet map setup ===
+  // === Leaflet map setup — bez dlaždic, jen ČR ===
+  const CR_BOUNDS = L.latLngBounds([48.55, 12.09], [51.06, 18.86]);
+
   const map = L.map('leaflet-map', {
     center: [49.8, 15.5],
     zoom: 7,
-    minZoom: 6,
-    maxZoom: 14,
+    minZoom: 7,
+    maxZoom: 13,
+    maxBounds: CR_BOUNDS.pad(0.05),
+    maxBoundsViscosity: 0.9,
     zoomControl: true,
     scrollWheelZoom: true,
     attributionControl: false,
+    preferCanvas: true,            // Canvas renderer — nutný pro 6258 polygonů
   });
+  map.fitBounds(CR_BOUNDS);
 
-  L.control.attribution({ prefix: false, position: 'bottomleft' })
-    .addAttribution('&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>')
-    .addTo(map);
-
-  // OSM tile layer (světlá varianta)
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    maxZoom: 19,
-    subdomains: 'abcd',
-  }).addTo(map);
+  // Sdílený canvas renderer pro všechny obce (rychlejší než SVG)
+  const obceRenderer = L.canvas({ padding: 0.5 });
 
   // Layers
-  const krajeLayer = L.layerGroup().addTo(map);
   const obceLayer  = L.layerGroup().addTo(map);
+  const krajeLayer = L.layerGroup().addTo(map);  // Kraje nad obcemi (jen obrysy)
 
   // === Render functions ===
   function navigateToObec(name) {
@@ -320,31 +345,45 @@
 
   inputEl.addEventListener('input', e => renderResults(e.target.value, activeKraj));
 
-  // === Kraj filter clear ===
-  document.getElementById('kraj-filter-clear').addEventListener('click', () => {
-    activeKraj = null;
-    krajeLayer.eachLayer(l => l.setStyle({ fillOpacity: 0.05, weight: 1.5 }));
-    document.getElementById('kraj-filter').classList.add('hidden');
-    document.getElementById('reset-view').classList.add('hidden');
-    map.flyTo([49.8, 15.5], 7, { duration: 0.8 });
-    renderResults(inputEl.value, null);
+  // === Kraj dropdown ===
+  const krajSelectEl = document.getElementById('kraj-select');
+  const resetBtn = document.getElementById('reset-view');
+
+  krajSelectEl.addEventListener('change', e => {
+    const kraj = e.target.value || null;
+    activeKraj = kraj;
+    krajeLayer.eachLayer(l => l.setStyle({ weight: 2.5, color: '#475569' }));
+    if (kraj) {
+      const layer = findKrajLayer(kraj);
+      if (layer) {
+        layer.setStyle({ weight: 4, color: '#7c3aed' });
+        map.flyToBounds(layer.getBounds(), { padding: [40, 40], duration: 0.6 });
+      }
+      resetBtn.classList.remove('hidden');
+    } else {
+      map.flyToBounds(CR_BOUNDS, { padding: [20, 20], duration: 0.6 });
+      resetBtn.classList.add('hidden');
+    }
+    renderResults(inputEl.value, kraj);
   });
-  document.getElementById('reset-view').addEventListener('click', () => {
-    document.getElementById('kraj-filter-clear').click();
+
+  resetBtn.addEventListener('click', () => {
+    krajSelectEl.value = '';
+    krajSelectEl.dispatchEvent(new Event('change'));
   });
 
   // === Highlight kraj ===
   function selectKraj(kraj, layer) {
     if (activeKraj === kraj) {
       activeKraj = null;
-      krajeLayer.eachLayer(l => l.setStyle({ fillOpacity: 0.05, weight: 1.5 }));
+      krajeLayer.eachLayer(l => l.setStyle({ weight: 2.5, color: '#475569' }));
       document.getElementById('kraj-filter').classList.add('hidden');
       document.getElementById('reset-view').classList.add('hidden');
-      map.flyTo([49.8, 15.5], 7, { duration: 0.6 });
+      map.flyToBounds(CR_BOUNDS, { padding: [20, 20], duration: 0.6 });
     } else {
       activeKraj = kraj;
-      krajeLayer.eachLayer(l => l.setStyle({ fillOpacity: 0.05, weight: 1.5 }));
-      layer.setStyle({ fillOpacity: 0.35, weight: 2.5, color: '#7c3aed' });
+      krajeLayer.eachLayer(l => l.setStyle({ weight: 2.5, color: '#475569' }));
+      layer.setStyle({ weight: 4, color: '#7c3aed' });
       document.getElementById('kraj-filter').classList.remove('hidden');
       document.getElementById('kraj-filter-name').textContent = kraj;
       document.getElementById('reset-view').classList.remove('hidden');
@@ -353,12 +392,11 @@
     renderResults(inputEl.value, activeKraj);
   }
 
-  // === Load kraje polygons ===
+  // === Load kraje (pouze obrysy, NEinteraktivní — kliky jdou na obce pod nimi) ===
   fetch('kraje-simple.json')
     .then(r => r.json())
     .then(kraje => {
       kraje.forEach(k => {
-        // GeoJSON má lon/lat, Leaflet chce lat/lon
         let coords;
         if (k.rings) {
           coords = k.rings.map(ring => ring.map(([lon, lat]) => [lat, lon]));
@@ -366,22 +404,20 @@
           coords = k.polys.map(poly => poly.map(ring => ring.map(([lon, lat]) => [lat, lon])));
         }
         const poly = L.polygon(coords, {
-          color: '#7c3aed',
-          weight: 1.5,
-          fillColor: '#7c3aed',
-          fillOpacity: 0.05,
+          color: '#475569',
+          weight: 2.5,
+          fillOpacity: 0,           // bez výplně — neblokuje kliky na obce
+          interactive: false,       // kraje neklikatelné — primární interakce je obec
         });
-        poly.bindTooltip(`<strong>${k.name}</strong>`, { sticky: true, className: 'kraj-tooltip' });
-        poly.on('click', () => selectKraj(k.name, poly));
-        poly.on('mouseover', () => { if (activeKraj !== k.name) poly.setStyle({ fillOpacity: 0.15 }); });
-        poly.on('mouseout',  () => { if (activeKraj !== k.name) poly.setStyle({ fillOpacity: 0.05 }); });
         krajeLayer.addLayer(poly);
+        // Uložíme referenci pro pozdější selectKraj přes search filter
+        poly._krajName = k.name;
       });
     })
     .catch(err => console.error('kraje-simple.json failed:', err));
 
-  // === Load obce dots ===
-  fetch('obce-cr.json')
+  // === Load obce polygons (2.6 MB — gzip ~800 KB přes Pages) ===
+  fetch('obce-polygons.json')
     .then(r => r.json())
     .then(data => {
       KRAJE = data.kraje;
@@ -391,34 +427,79 @@
         KRAJE_TOTAL[k] = (KRAJE_TOTAL[k] || 0) + 1;
       });
 
-      // Vykreslit obce jako CircleMarker (lehčí než Marker)
-      OBCE.forEach(o => {
-        const [name, ki, lon, lat] = o;
-        const isOrp = ORP.has(name);
-        const cm = L.circleMarker([lat, lon], {
-          radius: isOrp ? 5 : 2.5,
-          fillColor: isOrp ? '#10b981' : '#7c3aed',
-          fillOpacity: isOrp ? 0.9 : 0.45,
-          color: '#ffffff',
-          weight: isOrp ? 1.5 : 0.5,
-        });
-        const krajName = KRAJE[ki];
-        const tag = isOrp ? 'v žebříčku' : 'obec';
-        cm.bindTooltip(`<strong>${name}</strong> · ${krajName} · ${tag}`, {
-          direction: 'top',
-          offset: [0, -4],
-        });
-        cm.on('click', () => navigateToObec(name));
-        obceLayer.addLayer(cm);
+      // Naplnit kraj dropdown
+      const krajeSorted = KRAJE.slice().sort((a,b) => a.localeCompare(b, 'cs'));
+      krajeSorted.forEach(k => {
+        const opt = document.createElement('option');
+        opt.value = k;
+        opt.textContent = `${k} (${(KRAJE_TOTAL[k]||0).toLocaleString('cs-CZ')})`;
+        krajSelectEl.appendChild(opt);
       });
+
+      // Vykreslit polygony obcí na canvasu
+      const polys = [];
+      OBCE.forEach(o => {
+        const [name, ki, , , ring] = o;
+        const isOrp = ORP.has(name);
+        const latlngs = ring.map(([lon, lat]) => [lat, lon]);
+        const poly = L.polygon(latlngs, {
+          renderer: obceRenderer,
+          color: '#cbd5e1',
+          weight: 0.6,
+          fillColor: isOrp ? '#a78bfa' : '#e2e8f0',
+          fillOpacity: isOrp ? 0.55 : 0.35,
+          smoothFactor: 1.2,
+        });
+        poly._obecName = name;
+        poly._obecKraj = KRAJE[ki];
+        poly._isOrp = isOrp;
+        const tag = isOrp ? 'v žebříčku' : 'obec';
+        poly.bindTooltip(`<strong>${name}</strong> · ${KRAJE[ki]} · ${tag}`, {
+          sticky: true,
+          direction: 'top',
+        });
+        poly.on('click', () => navigateToObec(name));
+        poly.on('mouseover', e => {
+          e.target.setStyle({
+            fillColor: '#7c3aed',
+            fillOpacity: 0.7,
+            color: '#5b21b6',
+            weight: 1.2,
+          });
+        });
+        poly.on('mouseout', e => {
+          e.target.setStyle({
+            color: '#cbd5e1',
+            weight: 0.6,
+            fillColor: e.target._isOrp ? '#a78bfa' : '#e2e8f0',
+            fillOpacity: e.target._isOrp ? 0.55 : 0.35,
+          });
+        });
+        polys.push(poly);
+      });
+      // Hromadné přidání do layeru
+      polys.forEach(p => obceLayer.addLayer(p));
+
+      // Schovat loading
+      const loading = document.getElementById('map-loading');
+      if (loading) loading.style.display = 'none';
 
       renderResults();
     })
     .catch(err => {
+      const loading = document.getElementById('map-loading');
+      if (loading) loading.textContent = 'Nelze načíst hranice obcí. Otevřete přes lokální server.';
       resultsEl.innerHTML =
         '<div class="px-4 py-8 text-center text-ink-500 text-sm">Nelze načíst seznam obcí (offline?). Spusťte přes lokální server: <code>python -m http.server</code></div>';
       console.error('obce-cr.json failed:', err);
     });
+
+  // === Search filter — když se vybere kraj přes search/filter UI, najdi v krajeLayer a pohni mapou ===
+  function findKrajLayer(name) {
+    let found = null;
+    krajeLayer.eachLayer(l => { if (l._krajName === name) found = l; });
+    return found;
+  }
 </script>
 
 </body>
