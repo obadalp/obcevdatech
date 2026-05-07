@@ -37,13 +37,14 @@
   @layer base { html{font-family:'Plus Jakarta Sans','Inter',system-ui,sans-serif} body{@apply bg-white text-ink-900 antialiased} h1,h2,h3,h4{@apply font-display tracking-tight} }
   @layer components {
     .container-x { @apply max-w-[1280px] mx-auto px-4 lg:px-8; }
-    .nav-link    { @apply px-4 py-2 text-[15px] font-medium text-ink-700 hover:text-primary-700 transition-colors; }
+    .nav-link    { @apply px-3 py-2 text-[14px] font-medium text-ink-700 hover:text-primary-700 transition-colors whitespace-nowrap; }
     .nav-utility { @apply text-[12px] font-medium text-ink-500 hover:text-primary-700 transition-colors; }
     .label-up    { @apply text-xs font-bold uppercase tracking-[0.12em] text-ink-500; }
     .label-acc   { @apply text-xs font-bold uppercase tracking-[0.12em] text-accent-700; }
     .label-pri   { @apply text-xs font-bold uppercase tracking-[0.12em] text-primary-700; }
     .label-warn  { @apply text-xs font-bold uppercase tracking-[0.12em] text-rose-700; }
-    .btn-buy     { @apply inline-flex items-center justify-center gap-2 h-12 px-6 rounded-xl bg-accent-500 hover:bg-accent-600 text-white font-bold text-base transition-colors shadow-[0_8px_24px_-8px_rgba(16,185,129,0.5)]; }
+    .btn-buy     { @apply inline-flex items-center justify-center gap-2 h-12 px-6 rounded-xl bg-accent-500 hover:bg-accent-600 text-white font-bold text-base transition-colors shadow-[0_8px_24px_-8px_rgba(16,185,129,0.5)] whitespace-nowrap; }
+    .btn-cta     { @apply inline-flex items-center justify-center gap-2 h-11 px-5 rounded-xl bg-accent-500 hover:bg-accent-600 text-white font-bold text-sm transition-colors shadow-[0_4px_14px_rgba(16,185,129,0.35)] whitespace-nowrap; }
     .btn-reg     { @apply inline-flex items-center justify-center gap-2 h-12 px-6 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-bold text-base transition-colors; }
     .btn-ghost-d { @apply inline-flex items-center justify-center gap-2 h-12 px-6 rounded-xl bg-white hover:bg-ink-100 text-ink-900 font-bold text-base border border-ink-200 transition-colors; }
     .hero-grad   { background: linear-gradient(180deg, #fcfaff 0%, #ddd6fe 100%); }
